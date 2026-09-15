@@ -244,11 +244,23 @@ a.btn, .btn-large, .btn-ghost{transition: filter .15s ease, border-color .15s ea
               <button id="batch-cancel" class="btn-ghost" style="display:none;" aria-label="取消批量下载">取消</button>
               <span id="batch-status" role="status" aria-live="polite"></span>
             </div>
+            <div class="setting-item" style="margin-top:6px;">
+              <label>清晰度：<select id="batch-qn" aria-label="批量下载清晰度" style="margin-left:4px;padding:2px 6px;border:1px solid #ccc;border-radius:3px;background:#fff;">
+                <option value="">跟随播放器</option>
+                <option value="16">360P 流畅</option>
+                <option value="32">480P 标清</option>
+                <option value="64">720P 准高清</option>
+                <option value="80">1080P 高清</option>
+                <option value="112">1080P 高码率</option>
+                <option value="120">4K 超高清</option>
+                <option value="125">HDR 真彩</option>
+              </select></label>
+            </div>
             <div class="setting-item" id="batch-resume" style="display:none;">
               <label><input id="batch-skip" type="checkbox"> 跳过上次已下载的集数</label>
               <button id="batch-clear" class="btn-ghost" style="padding:3px 8px;font-size:12px;margin-left:8px;">清空记录</button>
             </div>
-            <p class="desc" style="margin-top:6px;">逐集下载并合并保存，过程中请勿刷新/关闭页面或切换分集</p>
+            <p class="desc" style="margin-top:6px;">固定使用高级模式：逐集自动重命名并合并音视频（兼容模式的浏览器直接下载不适用于批量，会被浏览器多文件下载拦截且无重命名/合并）；清晰度由上方选择，默认跟随播放器。过程中请勿刷新/关闭页面或切换分集</p>
             <ul id="batch-progress" style="margin:8px 0 0 2em;max-height:220px;overflow:auto;"></ul>
           </div>
           <div id="bilibliHelperLogs">
@@ -270,7 +282,7 @@ var bx2=e=>new Promise(i=>setTimeout(i,e));
 var bx5=e=>{try{let t=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");return t[e]&&t[e].cids||[]}catch{return[]}};
 var bx6=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),d=i[e]||{cids:[]};d.cids.includes(t)||d.cids.push(t),i[e]=d,localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i))}catch{}};
 var bx7=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");i[e]&&(i[e].cids=i[e].cids.filter(d=>d!==t),localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i)))}catch{}};
-var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,r=n&&n.videoData&&n.videoData.ugc_season;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");r&&r.id&&u[r.id]&&(delete u[r.id],localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u)))}catch(a){a}W0(e)}));let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,c=u&&u.id?bx5(u.id):[],a=e.getElementById("batch-resume");a.style.display=c.length?"block":"none";let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display=n?"block":"none",bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:""};
+var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,r=n&&n.videoData&&n.videoData.ugc_season;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");r&&r.id&&u[r.id]&&(delete u[r.id],localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u)))}catch(a){a}W0(e)}),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,c=u&&u.id?bx5(u.id):[],a=e.getElementById("batch-resume");a.style.display=c.length?"block":"none";let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display=n?"block":"none",bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:""};
 var Dx=async e=>{
   if(bx0.running)return;
   let t=Bx();
@@ -278,7 +290,7 @@ var Dx=async e=>{
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[];
   let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),c=window.__INITIAL_STATE__,f=c&&c.videoData&&c.videoData.ugc_season,P=f&&f.id||"unknown",Q0=0,Q1=0,Q2=0;
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
-  let n=await z();
+  let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
   v("开始批量下载合集，共",t.length,"集，目标画质",x[n]||n);
   let s=new Set(q.blobUrls);
   for(let a=0;a<t.length;a++){
