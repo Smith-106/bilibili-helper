@@ -255,12 +255,18 @@ a.btn, .btn-large, .btn-ghost{transition: filter .15s ease, border-color .15s ea
                 <option value="120">4K 超高清</option>
                 <option value="125">HDR 真彩</option>
               </select></label>
+              <label style="margin-left:14px;">速度：<select id="batch-speed" aria-label="批量下载速度" style="padding:2px 6px;border:1px solid #ccc;border-radius:3px;background:#fff;">
+                <option value="1">快速（每集约1秒）</option>
+                <option value="3">标准（每集约3秒）</option>
+                <option value="6">保守（每集约6秒）</option>
+                <option value="12">最稳（每集约12秒）</option>
+              </select></label>
             </div>
             <div class="setting-item" id="batch-resume" style="display:none;">
               <label><input id="batch-skip" type="checkbox"> 跳过上次已下载的集数</label>
               <button id="batch-clear" class="btn-ghost" style="padding:3px 8px;font-size:12px;margin-left:8px;">清空记录</button>
             </div>
-            <p class="desc" style="margin-top:6px;">固定使用高级模式：逐集自动重命名并合并音视频（兼容模式的浏览器直接下载不适用于批量，会被浏览器多文件下载拦截且无重命名/合并）；清晰度由上方选择，默认跟随播放器。过程中请勿刷新/关闭页面或切换分集</p>
+            <p class="desc" style="margin-top:6px;">固定使用高级模式：逐集自动重命名并合并音视频（兼容模式的浏览器直接下载不适用于批量，会被浏览器多文件下载拦截且无重命名/合并）；清晰度由上方选择，默认跟随播放器；速度档控制每集之间的随机间隔，越慢越不易触发风控。过程中请勿刷新/关闭页面或切换分集</p>
             <ul id="batch-progress" style="margin:8px 0 0 2em;max-height:220px;overflow:auto;"></ul>
           </div>
           <div id="bilibliHelperLogs">
@@ -282,7 +288,7 @@ var bx2=e=>new Promise(i=>setTimeout(i,e));
 var bx5=e=>{try{let t=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");return t[e]&&t[e].cids||[]}catch{return[]}};
 var bx6=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),d=i[e]||{cids:[]};d.cids.includes(t)||d.cids.push(t),i[e]=d,localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i))}catch{}};
 var bx7=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");i[e]&&(i[e].cids=i[e].cids.filter(d=>d!==t),localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i)))}catch{}};
-var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,r=n&&n.videoData&&n.videoData.ugc_season;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");r&&r.id&&u[r.id]&&(delete u[r.id],localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u)))}catch(a){a}W0(e)}),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,c=u&&u.id?bx5(u.id):[],a=e.getElementById("batch-resume");a.style.display=c.length?"block":"none";let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display=n?"block":"none",bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:""};
+var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,r=n&&n.videoData&&n.videoData.ugc_season;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");r&&r.id&&u[r.id]&&(delete u[r.id],localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u)))}catch(a){a}W0(e)}),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,c=u&&u.id?bx5(u.id):[],a=e.getElementById("batch-resume");a.style.display=c.length?"block":"none";let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display=n?"block":"none",bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:"",(()=>{let bq=e.getElementById("batch-speed");if(!bq||bq.dataset.bound)return;bq.dataset.bound="1",bq.value=localStorage.getItem("bilibili_helper_batch_delay")||"3",bq.addEventListener("change",()=>{localStorage.bilibili_helper_batch_delay=bq.value})})()};
 var Dx=async e=>{
   if(bx0.running)return;
   let t=Bx();
@@ -291,7 +297,8 @@ var Dx=async e=>{
   let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),c=window.__INITIAL_STATE__,f=c&&c.videoData&&c.videoData.ugc_season,P=f&&f.id||"unknown",Q0=0,Q1=0,Q2=0;
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
-  v("开始批量下载合集，共",t.length,"集，目标画质",x[n]||n);
+  let dv=+(localStorage.getItem("bilibili_helper_batch_delay")||3)||3,F1=0;
+  v("开始批量下载合集，共",t.length,"集，目标画质",x[n]||n,"集间间隔约",dv,"秒");
   let s=new Set(q.blobUrls);
   for(let a=0;a<t.length;a++){
     if(bx0.cancel)break;
@@ -306,15 +313,15 @@ var Dx=async e=>{
         let S=[{url:N.dash.audio.base_url,size:N.dash.audio.size},{url:N.dash.video.base_url,size:N.dash.video.size}],_=document.createElement("ul");
         _.className="progress",p.appendChild(_);
         let w=new Set(q.ffmpegUsedFiles);
-        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✔ 已保存`,bx6(P,h.cid);
+        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✔ 已保存`,bx6(P,h.cid);
         let K=[...q.ffmpegUsedFiles].find(V=>!w.has(V));
         K&&(q.ffmpegUsedFiles.delete(K),q.ffmpegInstance.deleteFile(K).catch(()=>{})),[...q.blobUrls].filter(V=>!s.has(V)).forEach(V=>{setTimeout(()=>{try{URL.revokeObjectURL(V)}catch(G1){G1}q.blobUrls.delete(V)},6e4),s.add(V)})
-      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✔ 已保存`}
+      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✔ 已保存`}
       else throw new Error("未返回DASH地址，已跳过")
     }catch(N){
-      Q1++,p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx7(P,h.cid)
+      Q1++,F1++,p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${t.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx7(P,h.cid)
     }
-    await bx2(1e3)
+    let wt=dv*1e3+Math.random()*dv*500;F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续")),await bx2(wt)
   }
   if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}）`;
   else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);
