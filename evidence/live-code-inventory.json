@@ -1,0 +1,49 @@
+{
+ "generated_at": "2026-09-23T20:49:52.125Z",
+ "note": "沙盒出口全部live观测code全量清单:-403/-401从未出现",
+ "codes": {
+  "0": {
+   "count": 42,
+   "files": [
+    "live-fc-pg1.json",
+    "live-fc-pg2.json",
+    "live-fc-pg3.json",
+    "live-fc-playurl.json",
+    "live-fc-top.json",
+    "live-top-arc.json",
+    "live-view30-summary.json",
+    "live-walk-pn1.json",
+    "live-walk-summary.json",
+    "pagelist-single.json",
+    "up-list-pn1-first5.json",
+    "up-list-pn1-summary.json",
+    "up-list-pn1.json"
+   ]
+  },
+  "HTTP_206": {
+   "count": 6,
+   "files": [
+    "live-batch-sample.json"
+   ]
+  },
+  "-101": {
+   "count": 1,
+   "files": [
+    "live-nav-anon.json"
+   ]
+  },
+  "-799": {
+   "count": 1,
+   "files": [
+    "live-pn1-799.json"
+   ]
+  },
+  "HTML_412": {
+   "count": 1,
+   "files": [
+    "live-pn1-412.html",
+    "live-walk-summary.json"
+   ]
+  }
+ }
+}

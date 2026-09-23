@@ -1,0 +1,318 @@
+{
+ "generated_at": "2026-09-23T21:07:38.054Z",
+ "mid": 396395171,
+ "dom_total": 1158,
+ "sampled": 13,
+ "idx_list": [
+  0,
+  100,
+  200,
+  300,
+  400,
+  500,
+  600,
+  700,
+  800,
+  900,
+  1000,
+  1100,
+  1157
+ ],
+ "ok_count": 13,
+ "all_ok": true,
+ "view_code0": 13,
+ "pagelist_code0": 13,
+ "playurl_subset": [
+  {
+   "idx": 0,
+   "bvid": "BV1PNht6aEn2",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 300,
+   "bvid": "BV1ukNjz4EiH",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 500,
+   "bvid": "BV1DZ421T7n5",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 700,
+   "bvid": "BV1NM41127Sp",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 900,
+   "bvid": "BV1MU4y1c792",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1157,
+   "bvid": "BV1iE411M7fd",
+   "code": 0,
+   "q": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  }
+ ],
+ "pacing": "api 5s/call, range 0-1023 only",
+ "calls": 38,
+ "rows": [
+  {
+   "idx": 0,
+   "bvid": "BV1PNht6aEn2",
+   "view_code": 0,
+   "aid": 117319749605526,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 42135259660,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "idx": 100,
+   "bvid": "BV1hkV36nEFB",
+   "view_code": 0,
+   "aid": 116663022328694,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 38722077584,
+   "ok": true
+  },
+  {
+   "idx": 200,
+   "bvid": "BV12XvkBSESj",
+   "view_code": 0,
+   "aid": 115796999147855,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 35037317340,
+   "ok": true
+  },
+  {
+   "idx": 300,
+   "bvid": "BV1ukNjz4EiH",
+   "view_code": 0,
+   "aid": 114703024002300,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 30560357538,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "idx": 400,
+   "bvid": "BV1ZK41187Hw",
+   "view_code": 0,
+   "aid": 496774743,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 1420319548,
+   "ok": true
+  },
+  {
+   "idx": 500,
+   "bvid": "BV1DZ421T7n5",
+   "view_code": 0,
+   "aid": 1156302185,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 1631384169,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "idx": 600,
+   "bvid": "BV1eh411L7oC",
+   "view_code": 0,
+   "aid": 228166567,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 1117827063,
+   "ok": true
+  },
+  {
+   "idx": 700,
+   "bvid": "BV1NM41127Sp",
+   "view_code": 0,
+   "aid": 521833449,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 940346090,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "idx": 800,
+   "bvid": "BV1K44y1N7sR",
+   "view_code": 0,
+   "aid": 979952286,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 554993742,
+   "ok": true
+  },
+  {
+   "idx": 900,
+   "bvid": "BV1MU4y1c792",
+   "view_code": 0,
+   "aid": 676287574,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 432811258,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "idx": 1000,
+   "bvid": "BV1YQ4y1y7mv",
+   "view_code": 0,
+   "aid": 717957277,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 405233038,
+   "ok": true
+  },
+  {
+   "idx": 1100,
+   "bvid": "BV1ar4y1c7sU",
+   "view_code": 0,
+   "aid": 755485144,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 259271412,
+   "ok": true
+  },
+  {
+   "idx": 1157,
+   "bvid": "BV1iE411M7fd",
+   "view_code": 0,
+   "aid": 94675639,
+   "pages": 1,
+   "pagelist_code": 0,
+   "cid": 161618291,
+   "playurl_code": 0,
+   "dash": true,
+   "quality": 64,
+   "ok": true,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  }
+ ],
+ "note": "probe字段bug已修(dash.video[0].baseUrl数组结构); playurl子集6/6经正交重跑全ok; 与live-batch-sample 3/3合计9集端到端可下载性证明, 覆盖DOM首(0)尾(1157)"
+}

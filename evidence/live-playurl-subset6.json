@@ -1,0 +1,110 @@
+{
+ "generated_at": "2026-09-23T21:05:44.308Z",
+ "subset": 6,
+ "ok_count": 6,
+ "all_ok": true,
+ "rows": [
+  {
+   "idx": 0,
+   "bvid": "BV1PNht6aEn2",
+   "aid": 117319749605526,
+   "cid": 42135259660,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 300,
+   "bvid": "BV1ukNjz4EiH",
+   "aid": 114703024002300,
+   "cid": 30560357538,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 500,
+   "bvid": "BV1DZ421T7n5",
+   "aid": 1156302185,
+   "cid": 1631384169,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 700,
+   "bvid": "BV1NM41127Sp",
+   "aid": 521833449,
+   "cid": 940346090,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 900,
+   "bvid": "BV1MU4y1c792",
+   "aid": 676287574,
+   "cid": 432811258,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1157,
+   "bvid": "BV1iE411M7fd",
+   "aid": 94675639,
+   "cid": 161618291,
+   "playurl_code": 0,
+   "quality": 64,
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  }
+ ]
+}
