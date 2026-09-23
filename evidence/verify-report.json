@@ -1,0 +1,61 @@
+{
+ "generated_at": "2026-09-23T15:46:45.299Z",
+ "file": "bilibili-helper-content-script.js",
+ "u1_line": 337,
+ "static": "A1-A20见控制台",
+ "replay": {
+  "total_expected": 1159,
+  "pages_expected": 39,
+  "got_len": 1159,
+  "uniq": 1159,
+  "partial": false,
+  "fetchCalls": 39,
+  "wbiHits": 0,
+  "first30_real": true,
+  "first": "BV1PNht6aEn2",
+  "last": "BV1T98j6KEPc_p39_18",
+  "sleeps_min": 1502,
+  "sleeps_max": 2299,
+  "converged": true
+ },
+ "scenarios": [
+  {
+   "name": "中途-352已抓120条→partial无抛错",
+   "len": 120,
+   "partial": true,
+   "fetchCalls": 5,
+   "threw": null,
+   "expect": {
+    "len": 120,
+    "partial": true,
+    "maxFetch": 6
+   }
+  },
+  {
+   "name": "首屏-403零结果→top兜底1条partial",
+   "len": 1,
+   "partial": true,
+   "fetchCalls": 2,
+   "threw": null,
+   "expect": {
+    "len": 1,
+    "partial": true,
+    "maxFetch": 3
+   }
+  },
+  {
+   "name": "首屏网络异常+兜底空→空partial无抛错",
+   "len": 0,
+   "partial": true,
+   "fetchCalls": 2,
+   "threw": null,
+   "expect": {
+    "len": 0,
+    "partial": true,
+    "maxFetch": 3
+   }
+  }
+ ],
+ "live_note": "live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试)",
+ "pass": true
+}
