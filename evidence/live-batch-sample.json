@@ -1,0 +1,62 @@
+{
+ "generated_at": "2026-09-23T17:57:36.232Z",
+ "count": 3,
+ "downloadable": 3,
+ "pacing": "api 5s, segment 3s, range 0-1023 only",
+ "rows": [
+  {
+   "bvid": "BV1PNht6aEn2",
+   "aid": 117319749605526,
+   "cid": 42135259660,
+   "playurl": "cached",
+   "playurl_code": 0,
+   "quality": 64,
+   "dash_video_size": null,
+   "dash_audio_size": null,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "bvid": "BV1jUhk6bET4",
+   "aid": 117312233479995,
+   "cid": 42098034065,
+   "playurl": "live",
+   "playurl_code": 0,
+   "quality": 64,
+   "dash_video_size": null,
+   "dash_audio_size": null,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  },
+  {
+   "bvid": "BV1pqeQ6BECR",
+   "aid": 117295321978626,
+   "cid": 42016704241,
+   "playurl": "live",
+   "playurl_code": 0,
+   "quality": 64,
+   "dash_video_size": null,
+   "dash_audio_size": null,
+   "video_head": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "audio_head": {
+    "http": 206,
+    "bytes": 1024
+   }
+  }
+ ]
+}
