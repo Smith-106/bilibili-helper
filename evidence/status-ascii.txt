@@ -7,3 +7,7 @@ REPLAY got=1159 uniq=1159 fetch=39 wbi=0 first30=true conv=true
 PAGELIST code=0 cid=42135259660
 TOP code=0 NAV code=-101
 HARNESS exit=0 pass=true
+DOM29 pages=29/29 uniq=1158 declared=1159 risk=none
+DOM30 view=30/30 code0 aid_match=true
+PLAYURL code0 q64 dash=true
+BATCH3 dl=3/3 heads=206
