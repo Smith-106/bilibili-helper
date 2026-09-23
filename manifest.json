@@ -23,7 +23,7 @@
    "name": "bilibili哔哩哔哩下载助手",
    "offline_enabled": true,
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.0.12",
+   "version": "3.0.13",
    "web_accessible_resources": [ {
       "matches": [ "http://*.bilibili.com/*", "https://*.bilibili.com/*" ],
       "resources": [ "*.js", "*.css", "*.png", "*.webp", "*.json", "*.html", "*.wasm" ]
