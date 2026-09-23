@@ -1,0 +1,47 @@
+{
+ "file": "bilibili-helper-content-script.js",
+ "u1_line": 337,
+ "version": "3.0.16",
+ "cjs_ok": true,
+ "static_checks": "A1-A20 pass",
+ "replay": {
+  "total_expected": 1159,
+  "pages_expected": 39,
+  "got_len": 1159,
+  "uniq": 1159,
+  "fetchCalls": 39,
+  "wbiHits": 0,
+  "first30_real": true,
+  "first": "BV1PNht6aEn2",
+  "converged": true,
+  "sleeps_min": 1542,
+  "sleeps_max": 2269,
+  "partial": false
+ },
+ "scenarios": [
+  {
+   "len": 120,
+   "partial": true,
+   "fetchCalls": 5,
+   "threw": null
+  },
+  {
+   "len": 1,
+   "partial": true,
+   "fetchCalls": 2,
+   "threw": null
+  },
+  {
+   "len": 0,
+   "partial": true,
+   "fetchCalls": 2,
+   "threw": null
+  }
+ ],
+ "live": {
+  "top_code": 0,
+  "nav_code": -101,
+  "pn1_412_bytes": 3286
+ },
+ "pass": true
+}
