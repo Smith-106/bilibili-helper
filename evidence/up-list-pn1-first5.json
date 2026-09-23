@@ -1,0 +1,49 @@
+{
+  "code": 0,
+  "page": {
+    "pn": 1,
+    "ps": 30,
+    "count": 1159
+  },
+  "episodic_button": {
+    "text": "播放全部",
+    "uri": "//www.bilibili.com/medialist/play/396395171?from=space"
+  },
+  "sample5": [
+    {
+      "aid": 117319749605526,
+      "bvid": "BV1PNht6aEn2",
+      "title": "【Lee哥】Synty低多边形游戏开发资源包，97% OFF！哥布林、维京、角色动画全都有｜Best of Synty Bundle 6",
+      "mid": 396395171,
+      "author": "Lee哥的游戏开发加油站"
+    },
+    {
+      "aid": 117312233479995,
+      "bvid": "BV1jUhk6bET4",
+      "title": "【Lee哥】高级整活！那些认真的Unity项目介绍，9月篇！| 优秀项目 | 游戏开发",
+      "mid": 396395171,
+      "author": "Lee哥的游戏开发加油站"
+    },
+    {
+      "aid": 117295321978626,
+      "bvid": "BV1pqeQ6BECR",
+      "title": "【Lee哥】后室与阈限空间开发资源包，88% OFF！程序化生成、147件资产全都有｜Backrooms and Liminal World Builder",
+      "mid": 396395171,
+      "author": "Lee哥的游戏开发加油站"
+    },
+    {
+      "aid": 117297016477802,
+      "bvid": "BV1Mseb6EE76",
+      "title": "【Lee哥】短视频爆了以后怎么办？《MOUSE: P.I. For Hire》从300万播放到150万愿望单 | 游戏案例",
+      "mid": 396395171,
+      "author": "Lee哥的游戏开发加油站"
+    },
+    {
+      "aid": 117274182686147,
+      "bvid": "BV196en6NE5q",
+      "title": "【Lee哥】Fab三套限时免费资源！中世纪村庄、工业场景、RPG环境特效一次领取 | 游戏开发",
+      "mid": 396395171,
+      "author": "Lee哥的游戏开发加油站"
+    }
+  ]
+}
