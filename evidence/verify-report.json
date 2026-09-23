@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-23T15:46:45.299Z",
+ "generated_at": "2026-09-23T15:47:37.351Z",
  "file": "bilibili-helper-content-script.js",
  "u1_line": 337,
  "static": "A1-A20见控制台",
@@ -14,8 +14,8 @@
   "first30_real": true,
   "first": "BV1PNht6aEn2",
   "last": "BV1T98j6KEPc_p39_18",
-  "sleeps_min": 1502,
-  "sleeps_max": 2299,
+  "sleeps_min": 1510,
+  "sleeps_max": 2294,
   "converged": true
  },
  "scenarios": [
