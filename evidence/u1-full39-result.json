@@ -1,0 +1,13 @@
+{
+  "total_expected": 1159,
+  "pages_expected": 39,
+  "got_len": 1159,
+  "uniq": 1159,
+  "partial": false,
+  "fetchCalls": 39,
+  "wbiCalls": 0,
+  "first": "BVFULL0001",
+  "last": "BVFULL1159",
+  "converged": true,
+  "ms": 577
+}
