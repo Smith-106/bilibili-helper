@@ -30,3 +30,6 @@ out/
 *.zip
 *.pem
 *.key
+
+# maestro embedding/vector 索引(可重建,不入库)
+.workflow/embedding*
