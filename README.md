@@ -83,6 +83,13 @@ node evidence/acceptance.mjs                     # 16 项验收门（R1/R2/R3）
 └── docs/                                # 文档站（GitHub Pages / 静态）
 ```
 
+## 文档 / Wiki
+
+- **文档站（即项目 Wiki）**：<https://smith-106.github.io/bilibili-helper/> —— 托管 `docs/` 全部页面。
+- Wiki 索引：[docs/WIKI.md](./docs/WIKI.md)；知识库/决策记录（kg）：[docs/KNOWLEDGE.md](./docs/KNOWLEDGE.md)。
+
+> GitHub 独立 `.wiki.git` 需网页端手动建首页才生成（无 API 接口），故本项目以「文档站即 Wiki」：Wiki 内容在 `docs/` 随版本控制，等价且可评审。
+
 ## 变更日志
 
 见 [`CHANGELOG.md`](./CHANGELOG.md)。

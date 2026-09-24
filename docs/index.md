@@ -8,6 +8,7 @@
 - [验证与证据](./verification.md)
 - [架构与文件说明](./architecture.md)
 - [知识库 / 决策记录（kg）](./KNOWLEDGE.md)
+- [项目 Wiki 索引](./WIKI.md)
 - [更新日志](../CHANGELOG.md)
 
 > 版本：`3.0.17` ｜ Manifest V3 ｜ 无后端依赖
