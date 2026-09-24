@@ -1,0 +1,36 @@
+{
+ "generated_at": "2026-09-24T05:56:06.853Z",
+ "mid": 396395171,
+ "dom_total": 1158,
+ "raw_lines": 1160,
+ "dedup": 1158,
+ "ok": 1158,
+ "all_ok": true,
+ "dash_n": 1046,
+ "durl1_n": 112,
+ "risk_hits": 0,
+ "other": 0,
+ "threw_rows": 2,
+ "transient_note": "i688 playurl-leg fetch-failed + i694 range-leg fetch-failed, each single retry ok code0 206/1024, non-risk TypeError",
+ "stopped": null,
+ "idx_complete": true,
+ "pacing": "playurl 5s + range-head 3s, bytes 0-1023 only, ~1MB total",
+ "first": {
+  "i": 0,
+  "bvid": "BV1PNht6aEn2",
+  "branch": "dash",
+  "vh": {
+   "http": 206,
+   "bytes": 1024
+  }
+ },
+ "last": {
+  "i": 1157,
+  "bvid": "BV1iE411M7fd",
+  "branch": "dash",
+  "vh": {
+   "http": 206,
+   "bytes": 1024
+  }
+ }
+}
