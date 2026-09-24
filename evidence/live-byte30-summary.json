@@ -1,0 +1,481 @@
+{
+ "generated_at": "2026-09-24T02:48:03.898Z",
+ "mid": 396395171,
+ "episodes": 30,
+ "ok": 30,
+ "risk_hits": 0,
+ "threw": 0,
+ "stopped": null,
+ "all_ok": true,
+ "pacing": "playurl 5s + range-head 3s, bytes 0-1023 only",
+ "rows": [
+  {
+   "idx": 0,
+   "bvid": "BV1PNht6aEn2",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 40,
+   "bvid": "BV1kvMR6jEuq",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 80,
+   "bvid": "BV1V27g6YEr2",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 120,
+   "bvid": "BV1HcR9B9EHY",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 160,
+   "bvid": "BV1JuNgzRE6c",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "durl1",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 200,
+   "bvid": "BV12XvkBSESj",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 240,
+   "bvid": "BV1EjHLzVEMb",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 280,
+   "bvid": "BV1Dfg5zvE9C",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 320,
+   "bvid": "BV1jE5PzoEBv",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 360,
+   "bvid": "BV1TsALeXE4x",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 400,
+   "bvid": "BV1ZK41187Hw",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 440,
+   "bvid": "BV1HHzmYrEMu",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 480,
+   "bvid": "BV1Zj2rYKE2d",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 520,
+   "bvid": "BV13w4m1S74i",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 560,
+   "bvid": "BV1qu4y1y79Y",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 600,
+   "bvid": "BV1eh411L7oC",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 640,
+   "bvid": "BV1Vg4y147u6",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 680,
+   "bvid": "BV1mx4y1u7Tm",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 720,
+   "bvid": "BV1J14y1K7su",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 760,
+   "bvid": "BV1Za41137Km",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 800,
+   "bvid": "BV1K44y1N7sR",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 840,
+   "bvid": "BV1ka411m7Mc",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 880,
+   "bvid": "BV1oR4y147ei",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "durl1",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 920,
+   "bvid": "BV1j14y1m76P",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "durl1",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 960,
+   "bvid": "BV1jA4y1R7eG",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1000,
+   "bvid": "BV1YQ4y1y7mv",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1040,
+   "bvid": "BV1hg411G75v",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1080,
+   "bvid": "BV1654y1Y7Mc",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1120,
+   "bvid": "BV1Xz4y1Q7XG",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  },
+  {
+   "idx": 1157,
+   "bvid": "BV1iE411M7fd",
+   "playurl_code": 0,
+   "q": 64,
+   "branch": "dash",
+   "vh": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ah": {
+    "http": 206,
+    "bytes": 1024
+   },
+   "ok": true
+  }
+ ]
+}

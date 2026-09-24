@@ -15,3 +15,4 @@ FULL_PLAYURL dl=1158/1158 dash=1046 durl1=112 vip=0 risk=0 threw=0
 PLAYURL6 subset=6/6 code0 q64 206/1024
 BATCH3 dl=3/3 heads=206
 QUOTA_NOTE arc-search-cooled(-799/412 honest records); sweeps used view/pagelist/playurl legs 4s/4s/5s pacing
+BYTE30 episodes=30/30 ok dash=27 durl1=3 risk=0 (idx step40 head0 tail1157, range0-1023 206/1024)
