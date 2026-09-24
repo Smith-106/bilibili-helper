@@ -1,0 +1,23 @@
+# maestro / workflow runtime artifacts (session, tmp, receipts, checkpoints)
+.workflow/
+
+# Pi agent runtime / injected context (never commit)
+.pi/
+
+# Chrome Web Store signing metadata (regenerated per publish)
+_metadata/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Node / build artifacts (project is dependency-free; guard for future tooling)
+node_modules/
+dist/
+build/
+out/
+*.crx
+*.zip
+*.pem
+*.key
