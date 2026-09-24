@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-09-24T02:27:20.647Z",
+ "generated_at": "2026-09-24T05:59:23.953Z",
  "note": "沙盒出口全部live观测code全量清单:-403/-401从未出现;新增view/pagelist/playurl全量sweep(3474 paced calls零风险码)",
  "codes": {
   "0": {
-   "count": 3516,
+   "count": 4674,
    "files": [
     "live-fc-pg1.json",
     "live-fc-pg2.json",
@@ -25,13 +25,18 @@
     "full-pagelist-progress.jsonl",
     "full-playurl-progress.jsonl",
     "live-stratified-chain.json",
-    "live-playurl-subset6.json"
+    "live-playurl-subset6.json",
+    "live-full-byte-summary.json",
+    "full-byte-progress.jsonl",
+    "live-byte30-summary.json"
    ]
   },
   "HTTP_206": {
-   "count": 6,
+   "count": 1164,
    "files": [
-    "live-batch-sample.json"
+    "live-batch-sample.json",
+    "live-full-byte-summary.json",
+    "live-byte30-summary.json"
    ]
   },
   "-101": {
@@ -55,11 +60,11 @@
    ]
   },
   "TRANSIENT_THROW_RETRIED_OK": {
-   "count": 1,
+   "count": 3,
    "files": [
     "full-pagelist-progress.jsonl"
    ],
-   "note": "i=982 pagelist TypeError fetch failed, single retry code0 cid=580528742, no risk code"
+   "note": "i982 pagelist + i688 playurl-leg + i694 range-leg, each TypeError fetch failed single retry ok, no risk code"
   }
  }
 }
