@@ -7,7 +7,11 @@ REPLAY got=1159 uniq=1159 fetch=39 wbi=0 first30=true conv=true
 PAGELIST code=0 cid=42135259660
 TOP code=0 NAV code=-101
 HARNESS exit=0 pass=true
-DOM29 pages=29/29 uniq=1158 declared=1159 risk=none
-DOM30 view=30/30 code0 aid_match=true
-PLAYURL code0 q64 dash=true
+DOM29 pages=29/29 uniq=1158 declared=1159 delta1=headline-slot risk=none
+FULL_VIEW swept=1158/1158 code0=1158 risk=0 threw=0 idx=0-1157 first=BV1PNht6aEn2 last=BV1iE411M7fd
+FULL_PAGELIST dedup=1158/1158 code0+cid=1158 risk=0 retry=i982-transient-ok
+FULL_CHAIN both_ok=1158/1158 aid=1158/1158 risk=0
+FULL_PLAYURL dl=1158/1158 dash=1046 durl1=112 vip=0 risk=0 threw=0
+PLAYURL6 subset=6/6 code0 q64 206/1024
 BATCH3 dl=3/3 heads=206
+QUOTA_NOTE arc-search-cooled(-799/412 honest records); sweeps used view/pagelist/playurl legs 4s/4s/5s pacing

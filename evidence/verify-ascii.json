@@ -1,47 +1,31 @@
 {
- "file": "bilibili-helper-content-script.js",
- "u1_line": 337,
- "version": "3.0.16",
- "cjs_ok": true,
- "static_checks": "A1-A20 pass",
- "replay": {
-  "total_expected": 1159,
-  "pages_expected": 39,
-  "got_len": 1159,
-  "uniq": 1159,
-  "fetchCalls": 39,
-  "wbiHits": 0,
-  "first30_real": true,
+ "mid": 396395171,
+ "dom_total": 1158,
+ "view": {
+  "swept": 1158,
+  "code0": 1158,
+  "risk": 0,
+  "threw": 0,
+  "all": true,
   "first": "BV1PNht6aEn2",
-  "converged": true,
-  "sleeps_min": 1542,
-  "sleeps_max": 2269,
-  "partial": false
+  "last": "BV1iE411M7fd"
  },
- "scenarios": [
-  {
-   "len": 120,
-   "partial": true,
-   "fetchCalls": 5,
-   "threw": null
-  },
-  {
-   "len": 1,
-   "partial": true,
-   "fetchCalls": 2,
-   "threw": null
-  },
-  {
-   "len": 0,
-   "partial": true,
-   "fetchCalls": 2,
-   "threw": null
-  }
- ],
- "live": {
-  "top_code": 0,
-  "nav_code": -101,
-  "pn1_412_bytes": 3286
+ "chain": {
+  "view_code0": 1158,
+  "pagelist_cid": 1158,
+  "both": 1158,
+  "all": true,
+  "risk": 0
  },
- "pass": true
+ "playurl": {
+  "swept": 1158,
+  "dl": 1158,
+  "dash": 1046,
+  "durl1": 112,
+  "vip": 0,
+  "risk": 0,
+  "all": true,
+  "first": "BV1PNht6aEn2",
+  "last": "BV1iE411M7fd"
+ }
 }

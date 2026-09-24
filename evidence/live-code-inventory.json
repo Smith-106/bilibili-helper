@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-09-23T20:49:52.125Z",
- "note": "沙盒出口全部live观测code全量清单:-403/-401从未出现",
+ "generated_at": "2026-09-24T02:27:20.647Z",
+ "note": "沙盒出口全部live观测code全量清单:-403/-401从未出现;新增view/pagelist/playurl全量sweep(3474 paced calls零风险码)",
  "codes": {
   "0": {
-   "count": 42,
+   "count": 3516,
    "files": [
     "live-fc-pg1.json",
     "live-fc-pg2.json",
@@ -17,7 +17,15 @@
     "pagelist-single.json",
     "up-list-pn1-first5.json",
     "up-list-pn1-summary.json",
-    "up-list-pn1.json"
+    "up-list-pn1.json",
+    "live-full-view-summary.json",
+    "live-full-chain-summary.json",
+    "live-full-playurl-summary.json",
+    "full-view-progress.jsonl",
+    "full-pagelist-progress.jsonl",
+    "full-playurl-progress.jsonl",
+    "live-stratified-chain.json",
+    "live-playurl-subset6.json"
    ]
   },
   "HTTP_206": {
@@ -39,11 +47,19 @@
    ]
   },
   "HTML_412": {
-   "count": 1,
+   "count": 2,
    "files": [
     "live-pn1-412.html",
-    "live-walk-summary.json"
+    "live-walk-summary.json",
+    "arc-search-recheck-iter117 (conversation-fresh, HTML http=412 len=3286)"
    ]
+  },
+  "TRANSIENT_THROW_RETRIED_OK": {
+   "count": 1,
+   "files": [
+    "full-pagelist-progress.jsonl"
+   ],
+   "note": "i=982 pagelist TypeError fetch failed, single retry code0 cid=580528742, no risk code"
   }
  }
 }

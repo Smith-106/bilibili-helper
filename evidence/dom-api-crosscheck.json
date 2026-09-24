@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-23T20:48:59.191Z",
+ "generated_at": "2026-09-24T02:27:36.135Z",
  "mid": 396395171,
  "dom_total": 1158,
  "dom_uniq": 1158,
@@ -10,5 +10,19 @@
  "fixture_eq_api_live": true,
  "api_pn1_first30_byte_identical_dom_p01": true,
  "top_in_dom": true,
- "per_page_note": "p01=40(30 API+10首屏附加位),p02=39,p03-p28=40,p29=39,raw=1158,uniq=1158,declared=1159,delta1=首屏附加位结构差"
+ "per_page_note": "p01=40(30 API+10首屏附加位),p02=39,p03-p28=40,p29=39,raw=1158,uniq=1158,declared=1159,delta1=首屏附加位结构差",
+ "full_sweep_confirm": {
+  "view": "1158/1158 code0",
+  "pagelist": "1158/1158 code0+cid",
+  "playurl": "1158/1158 dl_true",
+  "risk": 0,
+  "files": [
+   "live-full-view-summary.json",
+   "live-full-chain-summary.json",
+   "live-full-playurl-summary.json",
+   "full-view-progress.jsonl",
+   "full-pagelist-progress.jsonl",
+   "full-playurl-progress.jsonl"
+  ]
+ }
 }

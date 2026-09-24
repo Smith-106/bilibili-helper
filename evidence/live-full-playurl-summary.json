@@ -1,0 +1,28 @@
+{
+ "generated_at": "2026-09-24T02:22:36.182Z",
+ "mid": 396395171,
+ "dom_total": 1158,
+ "swept": 1158,
+ "playurl_code0_dl": 1158,
+ "dash_n": 1046,
+ "durl_single_n": 112,
+ "vip": 0,
+ "risk_hits": 0,
+ "threw": 0,
+ "stopped": null,
+ "all_dl": true,
+ "idx_complete": true,
+ "pacing": "playurl 5s/call JSON-only zero bytes",
+ "first": {
+  "i": 0,
+  "bvid": "BV1PNht6aEn2",
+  "q": 64,
+  "dash": true
+ },
+ "last": {
+  "i": 1157,
+  "bvid": "BV1iE411M7fd",
+  "q": 64,
+  "dash": true
+ }
+}

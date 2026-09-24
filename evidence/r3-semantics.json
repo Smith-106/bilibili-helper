@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-23T21:08:27.075Z",
+ "generated_at": "2026-09-24T02:27:36.080Z",
  "claim": "R3=方案行为语义：在用户设备正常 pacing 下不主动触发风控；沙盒出口配额记录(-799/412)是环境观测非方案行为",
  "scheme_guarantees": {
   "fetch_budget_2": true,
@@ -18,14 +18,16 @@
  "live_legs": {
   "dom": "29/29页零风险码(-799/-412/-403/-352零出现)",
   "api_pn1": "code0 count1159(冷却窗口外)",
-  "api_quota_obs": "-799x1(单发backoff恢复) + HTML_412x1(stop-no-retry)，见live-pn1-799.json/live-pn1-412.html/live-walk-summary.json(stopped=html_challenge pn=2)",
-  "chain_probes": "stratified 13集 api 5s/call + batch 3集 api5s/segment3s + range0-1023，零风险码"
+  "api_quota_obs": "-799x1(单发backoff恢复) + HTML_412x2(pn2-walk stop-no-retry + iter117 arc-search recheck http412 len3286 conversation-fresh)，见live-pn1-799.json/live-pn1-412.html/live-walk-summary.json",
+  "chain_probes": "stratified 13集 api 5s/call + batch 3集 api5s/segment3s + range0-1023，零风险码",
+  "full_sweeps": "view 1158/1158 code0 (4s/call) + pagelist dedup 1158/1158 code0+cid (4s/call) + playurl 1158/1158 dl_true dash1046/durl1_112 vip0 (5s/call JSON-only zero bytes); 3474 paced calls, risk 0, threw 0 except i982-transient-retry-ok"
  },
  "code_inventory_note": "沙盒出口全部live观测code全量清单:-403/-401从未出现",
  "verifier_runnable": [
   "node --check bilibili-helper-content-script.js",
   "node evidence/verify-u1-bxd.mjs",
   "grep -c -- -403/-401/访问权限不足 bilibili-helper-content-script.js (=0/0/0)",
-  "grep -cni wbi/mixin (=0)"
+  "grep -cni wbi/mixin (=0)",
+  "node -e view/pagelist/playurl sweeps recount (见live-full-*-summary.json + verify-ascii.json)"
  ]
 }
