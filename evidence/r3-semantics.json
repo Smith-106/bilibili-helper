@@ -2,14 +2,14 @@
  "generated_at": "2026-09-24T02:27:36.080Z",
  "claim": "R3=方案行为语义：在用户设备正常 pacing 下不主动触发风控；沙盒出口配额记录(-799/412)是环境观测非方案行为",
  "scheme_guarantees": {
-  "fetch_budget_2": true,
+  "fetch_budget_1_main": true,
   "page_gap_1500_2300": true,
-  "backoff799_single_5_7s_rt": true,
+  "backoff799_bounded_escalating_rt_le4_12_27s": true,
   "cap_t40": true,
   "seen_dedup": true,
   "no_throw": true,
   "partial_flag": true,
-  "top_fallback": true,
+  "top_fallback_removed_no_single_item_batch": true,
   "zero_352_retry": true,
   "zero_403_401": true,
   "bxd_delay_jitter_cool_skip_persist": true
@@ -18,7 +18,7 @@
  "live_legs": {
   "dom": "29/29页零风险码(-799/-412/-403/-352零出现)",
   "api_pn1": "code0 count1159(冷却窗口外)",
-  "api_quota_obs": "-799x1(单发backoff恢复) + HTML_412x2(pn2-walk stop-no-retry + iter117 arc-search recheck http412 len3286 conversation-fresh)，见live-pn1-799.json/live-pn1-412.html/live-walk-summary.json",
+  "api_quota_obs": "-799x1(单发backoff恢复) + HTML_412x2(pn2-walk stop-no-retry + iter117 arc-search recheck http412 len3286 conversation-fresh)，见live-pn1-799.json/live-pn1-412.html/live-walk-summary.json。修复后U1对-799/网络异常做≤4次递增退避(12/16/20/24s+0-3s抖动)再继续分页，不再退化为top/arc单条目批量",
   "chain_probes": "stratified 13集 api 5s/call + batch 3集 api5s/segment3s + range0-1023，零风险码",
   "full_sweeps": "view 1158/1158 code0 (4s/call) + pagelist dedup 1158/1158 code0+cid (4s/call) + playurl 1158/1158 dl_true dash1046/durl1_112 vip0 (5s/call JSON-only zero bytes); 3474 paced calls, risk 0, threw 0 except i982-transient-retry-ok"
  },

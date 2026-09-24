@@ -35,12 +35,12 @@ ok('A9 全仓访问权限不足清零', cnt(/访问权限不足/g) === 0);
 ok('A10 全仓wbi清零', cnt(/wbi/g) === 0);
 ok('A11 全仓MIXIN/bWk/bM5/bDm/bRk清零',
   cnt(/MIXIN/g) === 0 && cnt(/\bbWk\b/g) === 0 && cnt(/\bbM5\b/g) === 0 && cnt(/\bbDm\b/g) === 0 && cnt(/\bbRk\b/g) === 0);
-ok('A12 U1 fetch引用=2(主分页+top兜底)', (u1.match(/window\.fetch/g) || []).length === 2);
+ok('A12 U1 fetch引用=1(仅主分页, top兜底已移除)', (u1.match(/window\.fetch/g) || []).length === 1);
 ok('A13 页间隔1500-2300ms', u1.includes('bx2(1500+Math.floor(Math.random()*800))'));
-ok('A14 -799单次5-7s退避(rt旗)', u1.includes('c===-799&&!rt') && u1.includes('bx2(5000+Math.floor(Math.random()*2000))'));
+ok('A14 -799/网络异常有界递增退避(rt计数,≤4次,12-27s)', u1.includes('(c===-799||!u)&&rt<4') && u1.includes('bx2(8000+rt*4000+Math.floor(Math.random()*3000))'));
 ok('A15 t>=40上限', u1.includes('t>=40'));
 ok('A16 seen去重', u1.includes('seen=new Set') && u1.includes('seen.has'));
-ok('A17 top/arc兜底', u1.includes('x/space/top/arc?vmid='));
+ok('A17 top/arc兜底已移除(单条目不回填为批量列表)', !u1.includes('x/space/top/arc?vmid='));
 ok('A18 legacy playurl基址', src.includes('x/player/playurl') && !src.includes('x/player/wbi/playurl'));
 ok('A19 bxD速度控制(delay+jitter+失败冷却+跳过+持久化)',
   src.includes('bilibili_helper_batch_delay') && src.includes('Math.random()*dv*500') &&
@@ -62,7 +62,6 @@ const mkFetch = (scenario) => async (url) => {
   fetchCalls++;
   const s = String(url);
   if (/wbi/i.test(s)) wbiHits++;
-  if (s.includes('x/space/top/arc')) return { json: async () => ({ code: 0, data: {} }) };
   const m = s.match(/[?&]pn=(\d+)/);
   const pn = m ? +m[1] : 1;
   if (scenario && scenario.failAt === pn) return { json: async () => ({ code: scenario.code, message: 'mock-fail' }) };
@@ -110,22 +109,19 @@ async function scenario(name, fetchFn, expect) {
 }
 // C1: p5处-352, 已抓120条 → partial返回, 无抛错, fetch=5(无兜底调用, 因有已抓页直接降级)
 const c1 = await scenario('中途-352已抓120条→partial无抛错', mkFetch({ failAt: 5, code: -352 }), { len: 120, partial: true, maxFetch: 6 });
-// C2: 首屏-403零结果 + top兜底1条 → len1 partial, fetch=2
-const topFetch = async (url) => {
-  fetchCalls++;
-  const s = String(url);
-  if (s.includes('x/space/top/arc')) return { json: async () => ({ code: 0, data: { aid: 1, bvid: 'BV1TOPFALLBACK', title: 'top' } }) };
-  return { json: async () => ({ code: -403, message: 'forbidden' }) };
+// C2: 首屏-403零结果 → len0 partial, fetch=1(无top兜底调用, 单条目不再回填为批量列表)
+const c2 = await scenario('首屏-403零结果→空partial无抛错', mkFetch({ failAt: 1, code: -403 }), { len: 0, partial: true, maxFetch: 2 });
+// C3: 首屏网络异常(u=null)×5 → 递增退避4次后放弃, len0 partial, fetch=5, 无抛错
+const nullFetch = async (url) => { fetchCalls++; return { json: async () => null }; };
+const c3 = await scenario('首屏网络异常→退避4次后空partial无抛错', nullFetch, { len: 0, partial: true, maxFetch: 6 });
+// C4: -799持久(pn1处2次后退避恢复) → 全量, fetch=3, 无抛错
+const b799 = mkFetch(null);
+let h799 = 0;
+const f799 = async (url) => {
+  if (h799 < 2) { h799++; fetchCalls++; return { json: async () => ({ code: -799, message: '请求过于频繁，请稍后再试' }) }; }
+  return b799(url);
 };
-const c2 = await scenario('首屏-403零结果→top兜底1条partial', topFetch, { len: 1, partial: true, maxFetch: 3 });
-// C3: 首屏网络异常(u=null)+兜底空 → len0 partial, fetch=2, 无抛错
-const nullFetch = async (url) => {
-  fetchCalls++;
-  const s = String(url);
-  if (s.includes('x/space/top/arc')) return { json: async () => ({ code: 0, data: {} }) };
-  return { json: async () => null };
-};
-const c3 = await scenario('首屏网络异常+兜底空→空partial无抛错', nullFetch, { len: 0, partial: true, maxFetch: 3 });
+const c4 = await scenario('-799两次后退避恢复→全量非partial', f799, { len: count, partial: false, maxFetch: 44 });
 
 // ---- D) 报告 ----
 const report = {
@@ -133,7 +129,7 @@ const report = {
   file: 'bilibili-helper-content-script.js',
   u1_line: lines.findIndex(l => l.includes('var U1=')) + 1,
   static: 'A1-A20见控制台',
-  replay, scenarios: [c1, c2, c3],
+  replay, scenarios: [c1, c2, c3, c4],
   live_note: 'live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试)',
   pass: fail.length === 0
 };
