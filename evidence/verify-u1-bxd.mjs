@@ -36,8 +36,10 @@ ok('A10 全仓wbi清零', cnt(/wbi/g) === 0);
 ok('A11 全仓MIXIN/bWk/bM5/bDm/bRk清零',
   cnt(/MIXIN/g) === 0 && cnt(/\bbWk\b/g) === 0 && cnt(/\bbM5\b/g) === 0 && cnt(/\bbDm\b/g) === 0 && cnt(/\bbRk\b/g) === 0);
 ok('A12 U1 fetch引用=1(仅主分页, top兜底已移除)', (u1.match(/window\.fetch/g) || []).length === 1);
-ok('A13 页间隔1500-2300ms', u1.includes('bx2(1500+Math.floor(Math.random()*800))'));
-ok('A14 -799/网络异常有界递增退避(rt计数,≤4次,12-27s)', u1.includes('(c===-799||!u)&&rt<4') && u1.includes('bx2(8000+rt*4000+Math.floor(Math.random()*3000))'));
+ok('A13 页间隔3500-5000ms(人因pacing)', u1.includes('bx2(3500+Math.floor(Math.random()*1500))'));
+ok('A14 pn1双败fast-fail+15min冷却记忆', u1.includes('bilibili_helper_uplist_cool_') && u1.includes('9e5') && u1.includes('cool=!0'));
+ok('A14b 中途-799递增退避≤4次(12-27s)', u1.includes('rt<4') && u1.includes('bx2(8000+rt*4000+Math.floor(Math.random()*3000))'));
+ok('A14c 缓存failover(老缓存partial继续)', u1.includes('bilibili_helper_uplist_') && u1.includes('o.cached=!0'));
 ok('A15 t>=40上限', u1.includes('t>=40'));
 ok('A16 seen去重', u1.includes('seen=new Set') && u1.includes('seen.has'));
 ok('A17 top/arc兜底已移除(单条目不回填为批量列表)', !u1.includes('x/space/top/arc?vmid='));
@@ -94,7 +96,7 @@ const replay = {
 ok('B1 39页收敛1159/1159', replay.converged, `got=${replay.got_len} uniq=${replay.uniq}`);
 ok('B2 首30条与真机逐字节一致', replay.first30_real === true, `first=${replay.first}`);
 ok('B3 全程零wbi调用', replay.wbiHits === 0 && replay.fetchCalls === 39, `fetch=${replay.fetchCalls}`);
-ok('B4 页间隔全部1500-2300ms', replay.sleeps_min >= 1500 && replay.sleeps_max <= 2300, `${replay.sleeps_min}-${replay.sleeps_max}`);
+ok('B4 页间隔全部3500-5000ms', replay.sleeps_min >= 3500 && replay.sleeps_max <= 5000, `${replay.sleeps_min}-${replay.sleeps_max}`);
 ok('B5 非partial全量', replay.partial === false);
 
 // ---- C) 预算场景(零抛错 + fetch有界 + partial语义) ----
@@ -108,20 +110,38 @@ async function scenario(name, fetchFn, expect) {
   return { name, ...r, expect };
 }
 // C1: p5处-352, 已抓120条 → partial返回, 无抛错, fetch=5(无兜底调用, 因有已抓页直接降级)
+// C5: pn1双败-799写入冷却+无缓存 → cool数组len0, fetch=2, 无抛错(第二次调用零请求直接cool)
 const c1 = await scenario('中途-352已抓120条→partial无抛错', mkFetch({ failAt: 5, code: -352 }), { len: 120, partial: true, maxFetch: 6 });
 // C2: 首屏-403零结果 → len0 partial, fetch=1(无top兜底调用, 单条目不再回填为批量列表)
 const c2 = await scenario('首屏-403零结果→空partial无抛错', mkFetch({ failAt: 1, code: -403 }), { len: 0, partial: true, maxFetch: 2 });
-// C3: 首屏网络异常(u=null)×5 → 递增退避4次后放弃, len0 partial, fetch=5, 无抛错
+// C3: 首屏网络异常(u=null)×2 → pn1双败fast-fail进15min冷却, len0 cool(非partial数组), fetch=2, 无抛错
 const nullFetch = async (url) => { fetchCalls++; return { json: async () => null }; };
-const c3 = await scenario('首屏网络异常→退避4次后空partial无抛错', nullFetch, { len: 0, partial: true, maxFetch: 6 });
-// C4: -799持久(pn1处2次后退避恢复) → 全量, fetch=3, 无抛错
+const c3 = await scenario('首屏网络异常→pn1双败fast-fail进冷却无抛错', nullFetch, { len: 0, partial: false, maxFetch: 3 });
+// C4: -799在pn1处1次后恢复 → 全量, fetch=2+39, 无抛错(pn1双败阈=1次重试)
 const b799 = mkFetch(null);
 let h799 = 0;
-const f799 = async (url) => {
-  if (h799 < 2) { h799++; fetchCalls++; return { json: async () => ({ code: -799, message: '请求过于频繁，请稍后再试' }) }; }
+const f799once = async (url) => {
+  if (h799 < 1) { h799++; fetchCalls++; return { json: async () => ({ code: -799, message: '请求过于频繁，请稍后再试' }) }; }
   return b799(url);
 };
-const c4 = await scenario('-799两次后退避恢复→全量非partial', f799, { len: count, partial: false, maxFetch: 44 });
+const c4 = await scenario('-799一次后恢复→全量非partial', f799once, { len: count, partial: false, maxFetch: 42 });
+
+// C5: 冷却记忆 — 同一mid第二次调用直接cool零请求(Factory级localStorage mock)
+async function scenarioCool(name, fetchFn, expect) {
+  fetchCalls = 0;
+  const store = {};
+  const ls = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); }, removeItem: (k) => { delete store[k]; } };
+  const fac = new Function('bx0', 'bx2', 'V', 'E', 'window', 'localStorage', 'esc', u1line + '; return U1;');
+  const runC = (ff) => fac({ cancel: false }, bx2, V, E, { fetch: ff }, ls, String)(396395171, () => {});
+  let threw = null, r1 = null, r2 = null;
+  try { r1 = await runC(fetchFn); r2 = await runC(fetchFn); } catch (e) { threw = String((e && e.message) || e); }
+  const r = { len1: r1 ? r1.length : -1, cool1: r1 ? !!r1.cool : null, len2: r2 ? r2.length : -1, cool2: r2 ? !!r2.cool : null, fetchCalls, threw, coolKey: Object.keys(store).find((k) => k.includes('uplist_cool_')) || null };
+  const pass = threw === null && r.len1 === expect.len && r.cool1 === true && r.cool2 === true && r.fetchCalls <= expect.maxFetch && !!r.coolKey;
+  ok('C ' + name, pass, JSON.stringify(r));
+  return { name, ...r, expect };
+}
+const f799cool = (() => { let k = 0; return async (url) => { fetchCalls++; if (k < 2) { k++; return { json: async () => ({ code: -799, message: 'x' }) }; } return { json: async () => ({ code: 0, data: { list: { vlist: [] }, page: { count: 0 } } }) }; }; })();
+const c5 = await scenarioCool('pn1双败-799进冷却+二次零请求cool无抛错', f799cool, { len: 0, maxFetch: 3 });
 
 // ---- D) 报告 ----
 const report = {
@@ -129,7 +149,7 @@ const report = {
   file: 'bilibili-helper-content-script.js',
   u1_line: lines.findIndex(l => l.includes('var U1=')) + 1,
   static: 'A1-A20见控制台',
-  replay, scenarios: [c1, c2, c3, c4],
+  replay, scenarios: [c1, c2, c3, c4, c5],
   live_note: 'live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试)',
   pass: fail.length === 0
 };
