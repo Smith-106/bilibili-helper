@@ -7,14 +7,15 @@
 .workflow/search-daemon.json
 .workflow/spec-analytics.jsonl
 .workflow/wiki-index-publisher.lock
-.workflow/kg/*.shm
-.workflow/kg/*.wal
-.workflow/kg/*.journal
 # keep curated knowledge in version control:
 # .workflow/knowhow/ (wiki/knowhow 条目) + .workflow/kg/maestro.db (知识图谱) 跟踪入库
 # 其余 .workflow/* 运行时产物不入库
 !.workflow/knowhow/
-!.workflow/kg/
+!.workflow/kg/maestro.db
+# sqlite 运行时边车(常驻,不入库) — 必须放在否定规则之后
+**/*.db-shm
+**/*.db-wal
+**/*.db-journal
 
 # Pi agent runtime / injected context (never commit)
 .pi/
