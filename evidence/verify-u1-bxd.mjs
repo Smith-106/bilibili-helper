@@ -4,6 +4,7 @@
 //   A) 静态: U1走legacy零签名 / 全仓无wbi死代码 / U1无throw无登录无-403/-401 / fetch预算2 / 间隔与退避与上限与去重
 //   B) 重放: 当前U1源码 + evidence/up-list-pn1.json 真实30条逐字节(p1) + 确定性派生p2-p39 → 39页收敛
 //   C) 预算场景: 中途-352 / 首屏-403+top兜底 / 首屏网络异常+兜底空 → 全部无抛错、partial降级、fetch有界
+//   E) 完整性: U1回传expected/miss语义 + 常驻条bx8/up-integrity/重抓按钮 + Dv落盘lastUplist
 //   D) 链路: bxD速度控制(pagelist/persist/delay/jitter/失败冷却/跳过) + legacy playurl基址
 import fs from 'node:fs';
 
@@ -48,6 +49,9 @@ ok('A19 bxD速度控制(delay+jitter+失败冷却+跳过+持久化)',
   src.includes('bilibili_helper_batch_delay') && src.includes('Math.random()*dv*500') &&
   src.includes('dv*3e3') && src.includes('bilibili_helper_batch_done'));
 ok('A20 逐集cid经pagelist', src.includes('x/player/pagelist?bvid='));
+ok('A21 U1回传expected+cacheTs(完整性数据源)', u1.includes('o.expected=') && u1.includes('o.cacheTs=') && u1.includes('m.expected=0'));
+ok('A22 常驻完整性条bx8+up-integrity+重抓按钮', src.includes('var bx8=') && src.includes('id="up-integrity"') && src.includes('重抓完整列表'));
+ok('A23 Dv落盘lastUplist并重渲染(W0恢复)', src.includes('lastUplist') && src.includes('bx8(e,t)') && src.includes('bx0.lastUplist&&bx8(e,bx0.lastUplist)'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
@@ -154,6 +158,17 @@ const fMid = async (url) => {
   return bMid(url);
 };
 const c6 = await scenario('中途pn3-799两次后恢复→增量继续全量无抛错', fMid, { len: count, partial: false, maxFetch: 43 });
+
+// ---- E) 完整性字段(零网络, 同一runU1) ----
+fetchCalls = 0;
+const full = await runU1(mkFetch(null));
+ok('E1 全量expected==count且cacheTs>0', full.expected === count && full.cacheTs > 0 && full.partial === false, `expected=${full.expected} cacheTs=${full.cacheTs ? 'set' : 'unset'}`);
+fetchCalls = 0;
+const part = await runU1(mkFetch({ failAt: 5, code: -352 }));
+ok('E2 部分expected==count且缺数==expected-len', part.expected === count && (part.expected - part.length) === (count - 120) && part.partial === true, `expected=${part.expected} len=${part.length} miss=${part.expected - part.length}`);
+fetchCalls = 0;
+const cool = await runU1(nullFetch);
+ok('E3 冷却expected==0且cool标记', cool.expected === 0 && cool.cool === true && cool.cacheTs === 0, `expected=${cool.expected} cool=${!!cool.cool}`);
 
 // ---- D) 报告 ----
 const report = {
