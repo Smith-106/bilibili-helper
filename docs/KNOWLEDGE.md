@@ -6,11 +6,11 @@
 
 - **S1 列表腿零抛错**：`U1` 任何失败一律 partial/空降级，不向上 throw。批量入口据此判定「是否再试」。
 - **S2 单条目兜底不得回填为批量列表**：`x/space/top/arc` 只返回置顶 1 条；若把它当批量列表会导致「只下 1 集」。已从 `U1` 移除该兜底（v3.0.17）。
-- **S3 pn1 双败 fast-fail + 15min 冷却记忆 / 中途递增退避**（v3.0.18）：首屏连续失败只重试 1 次（约 12s），再败即停并写 `bilibili_helper_uplist_cool_<mid>`，15min 内零请求直接提示；有缓存则缓存 partial 继续。中途分页仍有界递增退避最多 4 次（≈12/16/20/24/27s）。禁止单次退避后直接落单条目兜底。
+- **S3 pn1 双败 fast-fail + 15min 冷却记忆 / 中途加长退避+自适应放慢**（v3.0.19）：首屏连续失败只重试 1 次（约 12s），再败即停并写 `bilibili_helper_uplist_cool_<mid>`，15min 内零请求直接提示；有缓存则缓存 partial 继续。中途分页加长递增退避最多 4 次（≈20/26/32/38s，`14+rt*6`s+抖动），每次退避自适应放慢后续页间隔（+2s/次，上限+6s），耗尽写冷却并按已抓增量缓存返回 partial。禁止单次退避后直接落单条目兜底。
 - **S4 零登录依赖**：不得引入 `-403`/`-401`/`访问权限不足`/`需要登录` 字面量或登录前置；匿名即可用。
 - **S5 不使用 wbi 签名**：列表用 legacy `x/space/arc/search`，播放用 `x/player/playurl`；不得回退到 `wbi/playurl` 或 `mixin` 路径。
-- **S6 风控节奏冻结**：页间隔 3500–5000ms（类人）、`t>=40` 上限、`bvid` 去重、`-352` 零重试、批量 `delay+jitter`+连续失败 `>=2`→`delay*3`+`bilibili_helper_batch_done` 持久化 + `bilibili_helper_uplist_<mid>` 列表缓存。改动须保语义。
-- **S7 验证门为验收标准**：`node --check` + `verify-u1-bxd.mjs`(28) + `acceptance.mjs`(16) 全绿才可发布。改 U1/bxD 必同步 harness 断言。
+- **S6 风控节奏冻结**：起步 2–3s、页间隔档位联动 4.5–10s（默认约 4.5–6s，超稳档约 8.5–10s）+ 受限自适应放慢、`t>=40` 上限、`bvid` 去重、`-352` 零重试、批量 `delay+jitter`+连续失败 `>=2`→`delay*3`+`bilibili_helper_batch_done` 持久化 + `bilibili_helper_uplist_<mid>` 增量列表缓存（每页成功即写）。改动须保语义。
+- **S7 验证门为验收标准**：`node --check` + `verify-u1-bxd.mjs`(33) + `acceptance.mjs`(16) 全绿才可发布。改 U1/bxD 必同步 harness 断言。
 - **S8 仓库卫生**：`_metadata/`(商店签名)、`.workflow/` 运行时(tmp/sessions/recovery/embedding*)、`.pi/`(注入)、页面快照(`网页*.txt`)不入库；`.workflow/knowhow/` + `.workflow/kg/maestro.db`（maestro Wiki/kg 知识库）跟踪入库；见 `.gitignore`。
 - **S9 无第二完整列表桶**：space HTML 为 SPA 空壳、dynamic feed 需鉴权、series/search-type 报 -400、top/arc 仅 1 条（2026-09-25 实测 T1–T8）。不做换接口 failover，只做节奏+冷却+缓存。
 
@@ -27,5 +27,6 @@
 - v3.0.16：去 wbi/登录依赖、U1 零抛错 partial。
 - v3.0.17：`-799` 递增退避 + 移除 top/arc 单条目兜底（修「只下 1 集」）；仓库清理 + 文档站。
 - v3.0.18：防风控重设计——pn1 双败 fast-fail + 15min 冷却记忆（零请求恢复）+ 缓存 failover + 页间隔 3.5–5s 类人 pacing + 列表速度档“超稳 18s”；harness 同步（A13/A14/A14b/A14c/B4/C3/C4 更新 + C5 冷却记忆场景，32 项全绿）。
+- v3.0.19：中途分页风控加强——起步 2–3s settle + 页间隔档位联动 4.5–10s + 受限自适应放慢 + 中途退避加长 20/26/32/38s + 逐页增量缓存 + 耗尽写冷却 + 逐页冷却复检；harness 同步（A13/A14b/B4 更新 + C6 中途恢复场景，33 项全绿）。
 
 [← 返回文档首页](./index.md)

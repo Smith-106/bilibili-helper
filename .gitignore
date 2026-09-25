@@ -4,6 +4,12 @@
 .workflow/recovery/
 .workflow/search-cache.json
 .workflow/wiki-index.json
+.workflow/search-daemon.json
+.workflow/spec-analytics.jsonl
+.workflow/wiki-index-publisher.lock
+.workflow/kg/*.shm
+.workflow/kg/*.wal
+.workflow/kg/*.journal
 # keep curated knowledge in version control:
 # .workflow/knowhow/ (wiki/knowhow 条目) + .workflow/kg/maestro.db (知识图谱) 跟踪入库
 # 其余 .workflow/* 运行时产物不入库

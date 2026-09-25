@@ -36,9 +36,9 @@ ok('A10 全仓wbi清零', cnt(/wbi/g) === 0);
 ok('A11 全仓MIXIN/bWk/bM5/bDm/bRk清零',
   cnt(/MIXIN/g) === 0 && cnt(/\bbWk\b/g) === 0 && cnt(/\bbM5\b/g) === 0 && cnt(/\bbDm\b/g) === 0 && cnt(/\bbRk\b/g) === 0);
 ok('A12 U1 fetch引用=1(仅主分页, top兜底已移除)', (u1.match(/window\.fetch/g) || []).length === 1);
-ok('A13 页间隔3500-5000ms(人因pacing)', u1.includes('bx2(3500+Math.floor(Math.random()*1500))'));
+ok('A13 档位联动页间隔+起步settle(base档位+settle)', u1.includes('dv>=18?8500') && u1.includes('bx2(2000+Math.floor(Math.random()*1000))') && u1.includes('base+ex+Math.floor'));
 ok('A14 pn1双败fast-fail+15min冷却记忆', u1.includes('bilibili_helper_uplist_cool_') && u1.includes('9e5') && u1.includes('cool=!0'));
-ok('A14b 中途-799递增退避≤4次(12-27s)', u1.includes('rt<4') && u1.includes('bx2(8000+rt*4000+Math.floor(Math.random()*3000))'));
+ok('A14b 中途-799加长退避≤4次(20-41s)+自适应放慢ex+耗尽写冷却', u1.includes('rt<4') && u1.includes('14000+rt*6000') && u1.includes('ex=Math.min(6000,ex+2000)'));
 ok('A14c 缓存failover(老缓存partial继续)', u1.includes('bilibili_helper_uplist_') && u1.includes('o.cached=!0'));
 ok('A15 t>=40上限', u1.includes('t>=40'));
 ok('A16 seen去重', u1.includes('seen=new Set') && u1.includes('seen.has'));
@@ -96,7 +96,7 @@ const replay = {
 ok('B1 39页收敛1159/1159', replay.converged, `got=${replay.got_len} uniq=${replay.uniq}`);
 ok('B2 首30条与真机逐字节一致', replay.first30_real === true, `first=${replay.first}`);
 ok('B3 全程零wbi调用', replay.wbiHits === 0 && replay.fetchCalls === 39, `fetch=${replay.fetchCalls}`);
-ok('B4 页间隔全部3500-5000ms', replay.sleeps_min >= 3500 && replay.sleeps_max <= 5000, `${replay.sleeps_min}-${replay.sleeps_max}`);
+ok('B4 页间隔档位内(默认3s档4500-7000ms)', replay.sleeps_min >= 2000 && replay.sleeps_max <= 7500 && replay.sleeps_min < replay.sleeps_max, `${replay.sleeps_min}-${replay.sleeps_max}`);
 ok('B5 非partial全量', replay.partial === false);
 
 // ---- C) 预算场景(零抛错 + fetch有界 + partial语义) ----
@@ -127,6 +127,7 @@ const f799once = async (url) => {
 const c4 = await scenario('-799一次后恢复→全量非partial', f799once, { len: count, partial: false, maxFetch: 42 });
 
 // C5: 冷却记忆 — 同一mid第二次调用直接cool零请求(Factory级localStorage mock)
+// C6: 中途-799两次后恢复 → 增量继续+自适应ex>0 → 全量非partial, 无抛错
 async function scenarioCool(name, fetchFn, expect) {
   fetchCalls = 0;
   const store = {};
@@ -143,13 +144,24 @@ async function scenarioCool(name, fetchFn, expect) {
 const f799cool = (() => { let k = 0; return async (url) => { fetchCalls++; if (k < 2) { k++; return { json: async () => ({ code: -799, message: 'x' }) }; } return { json: async () => ({ code: 0, data: { list: { vlist: [] }, page: { count: 0 } } }) }; }; })();
 const c5 = await scenarioCool('pn1双败-799进冷却+二次零请求cool无抛错', f799cool, { len: 0, maxFetch: 3 });
 
+// C6: 中途(pn3处)-799两次后恢复 → 退避后增量继续, 全量非partial, 无抛错
+const bMid = mkFetch(null);
+let hMid = 0;
+const fMid = async (url) => {
+  const m = String(url).match(/[?&]pn=(\d+)/);
+  const pn = m ? +m[1] : 1;
+  if (pn === 3 && hMid < 2) { hMid++; fetchCalls++; return { json: async () => ({ code: -799, message: 'x' }) }; }
+  return bMid(url);
+};
+const c6 = await scenario('中途pn3-799两次后恢复→增量继续全量无抛错', fMid, { len: count, partial: false, maxFetch: 43 });
+
 // ---- D) 报告 ----
 const report = {
   generated_at: new Date().toISOString(),
   file: 'bilibili-helper-content-script.js',
   u1_line: lines.findIndex(l => l.includes('var U1=')) + 1,
   static: 'A1-A20见控制台',
-  replay, scenarios: [c1, c2, c3, c4, c5],
+  replay, scenarios: [c1, c2, c3, c4, c5, c6],
   live_note: 'live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试)',
   pass: fail.length === 0
 };

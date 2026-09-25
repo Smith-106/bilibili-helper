@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-25T02:48:21.979Z",
+ "generated_at": "2026-09-25T08:00:34.161Z",
  "file": "bilibili-helper-content-script.js",
  "u1_line": 338,
  "static": "A1-A20见控制台",
@@ -14,8 +14,8 @@
   "first30_real": true,
   "first": "BV1PNht6aEn2",
   "last": "BV1T98j6KEPc_p39_18",
-  "sleeps_min": 3511,
-  "sleeps_max": 4990,
+  "sleeps_min": 2264,
+  "sleeps_max": 5956,
   "converged": true
  },
  "scenarios": [
@@ -79,6 +79,18 @@
    "expect": {
     "len": 0,
     "maxFetch": 3
+   }
+  },
+  {
+   "name": "中途pn3-799两次后恢复→增量继续全量无抛错",
+   "len": 1159,
+   "partial": false,
+   "fetchCalls": 41,
+   "threw": null,
+   "expect": {
+    "len": 1159,
+    "partial": false,
+    "maxFetch": 43
    }
   }
  ],
