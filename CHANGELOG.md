@@ -2,6 +2,15 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.23] - 2026-09-28
+
+### Fixed（面板无显示：Dv 模板闭合符误写致整文件 module 解析失败）
+- `Dv` 行 `o.textContent` 模板字符串闭合符误写为双引号 `"`（应为反引号）；`node --check`（经典脚本语义）对此通过，但浏览器 `type=module` 注入时整文件解析失败 → 无面板、无图标、无下载入口（v3.0.21/v3.0.22 均受影响；旧文件 `SourceTextModule` 复验 `Unexpected identifier '当前为$'`，修复后 `MODULE: OK`）。
+- 新增 `evidence/mod-parse-check.mjs`（`vm.SourceTextModule` module 语义解析）+ harness 同步 A26 断言，防复发。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 42 项全绿（新增 A26 module 解析）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.22] - 2026-09-28
 
 ### Fixed（面板无显示：二次 define 抛错中断整条链路）

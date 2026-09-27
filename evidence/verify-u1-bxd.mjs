@@ -7,6 +7,7 @@
 //   E) 完整性: U1回传expected/miss语义 + 常驻条bx8/up-integrity/重抓按钮 + Dv落盘lastUplist
 //   D) 链路: bxD速度控制(pagelist/persist/delay/jitter/失败冷却/跳过) + legacy playurl基址
 import fs from 'node:fs';
+import { execSync } from 'node:child_process';
 
 const fail = [];
 const ok = (name, cond, extra = '') => {
@@ -55,7 +56,11 @@ ok('A23 Dv落盘lastUplist并重渲染(W0恢复)', src.includes('lastUplist') &&
 const dvi = src.indexOf('var Dv='), duj = src.indexOf('var U1=');
 const dvseg = dvi >= 0 && duj > dvi ? src.slice(dvi, duj) : '';
 ok('A24 Dv缓存/部分二次确认(confirm+取消停手复位)', dvseg.includes('window.confirm') && dvseg.includes('已取消') && dvseg.includes('bx0.running=!1') && dvseg.includes('重抓完整列表'));
-ok('A25 H自定义元素幂等(get判重+try/catch,防二次define无面板)', src.includes('customElements.get(B)||') && src.includes('customElements.define(B'))
+ok('A25 H自定义元素幂等(get判重+try/catch,防二次define无面板)', src.includes('customElements.get(B)||') && src.includes('customElements.define(B'));
+try {
+  execSync('node --experimental-vm-modules evidence/mod-parse-check.mjs', { stdio: 'pipe' });
+  ok('A26 主脚本module语义可解析(与浏览器type=module注入一致,防模板闭合符误写致整文件无面板)', true);
+} catch (e) { ok('A26 主脚本module语义可解析(与浏览器type=module注入一致,防模板闭合符误写致整文件无面板)', false, 'mod-parse-check exit!=0'); }
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));

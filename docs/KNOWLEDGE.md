@@ -32,5 +32,6 @@
 - v3.0.20：UP 主列表完整性条——`U1` 回传 `expected`/`cacheTs` + `bx8` 常驻 `#up-integrity` 条（预期/实际/缺/状态/缓存时间）+ 部分·缓存一键重抓；harness 同步（A21–A23 静态 + E1–E3 完整性字段场景，39 项全绿）。
 - v3.0.21：`Dv` 缓存/部分二次确认——有数据且 `cached||partial` 时先 `window.confirm`（预期/实际/缺/缓存时间），取消停手复位不进 `bxD`；harness 同步（A24 静态，40 项全绿）。
 - v3.0.22：`H` 自定义元素幂等——`customElements.get(B)` 判重 + try/catch，防 seed 重复注入时二次 `define` 抛 `NotSupportedError` 中断 `y0` 入口（无面板/无图标/无下载入口）；真页验证 `X()` 门槛可过 + 裸页新旧语义对照；harness 同步（A25 静态，41 项全绿）。
+- v3.0.23：修 `Dv` 行模板字符串闭合符（反引号误写为 `"`，单字符）——`node --check`（经典语义）无法检出，但浏览器 `type=module` 注入整文件解析失败（`Unexpected identifier '当前为$'`）→ 无面板；二分定位（l338 OK→l339 报错）锁定；新增 `evidence/mod-parse-check.mjs`（`vm.SourceTextModule`）+ harness A26 断言，42 项全绿。
 
 [← 返回文档首页](./index.md)
