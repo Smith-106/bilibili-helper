@@ -2,6 +2,15 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.22] - 2026-09-28
+
+### Fixed（面板无显示：二次 define 抛错中断整条链路）
+- `H` 自定义元素注册加幂等保护：`customElements.get(B)` 判重 + try/catch。seed 重复注入（扩展重载/页面恢复/多实例同页）时，旧代码二次 `define('bilibili-helper-host')` 抛 `NotSupportedError`，`y0` 入口中断 → 无面板、无图标、无下载入口；现已跳过重复注册，后续链路正常渲染。
+- 真页验证：B 站视频页 `__INITIAL_STATE__` + `#bilibili-player .bpx-player-ctrl-quality` 正常（`X()` 门槛可过）；裸页复现旧语义二次 define 抛错、新语义零抛错。
+
+### Verified
+- `node --check` OK；`verify-u1-bxd.mjs` 41 项全绿（新增 A25 H 幂等静态）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.21] - 2026-09-27
 
 ### Added（缓存/部分列表二次确认：防“下了30个以为下完了”）

@@ -55,6 +55,7 @@ ok('A23 Dv落盘lastUplist并重渲染(W0恢复)', src.includes('lastUplist') &&
 const dvi = src.indexOf('var Dv='), duj = src.indexOf('var U1=');
 const dvseg = dvi >= 0 && duj > dvi ? src.slice(dvi, duj) : '';
 ok('A24 Dv缓存/部分二次确认(confirm+取消停手复位)', dvseg.includes('window.confirm') && dvseg.includes('已取消') && dvseg.includes('bx0.running=!1') && dvseg.includes('重抓完整列表'));
+ok('A25 H自定义元素幂等(get判重+try/catch,防二次define无面板)', src.includes('customElements.get(B)||') && src.includes('customElements.define(B'))
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
