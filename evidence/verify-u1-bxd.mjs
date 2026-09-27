@@ -52,6 +52,9 @@ ok('A20 逐集cid经pagelist', src.includes('x/player/pagelist?bvid='));
 ok('A21 U1回传expected+cacheTs(完整性数据源)', u1.includes('o.expected=') && u1.includes('o.cacheTs=') && u1.includes('m.expected=0'));
 ok('A22 常驻完整性条bx8+up-integrity+重抓按钮', src.includes('var bx8=') && src.includes('id="up-integrity"') && src.includes('重抓完整列表'));
 ok('A23 Dv落盘lastUplist并重渲染(W0恢复)', src.includes('lastUplist') && src.includes('bx8(e,t)') && src.includes('bx0.lastUplist&&bx8(e,bx0.lastUplist)'));
+const dvi = src.indexOf('var Dv='), duj = src.indexOf('var U1=');
+const dvseg = dvi >= 0 && duj > dvi ? src.slice(dvi, duj) : '';
+ok('A24 Dv缓存/部分二次确认(confirm+取消停手复位)', dvseg.includes('window.confirm') && dvseg.includes('已取消') && dvseg.includes('bx0.running=!1') && dvseg.includes('重抓完整列表'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
