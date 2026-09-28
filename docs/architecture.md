@@ -1,7 +1,7 @@
 # 架构与文件说明
 
 ```
-manifest.json                          # MV3 清单（version 3.0.23）
+manifest.json                          # MV3 清单（version 3.0.24）
 bilibili-helper-content-script-seed.js # 注入引导：创建 <script type=module> 加载主脚本，注入 baseUrl/manifest
 bilibili-helper-content-script.js      # 主脚本（≈43KB）：解析 playurl、渲染面板、ffmpeg 合并、批量下载
 ffmpeg-core.js / .wasm / .worker.js    # ffmpeg.wasm 0.12.1 —— 音视频合并（高级模式）

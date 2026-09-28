@@ -61,6 +61,12 @@ try {
   execSync('node --experimental-vm-modules evidence/mod-parse-check.mjs', { stdio: 'pipe' });
   ok('A26 主脚本module语义可解析(与浏览器type=module注入一致,防模板闭合符误写致整文件无面板)', true);
 } catch (e) { ok('A26 主脚本module语义可解析(与浏览器type=module注入一致,防模板闭合符误写致整文件无面板)', false, 'mod-parse-check exit!=0'); }
+const bdi = src.indexOf('var bxD='), bdj = src.indexOf('var Dx=');
+const bxd = bdi >= 0 && bdj > bdi ? src.slice(bdi, bdj) : '';
+ok('A27 失败一键重试(failItems+重试失败N集按钮,仅重跑失败项)', bxd.includes('bx0.failItems') && bxd.includes('重试失败') && bxd.includes('bxD(e,t,P,'));
+ok('A28 失败分类计数(需会员/登录vs其他)', bxd.includes('Q1v') && bxd.includes('Q1x') && bxd.includes('需会员/登录'));
+ok('A29 开始行ETA预估(集数×速度档,不含下载耗时)', bxd.includes('预计集间等待约') && bxd.includes('不含下载/合并耗时'));
+ok('A30 Dv缓存文案小时数(不用Math.max(1,1)写死)', src.includes('小时前缓存列表') && !src.includes('Math.max(1,1)'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
