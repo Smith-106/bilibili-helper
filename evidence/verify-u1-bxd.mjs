@@ -71,6 +71,7 @@ ok('A31 bxD结尾复位up-btn(修Dv成功路径up-btn永久disabled)', bxd.inclu
 ok('A32 bxD开头running守护(防重试按钮双击并发两轮)', /var bxD=async\(e,t,P,only\)=>\{\s*if\(bx0\.running\)return/.test(src));
 ok('A33 正在处理行剩余ETA(剩约X分)', (bxd.match(/剩约\$/g) || []).length >= 2);
 ok('A34 skip计数(已有N集)', src.includes('childNodes[1].nodeValue') && src.includes('已有${c.length}集'));
+ok('A35 UP主关键词筛选(up-kw输入+encodeURIComponent+缓存key隔离)', src.includes('id="up-kw"') && src.includes('encodeURIComponent(kw||"")') && src.includes('_kw"') && src.includes('U1(d.mid,n=>o.textContent=n,kw2)'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
