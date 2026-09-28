@@ -79,6 +79,10 @@ ok('A39 UI卡片化+批量进度滚动+失败行底色+收起态toggle小型化'
 ok('A40 可中断等待bx2c(500ms粒度查cancel)', src.includes('var bx2c=') && src.includes('bx0.cancel||r<=0'));
 ok('A41 原地冷却倒计时+可取消(cr循环每10s更新剩时)', bxd.includes('剩${Math.floor(cr/6e4)}分') && bxd.includes('可点取消'));
 ok('A42 集间等待前status提示(等待Ns后下一集)', bxd.includes('等待${Math.round(wt/1e3)}s后下一集'));
+ok('A43 取消按钮即时disable(防连点)', src.includes('d.disabled=!0,o.textContent') && src.includes('d.disabled=!1,bx0.running=!1'));
+ok('A44 当前集行b-cur脉动高亮+完成/失败移除', bxd.includes('p.classList.add("b-cur")') && bxd.includes('p.classList.remove("b-cur")') && src.includes('.b-cur{background: #eef6ff'));
+ok('A45 结束行耗时统计(用时X分Y秒)', bxd.includes('st0=Date.now()') && bxd.includes('${es}'));
+ok('A46 progress自动跟随近底(r.scrollTop跟随)', bxd.includes('r.scrollTop+r.clientHeight>=r.scrollHeight-60'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));

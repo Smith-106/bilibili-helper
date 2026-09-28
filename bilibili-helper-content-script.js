@@ -152,6 +152,8 @@ a.btn {
 #batch-progress{max-height: 280px;overflow-y: auto;margin-top: 4px;padding-left: 18px}
 #batch-progress li.b-fail{background: #fdf0f0}
 #batch-progress li.b-ok{background: #f2fbf6}
+#batch-progress li.b-cur{background: #eef6ff;box-shadow: inset 3px 0 0 #00a1d6;animation: b-cur 1.6s ease-in-out infinite}
+@keyframes b-cur{0%,100%{background:#eef6ff}50%{background:#e2efff}}
 #batch-status{font-size: 13px;padding: 4px 8px;background: #f7f9fa;border-radius: 4px;margin-top: 4px;min-height: 1em}
 #up-integrity{margin-top: 4px;font-size: 12px}
 #up-integrity>span{display: inline-block;background: #f0f6fa;padding: 3px 8px;border-radius: 4px;color: #33404c}
@@ -303,11 +305,11 @@ var bx2c=(e,cb)=>new Promise(i=>{let r=e,t=setInterval(()=>{if(bx0.cancel||r<=0)
 var bx5=e=>{try{let t=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");return t[e]&&t[e].cids||[]}catch{return[]}};
 var bx6=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),d=i[e]||{cids:[]};d.cids.includes(t)||d.cids.push(t),i[e]=d,localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i))}catch{}};
 var bx7=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");i[e]&&(i[e].cids=i[e].cids.filter(d=>d!==t),localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i)))}catch{}};
-var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,d3=n&&n.videoData,k1=d3&&d3.ugc_season&&d3.ugc_season.id,k2=d3&&d3.owner&&"up"+d3.owner.mid;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),del=0;k1&&u[k1]&&(delete u[k1],del=1),k2&&u[k2]&&(delete u[k2],del=1),del&&localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u))}catch(a){a}W0(e)}),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,d2=r&&r.videoData&&r.videoData.owner,c=(u&&u.id?bx5(u.id):[]).concat(d2&&d2.mid?bx5("up"+d2.mid):[]),a=e.getElementById("batch-resume"),s2=e.getElementById("batch-season-row");a.style.display=c.length?"block":"none";let sl=e.getElementById("batch-skip");sl&&sl.parentElement&&sl.parentElement.childNodes.length>1&&(sl.parentElement.childNodes[1].nodeValue=` 跳过上次已下载的集数（已有${c.length}集）`);let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display="block",s2&&(s2.style.display=n?"block":"none"),bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:"",(()=>{let bq=e.getElementById("batch-speed");if(!bq||bq.dataset.bound)return;bq.dataset.bound="1",bq.value=localStorage.getItem("bilibili_helper_batch_delay")||"3",bq.addEventListener("change",()=>{localStorage.bilibili_helper_batch_delay=bq.value})})(),(()=>{let bv=e.getElementById("up-btn");bv&&(bv.dataset.bound!=="1"&&(bv.dataset.bound="1",bv.addEventListener("click",()=>Dv(e))),bx0.running?(bv.disabled=!0,bv.classList.add("b-running")):(bv.disabled=!1,bv.classList.remove("b-running")),bx0.lastUplist&&bx8(e,bx0.lastUplist))})()};
+var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,d.disabled=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),e.getElementById("batch-clear").addEventListener("click",()=>{let n=window.__INITIAL_STATE__,d3=n&&n.videoData,k1=d3&&d3.ugc_season&&d3.ugc_season.id,k2=d3&&d3.owner&&"up"+d3.owner.mid;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),del=0;k1&&u[k1]&&(delete u[k1],del=1),k2&&u[k2]&&(delete u[k2],del=1),del&&localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u))}catch(a){a}W0(e)}),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,d2=r&&r.videoData&&r.videoData.owner,c=(u&&u.id?bx5(u.id):[]).concat(d2&&d2.mid?bx5("up"+d2.mid):[]),a=e.getElementById("batch-resume"),s2=e.getElementById("batch-season-row");a.style.display=c.length?"block":"none";let sl=e.getElementById("batch-skip");sl&&sl.parentElement&&sl.parentElement.childNodes.length>1&&(sl.parentElement.childNodes[1].nodeValue=` 跳过上次已下载的集数（已有${c.length}集）`);let f=`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display="block",s2&&(s2.style.display=n?"block":"none"),bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:"",(()=>{let bq=e.getElementById("batch-speed");if(!bq||bq.dataset.bound)return;bq.dataset.bound="1",bq.value=localStorage.getItem("bilibili_helper_batch_delay")||"3",bq.addEventListener("change",()=>{localStorage.bilibili_helper_batch_delay=bq.value})})(),(()=>{let bv=e.getElementById("up-btn");bv&&(bv.dataset.bound!=="1"&&(bv.dataset.bound="1",bv.addEventListener("click",()=>Dv(e))),bx0.running?(bv.disabled=!0,bv.classList.add("b-running")):(bv.disabled=!1,bv.classList.remove("b-running")),bx0.lastUplist&&bx8(e,bx0.lastUplist))})()};
 var bxD=async(e,t,P,only)=>{
   if(bx0.running)return;
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];
-  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Q1v=0,Q1x=0,th=0;
+  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Q1v=0,Q1x=0,th=0,st0=Date.now();
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
   let F0=only&&only.length?only:t;
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
@@ -317,7 +319,8 @@ var bxD=async(e,t,P,only)=>{
   for(let a=0;a<F0.length;a++){
     if(bx0.cancel)break;
     let h=F0[a],m=bx1(h.title),p=document.createElement("li");
-    p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> 等待`,r.appendChild(p);
+    p.classList.add("b-cur"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> 等待`,r.appendChild(p);
+    r.scrollTop+r.clientHeight>=r.scrollHeight-60&&(r.scrollTop=r.scrollHeight);
     if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ↷ 上次已下载，跳过`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
     o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
     try{
@@ -328,15 +331,15 @@ var bxD=async(e,t,P,only)=>{
         let S=[{url:N.dash.audio.base_url,size:N.dash.audio.size},{url:N.dash.video.base_url,size:N.dash.video.size}],_=document.createElement("ul");
         _.className="progress",p.appendChild(_);
         let w=new Set(q.ffmpegUsedFiles);
-        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`,bx6(P,h.cid);
+        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`,bx6(P,h.cid);
         let K=[...q.ffmpegUsedFiles].find(V=>!w.has(V));
         K&&(q.ffmpegUsedFiles.delete(K),q.ffmpegInstance.deleteFile(K).catch(()=>{})),[...q.blobUrls].filter(V=>!s.has(V)).forEach(V=>{setTimeout(()=>{try{URL.revokeObjectURL(V)}catch(G1){G1}q.blobUrls.delete(V)},6e4),s.add(V)})
-      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`}
+      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`}
       else throw new Error("未返回DASH地址，已跳过")
     }catch(N){
       Q1++;let vip=N.code===E.VIP_ONLY||/大会员|充电|登录/.test(N.message||"");vip?Q1v++:Q1x++,F1++;
       let thr=N.code===-799||/频繁|限制|412|风控|未返回DASH/.test(N.message||"");thr?th++:th=0;
-      p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
+      p.classList.remove("b-cur"),p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
     }
     if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢，可点取消）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟");let cr=300e3;while(cr>0&&!bx0.cancel){o.textContent=` 连续受限冷却中…剩${Math.floor(cr/6e4)}分${Math.floor(cr%6e4/1e3)}秒（可点取消）`,bx0.lastStatus=o.textContent;let st=Math.min(cr,1e4);await bx2(st);cr-=st}th=0}
     if(bx0.cancel)break;
@@ -344,12 +347,13 @@ var bxD=async(e,t,P,only)=>{
     wt>0&&a+1<F0.length&&(o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）等待${Math.round(wt/1e3)}s后下一集…剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent);
     await bx2c(wt)
   }
-  if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}）`;
-  else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);
-  else o.textContent=` 全部完成：成功${Q0} 跳过${Q2} 失败${Q1}（需会员/登录${Q1v}，其他${Q1x}）`;
+  let et=Math.round((Date.now()-st0)/1e3),es=`用时${Math.floor(et/60)}分${et%60}秒`;
+  if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}，${es}）`;
+  else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0（${es}）`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);
+  else o.textContent=` 全部完成：成功${Q0} 跳过${Q2} 失败${Q1}（需会员/登录${Q1v}，其他${Q1x}，${es}）`;
   bx0.lastStatus=o.textContent;
   if(bx0.failLog.length){let K=document.createElement("a");K.href="#nogo",K.className="btn-ghost b-copy",K.textContent="复制失败清单",K.addEventListener("click",V=>{V.preventDefault();let G1=bx0.failLog.join("\n");(navigator.clipboard?navigator.clipboard.writeText(G1):Promise.reject(new Error("no clipboard"))).then(()=>{K.textContent="已复制"},()=>{window.prompt("复制失败清单（Ctrl+C）",G1)})}),o.appendChild(K);if(!only&&bx0.failItems.length){let R2=document.createElement("a");R2.href="#nogo",R2.className="btn-ghost",R2.style.cssText="margin-left:8px",R2.textContent=`重试失败${bx0.failItems.length}集`,R2.addEventListener("click",V=>{V.preventDefault();let Fr=bx0.failItems.slice();bxD(e,t,P,Fr)}),o.appendChild(R2)}}
-  i.disabled=!1,i.classList.remove("b-running"),d.style.display="none",bx0.running=!1;
+  i.disabled=!1,i.classList.remove("b-running"),d.style.display="none",d.disabled=!1,bx0.running=!1;
   try{let ub=e.getElementById("up-btn");ub&&(ub.disabled=!1,ub.classList.remove("b-running"))}catch(_){}
   try{let rs=e.getElementById("batch-resume");rs&&(rs.style.display=bx5(P).length?"block":"none")}catch(_){}
 };
