@@ -37,5 +37,6 @@
 - v3.0.26：UP 主视频关键词筛选——`up-kw` 输入 + `U1(e,n,kw)` + `arc/search?keyword=` 服务端筛选（页数骤降=天然降风控）；缓存/冷却 key 按词隔离 `_kw_<词>`；完整性条 `预期=筛选后总数`；harness 同步（A35 静态，51 项全绿）。
 - v3.0.27：下载腿风控对抗——逐集 `playurl` 受限（-799/频繁/412/未返回DASH）计 `th`，命中即 `wt×(1+th×2)` 拉长集间；`th≥3` 原地冷却 5 分钟（写 `bilibili_helper_batch_cool_<P>`）继续、已抓不丢；harness 同步（A36–A38 静态，54 项全绿）。
 - v3.0.28：UI 可读性——`#batch-progress` 滚动（max-height 280px，千集级可回滚）；成功/失败行浅底色（#f2fbf6/#fdf0f0）；`#batch-status`/`#up-integrity>span` 卡片化；收起态 toggle 小型化；harness 同步（A39 静态，55 项全绿）。
+- v3.0.29：响应与反馈——`bx2c` 可中断等待（500ms 粒度查 `bx0.cancel`），原地冷却倒计时 `剩X分Y秒（可点取消）`，集间等待提示 `等待Ns后下一集`（末集不显示）；harness 同步（A40–A42 静态，58 项全绿）。
 
 [← 返回文档首页](./index.md)

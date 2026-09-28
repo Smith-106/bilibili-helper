@@ -299,6 +299,7 @@ var Bx=()=>{let e=window.__INITIAL_STATE__,i=e&&e.videoData&&e.videoData.ugc_sea
 var bx0={running:!1,cancel:!1,lastStatus:"",failLog:[],failItems:[],lastUplist:null};
 var bx1=e=>String(e==null?"":e).replace(/[\\/:*?"<>|]/g,"_").slice(0,80);
 var bx2=e=>new Promise(i=>setTimeout(i,e));
+var bx2c=(e,cb)=>new Promise(i=>{let r=e,t=setInterval(()=>{if(bx0.cancel||r<=0){clearInterval(t);i();return}r-=500;cb&&cb(r)},500)});
 var bx5=e=>{try{let t=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");return t[e]&&t[e].cids||[]}catch{return[]}};
 var bx6=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),d=i[e]||{cids:[]};d.cids.includes(t)||d.cids.push(t),i[e]=d,localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i))}catch{}};
 var bx7=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");i[e]&&(i[e].cids=i[e].cids.filter(d=>d!==t),localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i)))}catch{}};
@@ -337,8 +338,11 @@ var bxD=async(e,t,P,only)=>{
       let thr=N.code===-799||/频繁|限制|412|风控|未返回DASH/.test(N.message||"");thr?th++:th=0;
       p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
     }
-    if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟"),await bx2(300e3),th=0}
-    let wt=dv*1e3+Math.random()*dv*500;th>0&&(wt=Math.max(wt,dv*(1+th*2)*1e3));F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续")),await bx2(wt)
+    if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢，可点取消）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟");let cr=300e3;while(cr>0&&!bx0.cancel){o.textContent=` 连续受限冷却中…剩${Math.floor(cr/6e4)}分${Math.floor(cr%6e4/1e3)}秒（可点取消）`,bx0.lastStatus=o.textContent;let st=Math.min(cr,1e4);await bx2(st);cr-=st}th=0}
+    if(bx0.cancel)break;
+    let wt=dv*1e3+Math.random()*dv*500;th>0&&(wt=Math.max(wt,dv*(1+th*2)*1e3));F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续"));
+    wt>0&&a+1<F0.length&&(o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）等待${Math.round(wt/1e3)}s后下一集…剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent);
+    await bx2c(wt)
   }
   if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}）`;
   else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);

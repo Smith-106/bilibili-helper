@@ -76,6 +76,9 @@ ok('A36 下载腿受限计数(th判-799/频繁/412/未返回DASH)', bxd.includes
 ok('A37 下载腿连续受限原地冷却5分钟继续', bxd.includes('th>=3') && bxd.includes('300e3') && bxd.includes('原地冷却'));
 ok('A38 受限即时拉长集间(wt×(1+th*2))', bxd.includes('wt=Math.max(wt,dv*(1+th*2)*1e3)'));
 ok('A39 UI卡片化+批量进度滚动+失败行底色+收起态toggle小型化', src.includes('#batch-progress{max-height: 280px;overflow-y: auto') && src.includes('li.b-fail{background: #fdf0f0}') && src.includes('#up-integrity>span{display: inline-block;background: #f0f6fa') && src.includes('.hide #toggle{font-size: 11px'));
+ok('A40 可中断等待bx2c(500ms粒度查cancel)', src.includes('var bx2c=') && src.includes('bx0.cancel||r<=0'));
+ok('A41 原地冷却倒计时+可取消(cr循环每10s更新剩时)', bxd.includes('剩${Math.floor(cr/6e4)}分') && bxd.includes('可点取消'));
+ok('A42 集间等待前status提示(等待Ns后下一集)', bxd.includes('等待${Math.round(wt/1e3)}s后下一集'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
