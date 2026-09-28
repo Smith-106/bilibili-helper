@@ -149,6 +149,13 @@ a.btn {
 #content{transition: opacity .22s ease, transform .22s ease}
 .hide #content{opacity: 0;pointer-events: none}
 #durls{max-height: 220px;overflow: auto;margin-top: 4px}
+#batch-progress{max-height: 280px;overflow-y: auto;margin-top: 4px;padding-left: 18px}
+#batch-progress li.b-fail{background: #fdf0f0}
+#batch-progress li.b-ok{background: #f2fbf6}
+#batch-status{font-size: 13px;padding: 4px 8px;background: #f7f9fa;border-radius: 4px;margin-top: 4px;min-height: 1em}
+#up-integrity{margin-top: 4px;font-size: 12px}
+#up-integrity>span{display: inline-block;background: #f0f6fa;padding: 3px 8px;border-radius: 4px;color: #33404c}
+.hide #toggle{font-size: 11px;padding: 4px 8px;border-radius: 6px 0 0 6px}
 #durls li, #batch-progress li{transition: background .15s ease;border-radius: 4px;padding: 2px 4px;animation: b-fade .25s ease}
 #durls li:hover, #batch-progress li:hover{background: #f7f9fa}
 @keyframes b-fade{from{opacity: 0;transform: translateY(2px)}to{opacity: 1;transform: none}}

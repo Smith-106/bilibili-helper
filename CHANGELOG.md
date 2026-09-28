@@ -2,6 +2,18 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.28] - 2026-09-28
+
+### Improved（UI 可读性与可滚动性）
+- **批量进度列表可滚动**：`#batch-progress` 加 `max-height:280px; overflow-y:auto`，千集级批量不再把面板撑满半屏、且可回滚查看早期集。
+- **成功/失败行浅底色**：`b-ok` 行 `#f2fbf6`、`b-fail` 行 `#fdf0f0`，扫一眼即分清成败。
+- **状态行卡片化**：`#batch-status` 加浅灰底+圆角+内边距，信息区不再挤成一团。
+- **完整性条卡片化**：`#up-integrity>span` 浅蓝底卡片 `background:#f0f6fa`，数字更易读。
+- **收起态 toggle 小型化**：`.hide #toggle` 缩小字号/内边距并贴边圆角，收起后不再是大块粉蓝按钮占屏幕右下。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 55 项全绿（新增 A39 UI 静态）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.27] - 2026-09-28
 
 ### Added（风控对抗：下载腿自适应退避 + 原地冷却）
