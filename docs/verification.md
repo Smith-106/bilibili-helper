@@ -25,6 +25,8 @@ node evidence/acceptance.mjs                     # 16 项验收门
 
 ## 证据目录（`evidence/`）
 
-`full-*-progress.jsonl`（四条腿逐条记录）+ `live-full-*-summary.json`（汇总）+ `verify-*.json` + `r3-semantics.json` + 探针脚本（`probe-*.mjs`）。完整清单见 `evidence/live-code-inventory.json`。
+`full-*-progress.jsonl`（四条腿逐条记录，**被 `acceptance.mjs` 活引用为数据源，勿删**）+ `live-full-*-summary.json`（汇总）+ `verify-*.json` + `r3-semantics.json` + 探针脚本（`probe-*.mjs`）。完整清单见 `evidence/live-code-inventory.json`。
+
+已清理冗余（v3.0.30 后）：`browser-p01.txt`（被 `browser-all-bvids.txt` 覆盖）、`status-ascii.txt`（v3.0.16 一次性快照）、`live-collect.log`（运行时生成，`*.log` 已 ignore）。
 
 [← 返回文档首页](./index.md)
