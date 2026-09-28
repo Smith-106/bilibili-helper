@@ -299,7 +299,7 @@ var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementByI
 var bxD=async(e,t,P,only)=>{
   if(bx0.running)return;
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];
-  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Q1v=0,Q1x=0;
+  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Q1v=0,Q1x=0,th=0;
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
   let F0=only&&only.length?only:t;
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
@@ -326,9 +326,12 @@ var bxD=async(e,t,P,only)=>{
       }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`}
       else throw new Error("未返回DASH地址，已跳过")
     }catch(N){
-      Q1++;let vip=N.code===E.VIP_ONLY||/大会员|充电|登录/.test(N.message||"");vip?Q1v++:Q1x++,F1++,p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
+      Q1++;let vip=N.code===E.VIP_ONLY||/大会员|充电|登录/.test(N.message||"");vip?Q1v++:Q1x++,F1++;
+      let thr=N.code===-799||/频繁|限制|412|风控|未返回DASH/.test(N.message||"");thr?th++:th=0;
+      p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
     }
-    let wt=dv*1e3+Math.random()*dv*500;F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续")),await bx2(wt)
+    if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟"),await bx2(300e3),th=0}
+    let wt=dv*1e3+Math.random()*dv*500;th>0&&(wt=Math.max(wt,dv*(1+th*2)*1e3));F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续")),await bx2(wt)
   }
   if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}）`;
   else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);

@@ -72,6 +72,9 @@ ok('A32 bxD开头running守护(防重试按钮双击并发两轮)', /var bxD=asy
 ok('A33 正在处理行剩余ETA(剩约X分)', (bxd.match(/剩约\$/g) || []).length >= 2);
 ok('A34 skip计数(已有N集)', src.includes('childNodes[1].nodeValue') && src.includes('已有${c.length}集'));
 ok('A35 UP主关键词筛选(up-kw输入+encodeURIComponent+缓存key隔离)', src.includes('id="up-kw"') && src.includes('encodeURIComponent(kw||"")') && src.includes('_kw"') && src.includes('U1(d.mid,n=>o.textContent=n,kw2)'));
+ok('A36 下载腿受限计数(th判-799/频繁/412/未返回DASH)', bxd.includes('th++') && bxd.includes('/频繁|限制|412|风控|未返回DASH/'));
+ok('A37 下载腿连续受限原地冷却5分钟继续', bxd.includes('th>=3') && bxd.includes('300e3') && bxd.includes('原地冷却'));
+ok('A38 受限即时拉长集间(wt×(1+th*2))', bxd.includes('wt=Math.max(wt,dv*(1+th*2)*1e3)'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));

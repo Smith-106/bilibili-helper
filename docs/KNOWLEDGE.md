@@ -35,5 +35,6 @@
 - v3.0.24：批量失败可重试+分类可见+有预期——`bxD(e,t,P,only)` 第 4 参仅重跑 `bx0.failItems`（`bx7` 已剔除 done，重试与 skip 不冲突）；结束行 `需会员/登录a，其他b` 分类计数；开始行 ETA（集数×速度档×1.25，不含下载/合并）；`Dv` 缓存文案 `Math.max(1,1)` 改 `t.cacheTs` 小时数；`bxD` 结尾刷新 resume 行显隐；harness 同步（A27–A30 静态，46 项全绿）。
 - v3.0.25：修 `bxD` 结尾 up-btn 永久禁用（Dv 成功路径/重试后不复位）；`bxD` 开头 `if(bx0.running)return` 防重试双击并发；`正在处理 a/N` 行加剩余 ETA（剩约X分）；skip label 显示 `（已有N集）`；harness 同步（A31–A34 静态，50 项全绿）。
 - v3.0.26：UP 主视频关键词筛选——`up-kw` 输入 + `U1(e,n,kw)` + `arc/search?keyword=` 服务端筛选（页数骤降=天然降风控）；缓存/冷却 key 按词隔离 `_kw_<词>`；完整性条 `预期=筛选后总数`；harness 同步（A35 静态，51 项全绿）。
+- v3.0.27：下载腿风控对抗——逐集 `playurl` 受限（-799/频繁/412/未返回DASH）计 `th`，命中即 `wt×(1+th×2)` 拉长集间；`th≥3` 原地冷却 5 分钟（写 `bilibili_helper_batch_cool_<P>`）继续、已抓不丢；harness 同步（A36–A38 静态，54 项全绿）。
 
 [← 返回文档首页](./index.md)
