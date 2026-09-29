@@ -2,6 +2,17 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.31] - 2026-09-29
+
+### Added（多 P 视频批量下载）
+- **`Bx` 增补多 P fallback**：无 `ugc_season` 合集时，若 `videoData.videos>1`（多 P 视频/课程页），用 `videoData.pages[]` 构造批量列表（每 P 一集，`title=分P名`，`cid` 独立）。修复此前此类页 `Bx()` 返回 `[]` → 「未找到合集信息」的缺口。
+- **批量键 `mp-<bvid>`**：多 P 列表用 `mp-<bvid>` 作 resume/done/cool 键（与合集 `season_id`、UP 主 `up<mid>` 隔离互不干扰）。
+- **按钮文案自适应**：多 P 页批量按钮显示「批量下载本视频全部P（共 N P）」，合集页仍显示「批量下载合集（共 N 集）」。
+- `batch-clear` / `bx5(P)` resume 计数同步识别 `mp-` 键。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；真实页源码模拟 `Bx()` 返回 12 集（BV1Mjt96uE44 12 P 课程页）；`verify-u1-bxd.mjs` 64 项全绿（新增 A47–A48）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.30] - 2026-09-28
 
 ### Improved（UI 反馈：当前集定位、取消防连点、结束耗时、列表自动跟随）

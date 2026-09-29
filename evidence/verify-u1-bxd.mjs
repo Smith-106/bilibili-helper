@@ -83,6 +83,8 @@ ok('A43 取消按钮即时disable(防连点)', src.includes('d.disabled=!0,o.tex
 ok('A44 当前集行b-cur脉动高亮+完成/失败移除', bxd.includes('p.classList.add("b-cur")') && bxd.includes('p.classList.remove("b-cur")') && src.includes('.b-cur{background: #eef6ff'));
 ok('A45 结束行耗时统计(用时X分Y秒)', bxd.includes('st0=Date.now()') && bxd.includes('${es}'));
 ok('A46 progress自动跟随近底(r.scrollTop跟随)', bxd.includes('r.scrollTop+r.clientHeight>=r.scrollHeight-60'));
+ok('A47 多P视频Bx fallback(videos>1用pages构造12集)', src.includes('vd&&vd.videos>1&&Array.isArray(vd.pages)') && src.includes('p.part||"P"+p.page'));
+ok('A48 多P批量键mp-<bvid>+文案全部P', src.includes('"mp-"+vd.bvid') && src.includes('批量下载本视频全部P'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
