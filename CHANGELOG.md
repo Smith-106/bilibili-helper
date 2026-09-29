@@ -2,6 +2,15 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.33] - 2026-09-29
+
+### Fixed（「出错了 :(」——code=OK 但无下载链接）
+- **dash video-only 降级**：`playurl` 返回 `dash` 但 `audio` 缺失（无声视频/流受限）且 `durl` 为空时，此前 `dash:undefined,durl:undefined` → 「出错了 :(」。现在 video 流存在即降级为单链接 `durl=[{url:video.base_url,size,backup_url}]`，走分段下载可正常保存。
+- **「出错了」空 message 兜底**：`code=OK` 但 dash/durl 全无且 `message` 为空时，此前显示「出错了 :( 」（空白无提示）。现在兜底文案「无可用下载链接（可能该视频无音视频流或接口未返回 dash/durl），请尝试切换清晰度或稍候重试」。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 68 项全绿（新增 A51–A52）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.32] - 2026-09-29
 
 ### Fixed（潜在问题修复）
