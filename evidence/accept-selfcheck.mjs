@@ -1,9 +1,9 @@
-// accept-selfcheck.mjs — v3.0.33 单命令自验收(零网络, 确定性):
+// accept-selfcheck.mjs — v3.0.34 单命令自验收(零网络, 确定性):
 //   node evidence/accept-selfcheck.mjs  →  exit 0 全过 / exit 1 任一失败
 // 覆盖 Goal R1/R2/R3:
 //   R1: 主脚本含 window.confirm + cached||partial 条件 + 取消停手复位分支 + H 自定义元素幂等(get判重+try/catch)
-//   R2: node --check + mod-parse-check + verify-u1-bxd.mjs(68✓) + acceptance.mjs(16OK) + A24–A52断言行
-//   R3: manifest 3.0.33 + harness跑后还原verify-report(工作树干净由git负责)
+//   R2: node --check + mod-parse-check + verify-u1-bxd.mjs(69✓) + acceptance.mjs(16OK) + A24–A53断言行
+//   R3: manifest 3.0.34 + harness跑后还原verify-report(工作树干净由git负责)
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 let bad = 0;
@@ -28,7 +28,7 @@ catch (e) { ck('R2 module MOD-PARSE-OK', false, String((e && e.message) || e).sl
 try {
   const v = execSync('node evidence/verify-u1-bxd.mjs', { stdio: 'pipe' }).toString();
   const n = (v.match(/^✓/gm) || []).length;
-  ck('R2 verify 68 pass', n === 68 && v.includes('ALL VERIFY CHECKS PASS'), `got=${n}`);
+  ck('R2 verify 69 pass', n === 69 && v.includes('ALL VERIFY CHECKS PASS'), `got=${n}`);
   ck('R2 A24 in log', v.includes("✓ A24 Dv缓存/部分二次确认"));
   ck('R2 A25 in log', v.includes("✓ A25 H自定义元素幂等"));
   ck('R2 A26 in log', v.includes("✓ A26 主脚本module语义可解析"));
@@ -58,7 +58,8 @@ try {
   ck("R2 A50 in log", v.includes("✓ A50 batch-clear绑定守护"));
   ck("R2 A51 in log", v.includes("✓ A51 dash video-only降级"));
   ck("R2 A52 in log", v.includes("✓ A52 出错了message空兜底"));
-} catch (e) { ck('R2 verify 68 pass', false, 'exit!=0'); }
+  ck("R2 A53 in log", v.includes("✓ A53 d0 playurl空data判定"));
+} catch (e) { ck('R2 verify 69 pass', false, 'exit!=0'); }
 // R2c acceptance
 try {
   const a = execSync('node evidence/acceptance.mjs', { stdio: 'pipe' }).toString();
@@ -96,13 +97,14 @@ ck('R2 A49 assertion source', h.includes("ok('A49 Dx空列表写UI状态行"));
 ck("R2 A50 assertion source", h.includes("ok('A50 batch-clear绑定守护"));
 ck("R2 A51 assertion source", h.includes("ok('A51 dash video-only降级"));
 ck("R2 A52 assertion source", h.includes("ok('A52 出错了message空兜底"));
+ck("R2 A53 assertion source", h.includes("ok('A53 d0 playurl空data判定"));
 // R3 version sync
 const mf = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
-ck('R3 manifest 3.0.33', mf.version === '3.0.33', 'got=' + mf.version);
+ck('R3 manifest 3.0.34', mf.version === '3.0.34', 'got=' + mf.version);
 const rm = fs.readFileSync('README.md', 'utf8');
-ck('R3 README 3.0.33', rm.includes('`3.0.33`'));
+ck('R3 README 3.0.34', rm.includes('`3.0.34`'));
 const cl = fs.readFileSync('CHANGELOG.md', 'utf8');
-ck('R3 CHANGELOG 3.0.33', cl.includes('## [3.0.33]'));
+ck('R3 CHANGELOG 3.0.34', cl.includes('## [3.0.34]'));
 // restore harness side-effect
 try { execSync('git checkout -- evidence/verify-report.json', { stdio: 'pipe' }); } catch (_) {}
 console.log(bad === 0 ? 'SELFCHECK-ALL-PASS' : `SELFCHECK-FAIL n=${bad}`);

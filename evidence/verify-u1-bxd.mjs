@@ -89,6 +89,7 @@ ok('A49 Dx空列表写UI状态行(非仅日志)', src.includes('o.textContent=" 
 ok('A50 batch-clear绑定守护(dataset.bound防W0重绑)', src.includes('bc.dataset.bound="1"'));
 ok('A51 dash video-only降级为单链接durl(无声视频)', src.includes('!m&&p?[{url:p.base_url,size:p.size,backup_url:p.backup_url}]'));
 ok('A52 出错了message空兜底(无可用下载链接提示)', src.includes('无可用下载链接（可能该视频无音视频流'));
+ok('A53 d0 playurl空data判定+未登录提示', src.includes('!t.dash&&!(t.durl&&t.durl.length)') && src.includes('请先登录后刷新重试'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));

@@ -2,6 +2,14 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.34] - 2026-09-29
+
+### Fixed（「出错了」根因：未登录 / playurl 空 data 明确提示）
+- **`d0` playurl 空 data 判定**：`code=0` 但 `data.dash` 与 `data.durl` 均无（未登录态 B 站不返回流，或接口受限空响应）→ 此前落入「出错了 :( 无可用下载链接」不明提示；现判定 `__INITIAL_STATE__.user.isLogin===false`/`mid` 缺失 → 明确提示「当前未登录 B 站或接口未返回下载流，请先登录后刷新重试」；已登录则提示「接口未返回下载链接（可能风控/流受限），请稍候重试或切换清晰度」。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 69 项全绿（新增 A53）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.33] - 2026-09-29
 
 ### Fixed（「出错了 :(」——code=OK 但无下载链接）

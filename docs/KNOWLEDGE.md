@@ -42,5 +42,6 @@
 - v3.0.31：**多 P 视频批量下载**——`Bx` 增补 fallback：`videoData.videos>1` 且无 `ugc_season` 时用 `pages[]` 构造列表（每 P 一集，cid 独立），批量键 `mp-<bvid>` 与合集/UP 主键隔离，按钮文案「批量下载本视频全部P（共 N P）」；真实页 `BV1Mjt96uE44`（12 P 课程页）模拟 `Bx()` 返回 12 集验证通过；harness 同步（A47–A48 静态，64 项全绿）。
 - v3.0.32：潜在问题修复——`Dx` 空列表同时写 `#batch-status`（此前仅日志不可见）；`batch-clear` 加 `dataset.bound` 守护（其回调重调 W0 防重复绑定）；批量行 label `合集/分P：`；harness 同步（A49–A50 静态，66 项全绿）。
 - v3.0.33：「出错了 :(」修复——dash video-only（无声/流受限）且 durl 空时降级单链接 durl=[video] 可下载；code=OK 无链接且 message 空时兜底文案；harness 同步（A51–A52 静态，68 项全绿）。
+- v3.0.34：「出错了」根因提示——`d0` playurl 空 data（code=0 但无 dash/durl）判定：未登录态（user.isLogin=false/mid 缺）→「请先登录后刷新重试」；已登录→「接口未返回下载链接（可能风控/流受限）」；真实未登录页 `BV1ntah6TEvA` 源码验证 videoData 无 dash/durl 且 user.mid undefined；harness 同步（A53 静态，69 项全绿）。
 
 [← 返回文档首页](./index.md)
