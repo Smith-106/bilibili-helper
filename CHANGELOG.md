@@ -2,6 +2,15 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.35] - 2026-09-29
+
+### Fixed（「出错了」未解决根因：U 空链接仍回 code=OK）
+- **`U` 空链接改 INVALID_RESPONSE**：`o.dash||a.durl` 进入分支后 `r.video`/`r.audio` 为空数组或 `m,p` 全 undefined 时，此前仍返回 `code=OK` + `dash:undefined,durl:undefined` → `s0` `n===OK` → `T(code:OK)` → `l0` 「出错了 :(」。现在：`p`（video 流）存在即可下（video-only 降级 durl）；`a.durl` 非空可下；全空返回 `INVALID_RESPONSE` + 登录态判定提示（未登录→「请先登录」；已登录→「接口未返回可用下载链接（dash/durl 为空或流受限）」）。
+- **`support_formats` 可选防 TypeError**：`Object.values(c)` 对 `support_formats` 缺失时抛 `Cannot convert undefined or null to object` → `Object.values(c||{})`。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`U` 四场景模拟（video-only 降级 / 全空 INVALID_RESPONSE / 完整 dash / 纯 durl）全部正确；`verify-u1-bxd.mjs` 71 项全绿（新增 A54–A55 + A51 断言更新）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.34] - 2026-09-29
 
 ### Fixed（「出错了」根因：未登录 / playurl 空 data 明确提示）

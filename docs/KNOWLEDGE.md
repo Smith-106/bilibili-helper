@@ -43,5 +43,6 @@
 - v3.0.32：潜在问题修复——`Dx` 空列表同时写 `#batch-status`（此前仅日志不可见）；`batch-clear` 加 `dataset.bound` 守护（其回调重调 W0 防重复绑定）；批量行 label `合集/分P：`；harness 同步（A49–A50 静态，66 项全绿）。
 - v3.0.33：「出错了 :(」修复——dash video-only（无声/流受限）且 durl 空时降级单链接 durl=[video] 可下载；code=OK 无链接且 message 空时兜底文案；harness 同步（A51–A52 静态，68 项全绿）。
 - v3.0.34：「出错了」根因提示——`d0` playurl 空 data（code=0 但无 dash/durl）判定：未登录态（user.isLogin=false/mid 缺）→「请先登录后刷新重试」；已登录→「接口未返回下载链接（可能风控/流受限）」；真实未登录页 `BV1ntah6TEvA` 源码验证 videoData 无 dash/durl 且 user.mid undefined；harness 同步（A53 静态，69 项全绿）。
+- v3.0.35：**「出错了」真根因**——`U` 在 `o.dash||a.durl` 分支内 `r.video`/`r.audio` 空或 `m,p` 全 undefined 时仍回 `code=OK` 空链接 → 出错了。改：`p` 存在即可下（video-only durl）、`a.durl` 非空可下、全空 INVALID_RESPONSE+登录态判定；`support_formats` 缺时 `Object.values(c)` TypeError 改 `c||{}`；四场景模拟验证；harness 同步（A54–A55+A51 更新，71 项全绿）。
 
 [← 返回文档首页](./index.md)
