@@ -2,6 +2,16 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.32] - 2026-09-29
+
+### Fixed（潜在问题修复）
+- **`Dx` 空列表有 UI 反馈**：`Bx()` 返回空时此前仅 `v()` 写日志面板（用户不可见），现在同时写 `#batch-status` 状态行 `未找到可批量下载的合集或分P`。
+- **`batch-clear` 防重复绑定**：其点击回调内会再调 `W0(e)` 重渲染行状态，此前无 `dataset.bound` 守护导致每次清空后再点会多重绑定 listener；现加 `bc.dataset.bound` 守护，与其它按钮一致。
+- **批量行 label 文案**：`合集：` → `合集/分P：`（多 P 页也走此行）。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 66 项全绿（新增 A49–A50）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.31] - 2026-09-29
 
 ### Added（多 P 视频批量下载）

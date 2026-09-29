@@ -40,5 +40,6 @@
 - v3.0.29：响应与反馈——`bx2c` 可中断等待（500ms 粒度查 `bx0.cancel`），原地冷却倒计时 `剩X分Y秒（可点取消）`，集间等待提示 `等待Ns后下一集`（末集不显示）；harness 同步（A40–A42 静态，58 项全绿）。
 - v3.0.30：UI 反馈——当前集 `.b-cur` 浅蓝底+色条+脉动定位，取消按钮即时 disable，结束行 `用时X分Y秒`，progress 近底自动跟随（60px 阈值，上滚不打断）；harness 同步（A43–A46 静态，62 项全绿）。
 - v3.0.31：**多 P 视频批量下载**——`Bx` 增补 fallback：`videoData.videos>1` 且无 `ugc_season` 时用 `pages[]` 构造列表（每 P 一集，cid 独立），批量键 `mp-<bvid>` 与合集/UP 主键隔离，按钮文案「批量下载本视频全部P（共 N P）」；真实页 `BV1Mjt96uE44`（12 P 课程页）模拟 `Bx()` 返回 12 集验证通过；harness 同步（A47–A48 静态，64 项全绿）。
+- v3.0.32：潜在问题修复——`Dx` 空列表同时写 `#batch-status`（此前仅日志不可见）；`batch-clear` 加 `dataset.bound` 守护（其回调重调 W0 防重复绑定）；批量行 label `合集/分P：`；harness 同步（A49–A50 静态，66 项全绿）。
 
 [← 返回文档首页](./index.md)
