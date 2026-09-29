@@ -92,6 +92,8 @@ ok('A52 出错了message空兜底(无可用下载链接提示)', src.includes('�
 ok('A53 d0 playurl空data判定+未登录提示', src.includes('!t.dash&&!(t.durl&&t.durl.length)') && src.includes('请先登录后刷新重试'));
 ok('A54 U空链接改INVALID_RESPONSE(不再code=OK空链接)', src.includes('p?{code:E.OK') && src.includes('接口未返回可用下载链接'));
 ok('A55 support_formats可选(Object.values(c||{}))', src.includes('Object.values(c||{})'));
+ok('A56 UI精简——删教程链接/赞赏区/notice iframe(版本/微信赞赏外部区)', !src.includes('使用教程及常见问题解答') && !src.includes('五星好评') && !src.includes('id="notice-frame"') && src.includes('if(!i)return')&&src.includes('J0=e=>'));
+ok('A57 side-bar移除main撑满(flex:1)', !src.includes('id="side-bar"') && src.includes('#main {\n  flex: 1;'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));

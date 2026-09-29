@@ -2,6 +2,17 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.36] - 2026-09-29
+
+### Changed（UI 精简——移除外部宣传/教程/赞赏区）
+- **删「使用教程及常见问题解答」链接行**：`n0` 模板标题下方移除（面板更聚焦下载本身）。
+- **删 `.beg` 赞赏区**：「五星好评」按钮移除。
+- **删 `#notice-frame` iframe**：`#side-bar>.notice`（远程 `csser.top` 公告区，含「最新版本/已安装版本/微信赞赏二维码/教程链接」外部内容）整体移除；`J0` postMessage 逻辑保留但加 `if(!i)return` 兜底；`toggle` 展开时不再 postMessage。
+- **`#side-bar` 移除**，`#main` `flex:7`→`flex:1` 撑满宽。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` 73 项全绿（新增 A56–A57）；`acceptance.mjs` 16 项全绿。
+
 ## [3.0.35] - 2026-09-29
 
 ### Fixed（「出错了」未解决根因：U 空链接仍回 code=OK）

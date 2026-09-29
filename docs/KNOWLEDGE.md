@@ -44,5 +44,6 @@
 - v3.0.33：「出错了 :(」修复——dash video-only（无声/流受限）且 durl 空时降级单链接 durl=[video] 可下载；code=OK 无链接且 message 空时兜底文案；harness 同步（A51–A52 静态，68 项全绿）。
 - v3.0.34：「出错了」根因提示——`d0` playurl 空 data（code=0 但无 dash/durl）判定：未登录态（user.isLogin=false/mid 缺）→「请先登录后刷新重试」；已登录→「接口未返回下载链接（可能风控/流受限）」；真实未登录页 `BV1ntah6TEvA` 源码验证 videoData 无 dash/durl 且 user.mid undefined；harness 同步（A53 静态，69 项全绿）。
 - v3.0.35：**「出错了」真根因**——`U` 在 `o.dash||a.durl` 分支内 `r.video`/`r.audio` 空或 `m,p` 全 undefined 时仍回 `code=OK` 空链接 → 出错了。改：`p` 存在即可下（video-only durl）、`a.durl` 非空可下、全空 INVALID_RESPONSE+登录态判定；`support_formats` 缺时 `Object.values(c)` TypeError 改 `c||{}`；四场景模拟验证；harness 同步（A54–A55+A51 更新，71 项全绿）。
+- v3.0.36：UI 精简——删「使用教程及常见问题解答」链接行、`.beg` 赞赏区、`#notice-frame` iframe（远程 csser.top 公告区含版本/微信赞赏/教程外部内容）；`J0` 加 `if(!i)return` 兜底；`#side-bar` 移除 `#main` flex 撑满；harness 同步（A56–A57 静态，73 项全绿）。
 
 [← 返回文档首页](./index.md)
