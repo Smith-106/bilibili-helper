@@ -7,6 +7,7 @@
 .workflow/search-daemon.json
 .workflow/spec-analytics.jsonl
 .workflow/wiki-index-publisher.lock
+.workflow/kg/sync-state.json
 # keep curated knowledge in version control:
 # .workflow/knowhow/ (wiki/knowhow 条目) + .workflow/kg/maestro.db (知识图谱) 跟踪入库
 # 其余 .workflow/* 运行时产物不入库
@@ -44,3 +45,5 @@ out/
 
 # maestro embedding/vector 索引(可重建,不入库)
 .workflow/embedding*
+# maestro 代码图忽略规则(kg sync 自动生成,不入库)
+.maestroignore

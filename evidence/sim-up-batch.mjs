@@ -2,7 +2,8 @@
 //   node evidence/sim-up-batch.mjs → 落盘 evidence/sim-up-batch-result.json, exit 0 全过 / 1 失败
 // 方法: 取主脚本“真实源码段”在 node 里 new Function 跑起来, 仅把 I/O 层换成受控替身:
 //   新逻辑段 = var bxPn= .. var Dx= 之前 (含 bxPn/bxPgs/bxSp/bxSn/bxB/Bx + bx0/1/2/2c/5/6/7 + bxD, 未改写一字)
-//   旧逻辑段 = git HEAD(3.0.36) var bx0= .. var Dx= 之前 (对照组, 未改写一字)
+//   旧逻辑段 = git tag v3.0.36 的同段代码(对照组, 未改写一字; 必须钉死tag——
+//   用浮动 HEAD 取对照一提交就失效, 提交后 HEAD 即新代码会导致 S0c/S0d/C1/C2 全挂)
 //   替身: window.fetch→编排好的 pagelist(多P/单P/-799/先败后好); d0→按cid编排playurl(-10403一次后好);
 //         t0/R→只记录“会落下的文件名”; z→64; 计时器→同步立即执行(真实等待逻辑不变, 只是不耗时间)
 // 断言: 无cid条目恰1次pagelist；多P就地展开入队；命名 视频标题_Pn_分P名；
@@ -18,7 +19,7 @@ const ok = (name, cond, extra = '') => {
 };
 
 const src = fs.readFileSync('bilibili-helper-content-script.js', 'utf8');
-const headSrc = execSync('git show HEAD:bilibili-helper-content-script.js', { stdio: 'pipe' }).toString();
+const headSrc = execSync('git show v3.0.36:bilibili-helper-content-script.js', { stdio: 'pipe' }).toString();
 const newSeg = src.slice(src.indexOf('var bxPn='), src.indexOf('var Dx='));
 const oldSeg = headSrc.slice(headSrc.indexOf('var bx0='), headSrc.indexOf('var Dx='));
 ok('S0 新源码含就地展开且旧 P1-only 写法已删', newSeg.includes('F0.splice(a+1,0,...ad') && !newSeg.includes('h.cid=pg.data[0].cid'));
