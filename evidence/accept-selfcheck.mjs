@@ -1,9 +1,9 @@
-// accept-selfcheck.mjs — v3.0.36 单命令自验收(零网络, 确定性):
+// accept-selfcheck.mjs — v3.0.38 单命令自验收(零网络, 确定性):
 //   node evidence/accept-selfcheck.mjs  →  exit 0 全过 / exit 1 任一失败
 // 覆盖 Goal R1/R2/R3:
 //   R1: 主脚本含 window.confirm + cached||partial 条件 + 取消停手复位分支 + H 自定义元素幂等(get判重+try/catch)
-//   R2: node --check + mod-parse-check + verify-u1-bxd.mjs(73✓) + acceptance.mjs(16OK) + A24–A57断言行
-//   R3: manifest 3.0.36 + harness跑后还原verify-report(工作树干净由git负责)
+//   R2: node --check + mod-parse-check + verify-u1-bxd.mjs(92✓, 含D1-D2仿真门+A66) + acceptance.mjs(16OK) + A24–A66/B6–B13/D1–D2断言行
+//   R3: manifest 3.0.38 + harness跑后还原verify-report(工作树干净由git负责)
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 let bad = 0;
@@ -12,6 +12,16 @@ const ck = (name, cond, extra = '') => {
   if (!cond) bad++;
 };
 const src = fs.readFileSync('bilibili-helper-content-script.js', 'utf8');
+// v3.0.37 新增断言清单(verify 日志与 harness 源码双侧核对)
+const NEW = [
+  'A58 合集分集按分P展开', 'A59 分集取不到pages时留chk标记', 'A60 下载腿pagelist改为展开全分P',
+  'A61 分P命名', 'A62 按钮文案区分集数与分P数', 'A63 旧「合集只取每集首P」映射已移除',
+  'A64 cid解析/多P展开先于行渲染', 'A65 分P列表失败带接口码',
+  'B6 合集4集×多P展开324集', 'B7 每集都出全', 'B8 分P命名=视频标题', 'B9 按钮文案数据源seasonEps',
+  'B10 无合集单视频多P回退仍为90P', 'B11 分集无pages且无avl', 'B12 分集无pages时走availableVideoList',
+  'B13 普通合集(4集各单P)仍为4集不误伤',
+  'D1 sim全过', 'D2 分P列表失败也必须有行', 'A66 批量行结构化',
+];
 // R1
 ck('R1 confirm present once', (src.match(/window\.confirm/g) || []).length === 1);
 ck('R1 cached||partial gate', src.includes('if((t.cached||t.partial)&&t.length)'));
@@ -28,7 +38,7 @@ catch (e) { ck('R2 module MOD-PARSE-OK', false, String((e && e.message) || e).sl
 try {
   const v = execSync('node evidence/verify-u1-bxd.mjs', { stdio: 'pipe' }).toString();
   const n = (v.match(/^✓/gm) || []).length;
-  ck('R2 verify 73 pass', n === 73 && v.includes('ALL VERIFY CHECKS PASS'), `got=${n}`);
+  ck('R2 verify 92 pass', n === 92 && v.includes('ALL VERIFY CHECKS PASS'), `got=${n}`);
   ck('R2 A24 in log', v.includes("✓ A24 Dv缓存/部分二次确认"));
   ck('R2 A25 in log', v.includes("✓ A25 H自定义元素幂等"));
   ck('R2 A26 in log', v.includes("✓ A26 主脚本module语义可解析"));
@@ -52,7 +62,7 @@ try {
   ck('R2 A44 in log', v.includes("✓ A44 当前集行b-cur脉动高亮"));
   ck('R2 A45 in log', v.includes("✓ A45 结束行耗时统计"));
   ck('R2 A46 in log', v.includes("✓ A46 progress自动跟随近底"));
-  ck('R2 A47 in log', v.includes("✓ A47 多P视频Bx fallback"));
+  ck('R2 A47 in log', v.includes("✓ A47 多P视频Bx展开"));
   ck('R2 A48 in log', v.includes("✓ A48 多P批量键mp"));
   ck('R2 A49 in log', v.includes("✓ A49 Dx空列表写UI状态行"));
   ck("R2 A50 in log", v.includes("✓ A50 batch-clear绑定守护"));
@@ -63,7 +73,9 @@ try {
   ck("R2 A55 in log", v.includes("✓ A55 support_formats可选"));
   ck("R2 A56 in log", v.includes("✓ A56 UI精简"));
   ck("R2 A57 in log", v.includes("✓ A57 side-bar移除main撑满"));
-} catch (e) { ck('R2 verify 73 pass', false, 'exit!=0'); }
+  // v3.0.37 多P展开链(合集分集逐分P展开 + 真实状态重放)
+  NEW.forEach(l => ck('R2 ' + l.split(' ')[0] + ' in log', v.includes('✓ ' + l)));
+} catch (e) { ck('R2 verify 92 pass', false, 'exit!=0'); }
 // R2c acceptance
 try {
   const a = execSync('node evidence/acceptance.mjs', { stdio: 'pipe' }).toString();
@@ -95,7 +107,7 @@ ck('R2 A43 assertion source', h.includes("ok('A43 取消按钮即时disable"));
 ck('R2 A44 assertion source', h.includes("ok('A44 当前集行b-cur脉动高亮"));
 ck('R2 A45 assertion source', h.includes("ok('A45 结束行耗时统计"));
 ck('R2 A46 assertion source', h.includes("ok('A46 progress自动跟随近底"));
-ck('R2 A47 assertion source', h.includes("ok('A47 多P视频Bx fallback"));
+ck('R2 A47 assertion source', h.includes("ok('A47 多P视频Bx展开"));
 ck('R2 A48 assertion source', h.includes("ok('A48 多P批量键mp"));
 ck('R2 A49 assertion source', h.includes("ok('A49 Dx空列表写UI状态行"));
 ck("R2 A50 assertion source", h.includes("ok('A50 batch-clear绑定守护"));
@@ -106,13 +118,14 @@ ck("R2 A54 assertion source", h.includes("ok('A54 U空链接改INVALID_RESPONSE"
 ck("R2 A55 assertion source", h.includes("ok('A55 support_formats可选"));
 ck("R2 A56 assertion source", h.includes("ok('A56 UI精简"));
 ck("R2 A57 assertion source", h.includes("ok('A57 side-bar移除main撑满"));
+NEW.forEach(l => ck('R2 ' + l.split(' ')[0] + ' assertion source', h.includes("ok('" + l)));
 // R3 version sync
 const mf = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
-ck('R3 manifest 3.0.36', mf.version === '3.0.36', 'got=' + mf.version);
+ck('R3 manifest 3.0.38', mf.version === '3.0.38', 'got=' + mf.version);
 const rm = fs.readFileSync('README.md', 'utf8');
-ck('R3 README 3.0.36', rm.includes('`3.0.36`'));
+ck('R3 README 3.0.38', rm.includes('`3.0.38`'));
 const cl = fs.readFileSync('CHANGELOG.md', 'utf8');
-ck('R3 CHANGELOG 3.0.36', cl.includes('## [3.0.36]'));
+ck('R3 CHANGELOG 3.0.38', cl.includes('## [3.0.38]'));
 // restore harness side-effect
 try { execSync('git checkout -- evidence/verify-report.json', { stdio: 'pipe' }); } catch (_) {}
 console.log(bad === 0 ? 'SELFCHECK-ALL-PASS' : `SELFCHECK-FAIL n=${bad}`);

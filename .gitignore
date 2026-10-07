@@ -28,6 +28,10 @@ _metadata/
 Thumbs.db
 *.log
 
+# 页面快照(取证用,体积大且含个人账号态;见 docs/KNOWLEDGE.md S8)
+网页*.txt
+*.hdslb.html
+
 # Node / build artifacts (project is dependency-free; guard for future tooling)
 node_modules/
 dist/

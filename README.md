@@ -3,7 +3,7 @@
 浏览器扩展（Manifest V3），帮助你下载 B 站视频，包括「能看不能缓存」的版权受限番剧、电影、影视、电视剧等内容。
 
 - **商店名称**：bilibili哔哩哔哩下载助手
-- **当前版本**：`3.0.36`
+- **当前版本**：`3.0.38`
 - **清单版本**：Manifest V3
 - **运行方式**：纯前端注入（content script + ffmpeg wasm 合并音视频），无后端依赖
 
@@ -15,7 +15,7 @@
 |------|------|
 | 单视频下载 | 解析当前播放视频，给出可下载地址（高级模式自动重命名并合并音视频） |
 | 兼容模式 | 直接走浏览器默认下载，资源占用小（不支持自动重命名/合并） |
-| 批量下载合集 | 一键批量下载当前 `ugc_season` 合集全部集数 |
+| 批量下载合集 | 一键批量下载当前 `ugc_season` 合集全部集数；**分集本身是多 P 课程时按分P展开**（v3.0.37：合集 4 集 × 90/120/56/58 分P → 324 条，按钮显示「4集/共324个分P」） |
 | 批量下载 UP 主全部视频 | 在视频页一键拉取该 UP 主全部投稿（legacy `x/space/arc/search` 分页）并逐集下载；列表下方常驻**完整性条**（预期/实际/缺/完整·部分·缓存·冷却/缓存时间），部分或缓存时可一键**重抓完整列表** |
 | 清晰度跟随 | 默认跟随播放器清晰度，可在面板中固定 qn（16–125） |
 | 断点续传 | 已下载集数持久化到 `localStorage`，支持「跳过上次已下载」 |
@@ -36,6 +36,10 @@
 
 ### 批量下载合集
 在含合集（`ugc_season`）的视频页点击 **「批量下载合集」**。
+
+**分集本身是多 P 课程时按分P展开（v3.0.37）**：新式课程合集里每个「集」常常自己就是一门多P课程（例：合集 4 集分别为 90/120/56/58 分P，共 324 个分P）。旧版把每集压成一个条目、cid 取该集 P1，于是**每个分组只下到第一个视频**；现在按钮直接显示 `批量下载合集（4集/共324个分P）`，条目名 `视频标题_P{n}_{分P名}`，列表腿不额外发请求（全部来自 `INITIAL_STATE`）。若某集在页面状态里拿不到分P列表，下载到该集时会自动用 pagelist 补全后再继续。**「批量下载该UP主全部视频」同样修复**（此前每个视频只下 P1，且「跳过上次已下载」因 cid 未解析而从不命中）。
+
+> 324 个分P 走默认 3 秒档 ≈ 16 分钟纯集间等待（不含下载/合并）。想更快可把速度档调到「快速」，但风控风险上升。
 
 ### 批量下载 UP 主全部视频
 在该 UP 主任一视频页点击 **「批量下载该UP主全部视频」**。扩展会按 30 条/页遍历 `x/space/arc/search`，集齐后开始逐集下载。
@@ -73,11 +77,12 @@
 
 ```bash
 node --check bilibili-helper-content-script.js   # 语法
-node evidence/verify-u1-bxd.mjs                  # 39 项 harness（静态+重放+预算场景+完整性）
+node evidence/verify-u1-bxd.mjs                  # 92 项 harness（静态 + 重放 + 预算场景 + 完整性 + 多P展开 + UP下载腿仿真 + 批量行UI）
 node evidence/acceptance.mjs                     # 16 项验收门（R1/R2/R3）
+node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上面三门 + 版本同步）
 ```
 
-`evidence/` 目录保留了真实抓包与全量扫描的轻量证据（view/pagelist/playurl/byte 各 1158/1158，risk=0）。UP 主列表完整性语义（`expected`/`partial`/`cached`/`cool`+`bx8` 常驻条）见 `docs/batch-download.md` 与 `docs/KNOWLEDGE.md` S10。详见 `docs/`。
+`evidence/` 目录保留了真实抓包与全量扫描的轻量证据（view/pagelist/playurl/byte 各 1158/1158，risk=0），以及 v3.0.37 的合集多P取证（`season-multip-state.json` + `live-bx-expand.json`）。UP 主列表完整性语义（`expected`/`partial`/`cached`/`cool`+`bx8` 常驻条）见 `docs/batch-download.md` 与 `docs/KNOWLEDGE.md` S10。详见 `docs/`。
 
 ## 目录结构
 

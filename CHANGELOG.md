@@ -2,6 +2,33 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.38] - 2026-02-14
+
+### Changed（批量下载区 UI：层次、状态列、描边、可读性）
+- **进度行结构化**：旧模板把「计数+标题+状态」挤在一个 `span` 里（`1/324 标题… 等待`），324 集时计数列随标题长短左右跳动、计数与标题粘连难扫读。改：`<span class=b-idx>`（等宽数字、右对齐、固定 `min-width:7ch`，`1/9` 到 `324/324` 同宽）+ `<span class=b-ep>`（标题，58ch 截断+hover 全标题）+ `<span class=b-st>`（状态词：等待/✔/↷/✘）。bxD 五处行模板（等待/跳过/合并成功/直链成功/失败）逐条迁移。
+- **进行中行描边替代侧色条**：旧 `.b-cur` 用 `box-shadow: inset 3px 0 0` 左色条——impeccable 禁止的"侧边条装饰"写法；改 `outline: 2px solid #7cc4e8` 全描边+底色保留，对比度与原一致。
+- **状态行块级化**：旧 `#batch-status` 是裸 `span`，跑起来时「正在处理 12/324…」会和「取消」按钮挤在同一行；改 `display:block`，状态独占一行。
+- **`prefers-reduced-motion`**：批量区全部动画（`b-cur` 脉动、`b-celebrate`、`b-fade` 入场、`.b-bar` 过渡/不确定条）在系统减弱动态偏好下全关。原有暗黑感知变量保持不动。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` **92 项全绿**（新增 A66 静态断言钉住 `b-idx`/`b-st`/`outline`/`display:block`/`reduced-motion` 五处；sim-up-batch 17✓ 不受模板形状影响照常全过）；`acceptance.mjs` 16 项全绿；`accept-selfcheck.mjs` 全绿（91→92，A66 双侧核对，版本同步 3.0.38）。
+
+## [3.0.37] - 2026-02-14
+
+### Fixed（合集「每个分组只下第一个视频」：分集本身就是多P，只取了 P1）
+- **现场**：`https://www.bilibili.com/video/BV1jnHf6JEdk/` — 合集「Blender教程合集（1/4）」有 4 集，而**每集自己都是一门多P课程**（`sections[].episodes[].pages[]` 分别 90/120/56/58 分P，共 324）。旧 `Bx()` 把每个分集压成一个条目、`cid` 取分集 `cid`（= 该视频 **P1 的 cid**）→ 点「批量下载合集（共4集）」实际只下到 4 个视频，其余 320 个分P 拿不到。
+- **`bxSp` 三级取全部分P**：当前视频 `videoData.pages`（正在看的那一集最新）→ 分集 `ep.pages` → `availableVideoList[a].list`（新播放页结构，同样带逐分P cid）。三者都在 `INITIAL_STATE` 里，**列表腿零额外请求**。
+- **`bxPgs` 逐分P展开**：每分P一条 `{aid, bvid, cid(该P独立), title}`，按 cid 去重。
+- **`bxPn` 命名**：`视频标题_P{n}_{分P名}`，分P名尾部完整保留（总长 >80 只截标题前缀），配合进度行 3 位序号全程可定位。
+- **按钮文案**：分集数 ≠ 条目数时显示 `批量下载合集（4集/共324个分P）`，不再只说「共4集」（`bxSn`）。
+- **`bxD` 兜底展开**：分集取不到 `pages` 时条目带 `chk` 标记，下载到该集时用 pagelist 取全部分P并 `F0.splice(a+1,0,...)` 就地入队（每P一条、cid 独立），不静默只下 P1。
+- **UP 批量同修**：`x/space/arc/search` 不返回分P数（条目 `cid=0`），旧代码 `h.cid=pg.data[0].cid` 同样只下每个视频的 P1 → 改为按全部分P展开；并把 cid 解析**前移到进度行渲染与「跳过上次已下载」判定之前**，UP 批量的 skip 判定首次真正生效（此前 `bx5(P).includes(0)` 恒假）；分P列表失败时带接口码（受限计 `th` 走原地冷却）。
+- **失败行不得隐身（仿真抓到的真 bug，已修）**：旧循环里 `p.appendChild` 写在 cid 解析**之后**，分P列表失败（`throw` 在行渲染之前）→ 该条目只有失败清单、无进度行。补 `p.parentNode||r.appendChild(p)` 进 catch，保证 ✘ 行必渲染。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；实机 js-reverse（mainWorld）逐字节执行新 `Bx()` 于真实页 `BV1jnHf6JEdk` → **324 条 / 324 唯一 cid**（90/120/56/58 分组计数正确），证据 `evidence/live-bx-expand.json`。
+- `verify-u1-bxd.mjs` **91 项全绿**（A47 更新 + 新增 A58–A65 静态 + B6–B13 真实状态重放：324 条与各分集 `pages` cid 逐字节对齐，另覆盖「无合集单视频多P→90P」「分集无 pages 无 avl→4 集带 chk」「分集无 pages 有 avl→324」「普通合集 4 集各单P→仍 4 集」四个不回归场景 + **D1–D2 UP 下载腿离线仿真**：真 `bxD` 源码段 + 受控 I/O 跑全程——5 条无 cid→恰 5 次 pagelist→展开 12 行→playurl 逐分P 9 次→「成功 8 跳过 2 失败 2（需会员 1+其他 1）」，「重试失败 2 集」一键收敛只补 2 次 playurl；对照组旧 `bxD` 只产出 P1 且 skip 永不命中；证据 `evidence/sim-up-batch.mjs` + `sim-up-batch-result.json`）；证据 `evidence/season-multip-state.json`。`acceptance.mjs` 16 项全绿；`accept-selfcheck.mjs` 全绿（版本同步 3.0.37）。
+
 ## [3.0.36] - 2026-09-29
 
 ### Changed（UI 精简——移除外部宣传/教程/赞赏区）

@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-02-14T00:00:00.000Z",
+  "method": "js-reverse evaluate_script (mainWorld) 实机加载当前主脚本的列表展开链（bxPn/bxPgs/bxSp/bxSn/bxB/Bx 逐字节抽取）→ new Function 就地执行 Bx()",
+  "url": "https://www.bilibili.com/video/BV1jnHf6JEdk/",
+  "page": {
+    "title": "【中文语音】掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南",
+    "collection": "Blender教程合集（1/4）",
+    "videoData.videos": 90,
+    "videoData.pages": 90,
+    "ugc_season.id": 9255983,
+    "ugc_season.ep_count": 4,
+    "ugc_season.sections": [
+      { "id": 10349410, "title": "正片", "type": 1, "episodes": 4 }
+    ],
+    "episodes": [
+      { "bvid": "BV1jnHf6JEdk", "title": "掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南", "cid": 42498133660, "ep_pages": 90 },
+      { "bvid": "BV1sNHf68EBp", "title": "Blender电影级叙事技法大师课", "cid": 42499116682, "ep_pages": 120 },
+      { "bvid": "BV17spc6sE7P", "title": "Blender二次元动漫风格化场景全流程", "cid": 42513468666, "ep_pages": 56 },
+      { "bvid": "BV1D3HZ6iE23", "title": "Blender + Substance Painter + Unity：房子老师的VTuber模型制作完全指南", "cid": 42501474009, "ep_pages": 58 }
+    ]
+  },
+  "before_fix": {
+    "fn": "Bx() v3.0.36 — 每个分集只 push {cid: episode.cid}（即该视频 P1 的 cid）",
+    "result_len": 4,
+    "items": ["BV1jnHf6JEdk/42498133660", "BV1sNHf68EBp/42499116682", "BV17spc6sE7P/42513468666", "BV1D3HZ6iE23/42501474009"],
+    "symptom": "面板按钮显示「批量下载合集（共4集）」，实际只下到 4 个视频（每集 P1），324 个分P 中的 320 个拿不到"
+  },
+  "after_fix": {
+    "fn": "Bx() v3.0.37 — 分集按 pages/availableVideoList 逐分P展开",
+    "total": 324,
+    "seasonEps": 4,
+    "unique_cids": 324,
+    "by_bvid": { "BV1jnHf6JEdk": 90, "BV1sNHf68EBp": 120, "BV17spc6sE7P": 56, "BV1D3HZ6iE23": 58 },
+    "every_cid_truthy": true,
+    "head": [
+      "掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南_P1_1.01 - 欢迎来到本课程",
+      "掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南_P2_2.01 - 章节介绍",
+      "掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南_P3_2.02 - 什么是合成"
+    ],
+    "ep2_first": "Blender电影级叙事技法大师课_P1_1.01 - 欢迎来到本课程",
+    "tail": [
+      "Blender + Substance Painter + Unity：房子老师的VTuber模型制作完全指南_P57_30-2 VRM导出与最终检查",
+      "Blender + Substance Painter + Unity：房子老师的VTuber模型制作完全指南_P58_31 总结与寄语"
+    ]
+  },
+  "download_leg_check": {
+    "method": "展开后的「非当前页分P」样本各发一次 x/player/playurl（qn=64, fnval=4048, credentials:include），验证下载腿对每个分P cid 都能取到流",
+    "samples": [
+      { "item": "Blender电影级叙事技法大师课_P2_1.02 - 课程概览", "bvid": "BV1sNHf68EBp", "cid": 42499178796, "code": 0, "quality": 64, "dashVideo": 2, "dashAudio": 3 },
+      { "item": "Blender + Substance Painter + Unity…_P40_…Substance Painter 滤镜与生成器", "bvid": "BV1D3HZ6iE23", "cid": 42502064914, "code": 0, "quality": 64, "dashVideo": 2, "dashAudio": 3 }
+    ],
+    "note": "两个样本都不属于当前页面视频，仍返回 code=0 + DASH 音视频（未登录态 480P）——说明展开后的 324 条条目逐条可下载，不受「必须与当前页 bvid 一致」限制"
+  },
+  "panel_check": {
+    "method": "同页 mainWorld 注入整份主脚本（仅把 ffmpeg.wasm 内 import.meta.url 换常量，磁盘文件不动）+ 伪造 seed 的 #bilibili-helper-ext-content-script[data-internals]，等面板渲染后读 shadowRoot",
+    "inject_error": null,
+    "host_exists": true,
+    "has_shadow_root": true,
+    "panel_title": "[480P 标清] 【中文语音】掌握Blender合成：提升渲染质量，打造惊艳VFX效果的终极指南_P1_1.01 - 欢迎来到本课程 的下载地址：",
+    "batch_btn": "批量下载合集（4集/共324个分P）",
+    "batch_season_label": "合集/分P：",
+    "up_btn": "批量下载该UP主全部视频",
+    "note": "真机真脚本真 UI：按钮文案已从「共4集」变为「4集/共324个分P」，证明展开链贯通到面板；未点击批量按钮（不触发真实下载）"
+  },
+  "note": "实机为未登录态（__INITIAL_STATE__.user.isLogin=false），与用户保存的源码一致；列表腿完全走 INITIAL_STATE（零额外请求），下载腿 playurl 不受影响"
+}

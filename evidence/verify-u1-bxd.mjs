@@ -3,9 +3,15 @@
 // 覆盖:
 //   A) 静态: U1走legacy零签名 / 全仓无wbi死代码 / U1无throw无登录无-403/-401 / fetch预算2 / 间隔与退避与上限与去重
 //   B) 重放: 当前U1源码 + evidence/up-list-pn1.json 真实30条逐字节(p1) + 确定性派生p2-p39 → 39页收敛
+//      B6-B13: 合集多P真实状态重放 — evidence/season-multip-state.json(用户提交页面 __INITIAL_STATE__ 抽取)
+//              4 个分集各为多P课程(90/120/56/58) → Bx 展开 324 条, cid 与分集 pages 逐字节对齐;
+//              另覆盖 无合集单视频多P / 无pages无avl(chk补展开) / 无pages有avl / 普通合集单P 四个不回归场景
 //   C) 预算场景: 中途-352 / 首屏-403+top兜底 / 首屏网络异常+兜底空 → 全部无抛错、partial降级、fetch有界
 //   E) 完整性: U1回传expected/miss语义 + 常驻条bx8/up-integrity/重抓按钮 + Dv落盘lastUplist
-//   D) 链路: bxD速度控制(pagelist/persist/delay/jitter/失败冷却/跳过) + legacy playurl基址
+//   D) 链路: bxD速度控制(pagelist/persist/delay/jitter/失败冷却/跳过) via 离线仿真 evidence/sim-up-batch.mjs:
+//      5条无cid(UP列表形状)→恰5次pagelist→展开12行(4+3+1+1+3)→playurl逐分P cid(9次)→成功8/跳过2/失败2(需会员1+其他1);
+//      失败行渲染2条✘(分P列表失败也必须有行, 不得隐身); 「重试失败」按钮一键收敛(成功2/失败0, 只补2次playurl);
+//      对照组(HEAD旧bxD): 只产出P1(3文件无_P命名)且skip永不命中(跳过0)
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 
@@ -83,7 +89,7 @@ ok('A43 取消按钮即时disable(防连点)', src.includes('d.disabled=!0,o.tex
 ok('A44 当前集行b-cur脉动高亮+完成/失败移除', bxd.includes('p.classList.add("b-cur")') && bxd.includes('p.classList.remove("b-cur")') && src.includes('.b-cur{background: #eef6ff'));
 ok('A45 结束行耗时统计(用时X分Y秒)', bxd.includes('st0=Date.now()') && bxd.includes('${es}'));
 ok('A46 progress自动跟随近底(r.scrollTop跟随)', bxd.includes('r.scrollTop+r.clientHeight>=r.scrollHeight-60'));
-ok('A47 多P视频Bx fallback(videos>1用pages构造12集)', src.includes('vd&&vd.videos>1&&Array.isArray(vd.pages)') && src.includes('p.part||"P"+p.page'));
+ok('A47 多P视频Bx展开(videos>1用pages构造每P一项)', src.includes('vd&&vd.videos>1&&Array.isArray(vd.pages)') && src.includes('var bxPgs=') && src.includes('c=(p.part||p.title||"").trim()||("P"+n)'));
 ok('A48 多P批量键mp-<bvid>+文案全部P', src.includes('"mp-"+vd.bvid') && src.includes('批量下载本视频全部P'));
 ok('A49 Dx空列表写UI状态行(非仅日志)', src.includes('o.textContent=" 未找到可批量下载的合集或分P"'));
 ok('A50 batch-clear绑定守护(dataset.bound防W0重绑)', src.includes('bc.dataset.bound="1"'));
@@ -94,6 +100,15 @@ ok('A54 U空链接改INVALID_RESPONSE(不再code=OK空链接)', src.includes('p?
 ok('A55 support_formats可选(Object.values(c||{}))', src.includes('Object.values(c||{})'));
 ok('A56 UI精简——删教程链接/赞赏区/notice iframe(版本/微信赞赏外部区)', !src.includes('使用教程及常见问题解答') && !src.includes('五星好评') && !src.includes('id="notice-frame"') && src.includes('if(!i)return')&&src.includes('J0=e=>'));
 ok('A57 side-bar移除main撑满(flex:1)', !src.includes('id="side-bar"') && src.includes('#main {\n  flex: 1;'));
+ok('A58 合集分集按分P展开(bxSp取分集pages>当前视频pages>availableVideoList.list)', src.includes('var bxSp=') && src.includes('e.aid===i.aid&&Array.isArray(i.pages)&&i.pages.length>1') && src.includes('p.list.length>1'));
+ok('A59 分集取不到pages时留chk标记(下载腿按pagelist补展开,不退回只下P1)', src.includes('title:String(t),chk:1}]') && src.includes('!h.cid||h.chk'));
+ok('A60 下载腿pagelist改为展开全分P并插入队列(删除data[0]只取P1)', src.includes('F0.splice(a+1,0,...ad') && !src.includes('h.cid=pg.data[0].cid'));
+ok('A61 分P命名{标题}_P{n}_{分P名}(尾部保留,超80仅截标题前缀)', src.includes('var bxPn=') && src.includes('"_P"+e+"_"+i') && src.includes('String(t||"").slice(0,o)'));
+ok('A62 按钮文案区分集数与分P数(N集/共M个分P)', src.includes('集/共${n}个分P') && src.includes('ne=bxSn(r)'));
+ok('A63 旧「合集只取每集首P」映射已移除(回归防护)', !src.includes('d.some(t=>t.cid===a.cid)||d.push({aid:a.aid'));
+const iRes = src.indexOf('if(!h.cid||h.chk)'), iCur = src.indexOf('p.classList.add("b-cur")'), iSkip = src.indexOf('u&&u.checked&&bx5(P).includes(h.cid)');
+ok('A64 cid解析/多P展开先于行渲染与skip判定(UP列表skip与命名才拿得到真cid)', iRes > 0 && iRes < iCur && iCur < iSkip);
+ok('A65 分P列表失败带接口码(受限计th走原地冷却,不静默继续)', src.includes('分P列表获取失败：') && src.includes('-799||/频繁|限制|412|风控|未返回DASH/'));
 
 // ---- B) 39页重放(当前U1源码, p1=evidence真30条逐字节) ----
 const p1 = JSON.parse(fs.readFileSync('evidence/up-list-pn1.json', 'utf8'));
@@ -144,6 +159,59 @@ ok('B2 首30条与真机逐字节一致', replay.first30_real === true, `first=$
 ok('B3 全程零wbi调用', replay.wbiHits === 0 && replay.fetchCalls === 39, `fetch=${replay.fetchCalls}`);
 ok('B4 页间隔档位内(默认3s档4500-7000ms)', replay.sleeps_min >= 2000 && replay.sleeps_max <= 7500 && replay.sleeps_min < replay.sleeps_max, `${replay.sleeps_min}-${replay.sleeps_max}`);
 ok('B5 非partial全量', replay.partial === false);
+
+// ---- B6-B13) 合集多P真实状态重放(用户提交页面的 __INITIAL_STATE__ 抽取, 零网络) ----
+// 现场: https://www.bilibili.com/video/BV1jnHf6JEdk/ 合集「Blender教程合集（1/4）」
+//       4 个分集各自都是多P课程(90/120/56/58 分P, 共 324)；v3.0.36 每集只 push 一个 cid(该集 P1) → 只下到 4 个
+const bxSrc = src.slice(src.indexOf('var bxPn='), src.indexOf('var bx0='));
+const runBx = (st) => new Function('window', bxSrc + '; return Bx();')({ __INITIAL_STATE__: JSON.parse(JSON.stringify(st)) });
+const fx = JSON.parse(fs.readFileSync('evidence/season-multip-state.json', 'utf8'));
+const fxEps = fx.videoData.ugc_season.sections.flatMap((s) => s.episodes);
+const L = runBx(fx);
+const perBvid = {}; L.forEach((x) => { perBvid[x.bvid] = (perBvid[x.bvid] || 0) + 1; });
+const cidAligned = fxEps.every((e) => {
+  const got = L.filter((x) => x.bvid === e.bvid).map((x) => x.cid);
+  return got.length === e.pages.length && e.pages.every((p, k) => got[k] === p.cid);
+});
+const ep2 = L.filter((x) => x.bvid === 'BV1sNHf68EBp');
+const seasonReplay = {
+  fixture: 'evidence/season-multip-state.json',
+  episodes: fxEps.length, ep_parts: fxEps.map((e) => e.pages.length),
+  got_len: L.length, uniq: new Set(L.map((x) => x.cid)).size, seasonEps: L.seasonEps,
+  per_bvid: perBvid, cid_aligned: cidAligned, max_title_len: Math.max(...L.map((x) => x.title.length)),
+  first: L[0] && L[0].title, ep2_p2: ep2[1] && ep2[1].title, last: L[L.length - 1] && L[L.length - 1].title,
+  no_season: null, no_pages_no_avl: null, no_pages_with_avl: null, plain_collection: null,
+};
+ok('B6 合集4集×多P展开324集(90/120/56/58),cid逐字节对齐分集pages',
+  L.length === 324 && new Set(L.map((x) => x.cid)).size === 324 && cidAligned && L.every((x) => !!x.cid),
+  `len=${L.length} uniq=${new Set(L.map((x) => x.cid)).size} aligned=${cidAligned}`);
+ok('B7 每集都出全(不再只出每集首P)', perBvid['BV1jnHf6JEdk'] === 90 && perBvid['BV1sNHf68EBp'] === 120 && perBvid['BV17spc6sE7P'] === 56 && perBvid['BV1D3HZ6iE23'] === 58, JSON.stringify(perBvid));
+ok('B8 分P命名=视频标题_Pn_分P名(≤80,尾部可识别)', L[0].title.endsWith('_P1_1.01 - 欢迎来到本课程') && ep2[1].title === 'Blender电影级叙事技法大师课_P2_1.02 - 课程概览' && Math.max(...L.map((x) => x.title.length)) <= 80);
+ok('B9 按钮文案数据源seasonEps=4且ep_count一致', L.seasonEps === 4 && fx.videoData.ugc_season.ep_count === 4);
+const stA = JSON.parse(JSON.stringify(fx)); delete stA.videoData.ugc_season;
+const LA = runBx(stA);
+seasonReplay.no_season = { len: LA.length, first: LA[0] && LA[0].title };
+ok('B10 无合集单视频多P回退仍为90P(标题=分P名,cid对齐pages,不回归)', LA.length === 90 && LA[0].title === '1.01 - 欢迎来到本课程' && LA[89].cid === fx.videoData.pages[89].cid);
+const stB = JSON.parse(JSON.stringify(fx));
+stB.videoData.pages = [stB.videoData.pages[0]];
+stB.videoData.ugc_season.sections[0].episodes.forEach((e) => { e.pages = null; });
+stB.availableVideoList = stB.availableVideoList.filter((v) => (v.list || []).length <= 1);
+const LB = runBx(stB);
+seasonReplay.no_pages_no_avl = { len: LB.length, chk: LB.map((x) => x.chk) };
+ok('B11 分集无pages且无avl→4集带chk标记(交下载腿按pagelist补展开,而非静默只下P1)',
+  LB.length === 4 && LB.every((x) => x.chk === 1) && LB.map((x) => x.cid).join() === fxEps.map((e) => e.cid).join());
+const stC = JSON.parse(JSON.stringify(fx));
+stC.videoData.ugc_season.sections[0].episodes.forEach((e) => { e.pages = null; });
+const LC = runBx(stC);
+seasonReplay.no_pages_with_avl = { len: LC.length };
+ok('B12 分集无pages时走availableVideoList.list展开(仍324)', LC.length === 324 && new Set(LC.map((x) => x.cid)).size === 324);
+const stD = JSON.parse(JSON.stringify(fx));
+stD.videoData.pages = [stD.videoData.pages[0]];
+stD.videoData.ugc_season.sections[0].episodes.forEach((e) => { e.pages = [e.pages[0]]; });
+stD.availableVideoList = stD.availableVideoList.filter((v) => (v.list || []).length <= 1);
+const LD = runBx(stD);
+seasonReplay.plain_collection = { len: LD.length };
+ok('B13 普通合集(4集各单P)仍为4集不误伤(标题=分集标题)', LD.length === 4 && LD.map((x) => x.cid).join() === fxEps.map((e) => e.cid).join() && LD[0].title === fxEps[0].title);
 
 // ---- C) 预算场景(零抛错 + fetch有界 + partial语义) ----
 async function scenario(name, fetchFn, expect) {
@@ -212,14 +280,23 @@ fetchCalls = 0;
 const cool = await runU1(nullFetch);
 ok('E3 冷却expected==0且cool标记', cool.expected === 0 && cool.cool === true && cool.cacheTs === 0, `expected=${cool.expected} cool=${!!cool.cool}`);
 
-// ---- D) 报告 ----
+// ---- D) 链路: UP批量下载腿离线仿真(sim-up-batch.mjs, 真源码段+受控I/O, 零网络) ----
+try {
+  const sim = execSync('node evidence/sim-up-batch.mjs', { stdio: 'pipe' }).toString();
+  const n = (sim.match(/^✓/gm) || []).length;
+  ok('D1 sim全过(17✓: 无cid恰1次pagelist/12行展开/逐P命名/skip生效/失败分类/重试收敛/旧代码对照)', n === 17 && sim.includes('ALL SIM CHECKS PASS'), `got=${n}`);
+} catch (e) { ok('D1 sim全过(17✓: 无cid恰1次pagelist/12行展开/逐P命名/skip生效/失败分类/重试收敛/旧代码对照)', false, 'sim exit!=0'); }
+ok('D2 分P列表失败也必须有行(不得隐身)', src.includes('p.parentNode||r.appendChild(p)'));
+ok('A66 批量行结构化(b-idx计数列+b-ep标题+b-st状态, b-cur用outline描边, batch-status块级, reduced-motion全关)', src.includes('<span class="b-idx">') && src.includes('<span class="b-st">') && src.includes('.b-idx{display: inline-block;min-width: 7ch;text-align: right') && src.includes('.b-cur{background: #eef6ff;outline: 2px solid #7cc4e8') && src.includes('#batch-status{display: block') && src.includes('@media (prefers-reduced-motion: reduce)')); // v3.0.38 UI(批量区层次+可读性, 四位宽计数不再随324跳动, 原单行模板逐条迁移见bxD五处row)
+
+// ---- 报告 ----
 const report = {
   generated_at: new Date().toISOString(),
   file: 'bilibili-helper-content-script.js',
   u1_line: lines.findIndex(l => l.includes('var U1=')) + 1,
-  static: 'A1-A20见控制台',
-  replay, scenarios: [c1, c2, c3, c4, c5, c6],
-  live_note: 'live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试)',
+  static: 'A1-A65见控制台',
+  replay, season_replay: seasonReplay, scenarios: [c1, c2, c3, c4, c5, c6],
+  live_note: 'live单发证据见evidence/live-nav-anon.json(匿名-101), evidence/live-top-arc.json(code0兜底可用), evidence/live-pn1-412.html(服务端IP冷却, 单发无重试), evidence/live-bx-expand.json(合集4集×多P实机展开324集)',
   pass: fail.length === 0
 };
 fs.writeFileSync('evidence/verify-report.json', JSON.stringify(report, null, 1) + '\n');

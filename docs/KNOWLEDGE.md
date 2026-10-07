@@ -14,10 +14,12 @@
 - **S8 仓库卫生**：`_metadata/`(商店签名)、`.workflow/` 运行时(tmp/sessions/recovery/embedding*)、`.pi/`(注入)、页面快照(`网页*.txt`)不入库；`.workflow/knowhow/` + `.workflow/kg/maestro.db`（maestro Wiki/kg 知识库）跟踪入库；见 `.gitignore`。
 - **S10 列表完整性可自证（v3.0.20）**：`U1` 全部返回路径回传 `expected`（服务端 `page.count` 快照）+ `cacheTs`；`Dv` 落盘 `bx0.lastUplist` 并经 `bx8` 渲染常驻 `#up-integrity` 条（预期/实际/缺/完整·部分·缓存·冷却/缓存时间），与 `#batch-status` 分离；部分/缓存附「重抓完整列表」按钮直调 `Dv`。判定口径：`缺0/完整` + 开始行无后缀 + 结束行全完成三者一致。
 - **S9 无第二完整列表桶**：space HTML 为 SPA 空壳、dynamic feed 需鉴权、series/search-type 报 -400、top/arc 仅 1 条（2026-09-25 实测 T1–T8）。不做换接口 failover，只做节奏+冷却+缓存。
+- **S11 列表一律展开到「分P 粒度」（v3.0.37）**：任何批量入口的条目都必须是**一个可播放分P**，`cid` 必须指向该分P。取全部分P的优先级固定为「当前视频 `videoData.pages` > 分集 `ep.pages` > `availableVideoList[].list`」；三处都拿不到时**必须留 `chk` 标记**，由 `bxD` 用 pagelist 兜底展开——禁止把「视频/分集级 cid（= P1）」当作一集静默下掉。命名固定 `视频标题_P{n}_{分P名}`（分P名尾部优先保留）。
 
 ## Knowhow（可复用经验）
 
 - **「-799 后只下 1 集」根因模板**：凡「退避后批量坍缩为 1」，先查兜底源返回条数是否=1。修复=退避重试主列表 + 阻断单条目兜底进批量。
+- **「每个分组只下第一个视频」根因模板（v3.0.37）**：新式课程合集里 **`sections[].episodes[]` 的每一项本身就是多P视频**——分集对象带 `pages[]`，而它的 `cid` 字段等于该视频 **P1 的 cid**。凡「映射层只读 `ep.cid` / `pg.data[0].cid`」，结果必然是一组一个视频。判据：`Bx().length` 等于 `sections[].episodes[]` 总数而不是 `pages[]` 总数之和即命中。同类坑还有 `x/space/arc/search` 不返回分P数（条目无 cid）→ 下载腿 `data[0].cid` 也只下 P1，且 skip 判定因 cid=0 永不命中。
 - **离线重放验证法**：用真实 `pn1` 30 条作种子，确定性派生后续页，可零网络证明 `U1` 39 页收敛到 1159（见 `evidence/verify-u1-bxd.mjs` B 段）。
 - **预算场景矩阵**：对列表函数用 mock fetch 枚举「中途失败/首屏失败/网络异常/退避恢复」四类，断言 `len/partial/fetchCalls/无抛错`，一次锁定回归。
 - **delta-1 结构差**：API declared 1159 vs DOM uniq 1158 = 首屏挂载位 + count 快照差；用 pn1 30/30 逐字节比对 + `top_in_dom` 交叉证。
@@ -45,5 +47,7 @@
 - v3.0.34：「出错了」根因提示——`d0` playurl 空 data（code=0 但无 dash/durl）判定：未登录态（user.isLogin=false/mid 缺）→「请先登录后刷新重试」；已登录→「接口未返回下载链接（可能风控/流受限）」；真实未登录页 `BV1ntah6TEvA` 源码验证 videoData 无 dash/durl 且 user.mid undefined；harness 同步（A53 静态，69 项全绿）。
 - v3.0.35：**「出错了」真根因**——`U` 在 `o.dash||a.durl` 分支内 `r.video`/`r.audio` 空或 `m,p` 全 undefined 时仍回 `code=OK` 空链接 → 出错了。改：`p` 存在即可下（video-only durl）、`a.durl` 非空可下、全空 INVALID_RESPONSE+登录态判定；`support_formats` 缺时 `Object.values(c)` TypeError 改 `c||{}`；四场景模拟验证；harness 同步（A54–A55+A51 更新，71 项全绿）。
 - v3.0.36：UI 精简——删「使用教程及常见问题解答」链接行、`.beg` 赞赏区、`#notice-frame` iframe（远程 csser.top 公告区含版本/微信赞赏/教程外部内容）；`J0` 加 `if(!i)return` 兜底；`#side-bar` 移除 `#main` flex 撑满；harness 同步（A56–A57 静态，73 项全绿）。
+- v3.0.37：**合集分集逐分P展开（修「每个分组只下第一个视频」）**——新式课程合集的 `sections[].episodes[]` 每项自身是多P视频（如「Blender教程合集」4 集分别 90/120/56/58 分P，共 324），旧 `Bx` 把每集压成一个 `{cid: ep.cid}`（= 该视频 P1）→ 只下到 4 个。改：`bxSp` 三级取全部分P（当前视频 `pages` > 分集 `pages` > `availableVideoList.list`，列表腿零额外请求）+ `bxPgs` 逐分P生成条目 + `bxPn` 命名 `标题_Pn_分P名` + `bxSn` 按钮文案「4集/共324个分P」+ 取不到 pages 时留 `chk` 交下载腿 pagelist 兜底展开；下载腿 pagelist 由 `data[0].cid` 改为展开全分P并 `F0.splice(a+1,0,...)` 就地入队（UP 批量同修，且 cid 解析前移到行渲染与 skip 判定之前，UP 批量 skip 首次真正生效）；实机 js-reverse 逐字节执行新 `Bx()` 于真实页 `BV1jnHf6JEdk` 得 324 条/324 唯一 cid；harness 同步（A47 更新 + A58–A65 静态 + B6–B13 真实状态重放 4 场景不回归 + **D1–D2 UP 下载腿离线仿真**：真 `bxD` 源码段 + 受控 I/O——5 条无 cid→恰 5 次 pagelist→展开 12 行→playurl 逐分P 9 次→成功 8/跳过 2/失败 2，一键重试收敛；对照组旧 `bxD` 只出 P1 且 skip 永不命中；仿真附带修「分P列表失败行隐身」`p.parentNode||r.appendChild(p)`，91 项全绿）。
+- v3.0.38：批量下载区 UI——进度行结构化（`b-idx` 等宽右对齐计数列 + `b-ep` 标题 + `b-st` 状态词，bxD 五处行模板迁移；324 集下计数列不再随标题跳动）+ 进行中行 `outline` 全描边替代 inset 侧色条 + `#batch-status` 块级独占一行 + `prefers-reduced-motion` 全关批量区动画；harness 同步（A66 静态，92 项全绿）。
 
 [← 返回文档首页](./index.md)

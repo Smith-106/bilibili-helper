@@ -149,9 +149,9 @@ a.btn {
 #batch-progress{max-height: 280px;overflow-y: auto;margin-top: 4px;padding-left: 18px}
 #batch-progress li.b-fail{background: #fdf0f0}
 #batch-progress li.b-ok{background: #f2fbf6}
-#batch-progress li.b-cur{background: #eef6ff;box-shadow: inset 3px 0 0 #00a1d6;animation: b-cur 1.6s ease-in-out infinite}
+#batch-progress li.b-cur{background: #eef6ff;outline: 2px solid #7cc4e8;outline-offset: -2px;animation: b-cur 1.6s ease-in-out infinite}
 @keyframes b-cur{0%,100%{background:#eef6ff}50%{background:#e2efff}}
-#batch-status{font-size: 13px;padding: 4px 8px;background: #f7f9fa;border-radius: 4px;margin-top: 4px;min-height: 1em}
+#batch-status{display: block;font-size: 13px;padding: 4px 8px;background: #f7f9fa;border-radius: 4px;margin-top: 4px;min-height: 1em}
 #up-integrity{margin-top: 4px;font-size: 12px}
 #up-integrity>span{display: inline-block;background: #f0f6fa;padding: 3px 8px;border-radius: 4px;color: #33404c}
 .hide #toggle{font-size: 11px;padding: 4px 8px;border-radius: 6px 0 0 6px}
@@ -160,6 +160,8 @@ a.btn {
 @keyframes b-fade{from{opacity: 0;transform: translateY(2px)}to{opacity: 1;transform: none}}
 .progress{font-size: 12px;color: #5b6b7b}
 .b-ep{display: inline-block;max-width: 58ch;vertical-align: bottom;overflow: hidden;text-overflow: ellipsis;white-space: nowrap}
+.b-idx{display: inline-block;min-width: 7ch;text-align: right;color: #8a939b;font-variant-numeric: tabular-nums;margin-right: 6px;vertical-align: bottom}
+.b-st{display: inline-block;margin-left: 8px;font-size: 12px}
 .b-ok{color: #2ba471}
 .b-fail{color: #e35d5d}
 .b-skip{color: #b58500}
@@ -170,6 +172,7 @@ a.btn {
 .b-running{opacity: .75;cursor: progress;pointer-events: none}
 .b-celebrate{animation: b-pulse .7s ease;color: #2ba471}
 @keyframes b-pulse{0%{transform: scale(1.08)}100%{transform: scale(1)}}
+@media (prefers-reduced-motion: reduce){#batch-progress li.b-cur,.b-celebrate{animation: none}#durls li,#batch-progress li{animation: none;transition: none}.b-bar>i{transition: none}.b-bar.b-indet>i{animation: none}}
 a.btn, .btn-large, .btn-ghost{transition: filter .15s ease, border-color .15s ease, color .15s ease}
 .btn-large:hover{filter: brightness(1.1)}
 .btn-large:active{filter: brightness(.95)}
@@ -287,9 +290,14 @@ a.btn, .btn-large, .btn-ghost{transition: filter .15s ease, border-color .15s ea
         </div>
       </div>
     `,Z0(n),W0(n)),n.buildDownloadLinks=()=>{n.getElementById("durls").innerHTML=L({title:i,code:e,dash:d,durl:N})}},s0=async()=>{let e=await W(),i=await z();if(e.code)return T({code:e.code,quality:x[i],title:e.data.videoData.title});let d=e.data.videoData,o=d.aid,a=d.bvid,r=d.cid;v("av:",o,"bvid:",a,"cid:",r);let N,t;if(d.pages.length>1){let m=location.search.match(/p=(\d+)/),s=d.pages[0];m&&m[1]&&(s=d.pages.find(b=>""+b.page==""+m[1])),N=s.page,t=s.part,r=s.cid}let{code:n,dash:c,qualityDescription:l,message:p}=await d0(o,a,r,i);if(n===E.OK){let m=`${d.title}`;N&&t&&(m=`${d.title}_P${N}_${t}`),T({code:n,title:m,quality:l,dash:c,message:p})}else T({code:n,message:p})},c0=async e=>{let i=e?"next":"next2025",d=i==="next2025",o=await W(i),a=o,r=await z();if(o.code)return T({code:o.code,quality:x[r],title:d?a.data.result.supplement.ogv_episode_info.long_title:o.data.seasonInfo.mediaInfo.title});let N=d?[]:o.data.seasonInfo.mediaInfo.episodes,t=d?a.data.result.supplement.ogv_episode_info.episode_id:e.ep_id,n=d?{}:N.find(g=>t===g.ep_id),c=d?a.data.result.supplement.ogv_episode_info:void 0;v("ep id:",t,"quality:",x[r]);let{code:l,dash:p,qualityDescription:m,message:s,durl:b}=await i0(r,d?{...a.data.result.video_info,dash:a.data.result.video_info.dash,avid:a.data.result.arc.aid,cid:a.data.result.arc.cid}:e);if(p||b){let g=d?`${document.title.split("-")?.[0]}_${c.index_title}_${c.long_title}`:`${o.data.seasonInfo.mediaInfo.title}_${n.titleFormat||n.title||""}_${n.long_title||""}`;T({code:l,title:g,dash:p,message:s,quality:m,durl:b})}else T({code:l,message:s})},p0=(e,i)=>{let d=""+window.location.href,o=!1;(async()=>{let a=await A(".bpx-player-ctrl-quality-result");if(a){let r=a.textContent;new MutationObserver(t=>{if(t[0]?.type==="childList"){let n=t[0]?.addedNodes?.[0]?.textContent??r;r!==n&&(r=n,I(),o=!0,e())}}).observe(a,{childList:!0})}})(),i.interval=window.setInterval(()=>{let a=window.location.href;d!==a?(d=a,I(),o=!0,e()):o||(o=!0,e())},1e3)};var esc=e=>String(e==null?"":e).replace(/[&<>"']/g,t=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[t]??t));
-var Bx=()=>{let e=window.__INITIAL_STATE__,i=e&&e.videoData&&e.videoData.ugc_season;if(i&&i.sections){let d=[];return i.sections.forEach(o=>{(o.episodes||[]).forEach(a=>{d.some(t=>t.cid===a.cid)||d.push({aid:a.aid,bvid:a.bvid,cid:a.cid,title:(a.arc&&a.arc.title)||a.title||"av"+a.aid})})}),d}
-  let vd=e&&e.videoData;if(vd&&vd.videos>1&&Array.isArray(vd.pages)){let d=[];return vd.pages.forEach(p=>{d.some(t=>t.cid===p.cid)||d.push({aid:vd.aid,bvid:vd.bvid,cid:p.cid,title:(p.part||"P"+p.page).slice(0,80)})}),d}
-  return[]};
+var bxPn=(t,e,i)=>{let d="_P"+e+"_"+i,o=80-d.length;return((o>=8?String(t||"").slice(0,o):"")+d).slice(0,80)};
+var bxPgs=(e,i,d,o)=>{let a=[],r=new Set();(e||[]).forEach(p=>{let t=p&&(p.cid||p.id);if(!t||r.has(t))return;r.add(t);let n=p.page||p.p||0,c=(p.part||p.title||"").trim()||("P"+n);a.push({aid:i,bvid:d,cid:t,title:(o?bxPn(o,n,c):c).slice(0,80)})});return a};
+var bxSp=(e,i,d)=>{if(i&&e.aid===i.aid&&Array.isArray(i.pages)&&i.pages.length>1)return i.pages;if(Array.isArray(e.pages)&&e.pages.length>1)return e.pages;let t=(d||[]).find(p=>p&&(p.aid===e.aid||p.bvid===e.bvid)&&Array.isArray(p.list)&&p.list.length>1);return t?t.list:null};
+var bxSn=e=>{let i=e&&e.videoData&&e.videoData.ugc_season,d=0;i&&i.sections&&i.sections.forEach(o=>{d+=(o.episodes||[]).length});return d};
+var bxB=(vd,i)=>{let d=vd&&vd.videos>1&&Array.isArray(vd.pages)&&vd.pages.length>1?vd.pages:null;if(d)return bxPgs(d,vd.aid,vd.bvid,"");let o=(i||[]).find(p=>p&&p.bvid===vd.bvid&&Array.isArray(p.list)&&p.list.length>1);return o?bxPgs(o.list,vd.aid,vd.bvid,""):[]};
+var Bx=()=>{let e=window.__INITIAL_STATE__;if(!e)return[];let vd=e.videoData||{},av=Array.isArray(e.availableVideoList)?e.availableVideoList:[],u=vd.ugc_season;
+  if(u&&u.sections&&u.sections.length){let d=[],seen=new Set();u.sections.forEach(s=>(s.episodes||[]).forEach(a=>{let t=(a.arc&&a.arc.title)||a.title||("av"+a.aid),c=bxSp(a,vd,av),l=c?bxPgs(c,a.aid,a.bvid,t):[{aid:a.aid,bvid:a.bvid,cid:a.cid,title:String(t),chk:1}];l.forEach(x=>{if(x.cid){if(seen.has(x.cid))return;seen.add(x.cid)}d.push(x)})})),d.seasonEps=bxSn(e);if(d.length)return d}
+  return bxB(vd,av)};
 var bx0={running:!1,cancel:!1,lastStatus:"",failLog:[],failItems:[],lastUplist:null};
 var bx1=e=>String(e==null?"":e).replace(/[\\/:*?"<>|]/g,"_").slice(0,80);
 var bx2=e=>new Promise(i=>setTimeout(i,e));
@@ -297,7 +305,7 @@ var bx2c=(e,cb)=>new Promise(i=>{let r=e,t=setInterval(()=>{if(bx0.cancel||r<=0)
 var bx5=e=>{try{let t=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");return t[e]&&t[e].cids||[]}catch{return[]}};
 var bx6=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),d=i[e]||{cids:[]};d.cids.includes(t)||d.cids.push(t),i[e]=d,localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i))}catch{}};
 var bx7=(e,t)=>{try{let i=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}");i[e]&&(i[e].cids=i[e].cids.filter(d=>d!==t),localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(i)))}catch{}};
-var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,d.disabled=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),(()=>{let bc=e.getElementById("batch-clear");if(!bc||bc.dataset.bound)return;bc.dataset.bound="1";bc.addEventListener("click",()=>{let n=window.__INITIAL_STATE__,d3=n&&n.videoData,k1=d3&&d3.ugc_season&&d3.ugc_season.id,k2=d3&&d3.owner&&"up"+d3.owner.mid,k3=d3&&d3.videos>1&&!(d3.ugc_season&&d3.ugc_season.sections)&&"mp-"+d3.bvid;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),del=0;k1&&u[k1]&&(delete u[k1],del=1),k2&&u[k2]&&(delete u[k2],del=1),k3&&u[k3]&&(delete u[k3],del=1),del&&localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u))}catch(a){a}W0(e)})})(),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,d2=r&&r.videoData&&r.videoData.owner,mpk=r&&r.videoData&&r.videoData.videos>1&&!(u&&u.sections)&&"mp-"+r.videoData.bvid,c=(u&&u.id?bx5(u.id):[]).concat(d2&&d2.mid?bx5("up"+d2.mid):[]).concat(mpk?bx5(mpk):[]),a=e.getElementById("batch-resume"),s2=e.getElementById("batch-season-row");a.style.display=c.length?"block":"none";let sl=e.getElementById("batch-skip");sl&&sl.parentElement&&sl.parentElement.childNodes.length>1&&(sl.parentElement.childNodes[1].nodeValue=` 跳过上次已下载的集数（已有${c.length}集）`);let vd2=r&&r.videoData,isp=vd2&&vd2.videos>1&&!(vd2.ugc_season&&vd2.ugc_season.sections),f=isp?`批量下载本视频全部P（共${n}P）`:`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display="block",s2&&(s2.style.display=n?"block":"none"),bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:"",(()=>{let bq=e.getElementById("batch-speed");if(!bq||bq.dataset.bound)return;bq.dataset.bound="1",bq.value=localStorage.getItem("bilibili_helper_batch_delay")||"3",bq.addEventListener("change",()=>{localStorage.bilibili_helper_batch_delay=bq.value})})(),(()=>{let bv=e.getElementById("up-btn");bv&&(bv.dataset.bound!=="1"&&(bv.dataset.bound="1",bv.addEventListener("click",()=>Dv(e))),bx0.running?(bv.disabled=!0,bv.classList.add("b-running")):(bv.disabled=!1,bv.classList.remove("b-running")),bx0.lastUplist&&bx8(e,bx0.lastUplist))})()};
+var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status");i&&!i.dataset.bound&&(i.dataset.bound="1",i.addEventListener("click",()=>Dx(e)),d.addEventListener("click",()=>{bx0.cancel=!0,d.disabled=!0,o.textContent=" 已请求取消，当前集完成后停止",bx0.lastStatus=o.textContent}),(()=>{let bc=e.getElementById("batch-clear");if(!bc||bc.dataset.bound)return;bc.dataset.bound="1";bc.addEventListener("click",()=>{let n=window.__INITIAL_STATE__,d3=n&&n.videoData,k1=d3&&d3.ugc_season&&d3.ugc_season.id,k2=d3&&d3.owner&&"up"+d3.owner.mid,k3=d3&&d3.videos>1&&!(d3.ugc_season&&d3.ugc_season.sections)&&"mp-"+d3.bvid;try{let u=JSON.parse(localStorage.getItem("bilibili_helper_batch_done")||"{}"),del=0;k1&&u[k1]&&(delete u[k1],del=1),k2&&u[k2]&&(delete u[k2],del=1),k3&&u[k3]&&(delete u[k3],del=1),del&&localStorage.setItem("bilibili_helper_batch_done",JSON.stringify(u))}catch(a){a}W0(e)})})(),(()=>{let s=e.getElementById("batch-qn");if(!s)return;s.value=localStorage.getItem("bilibili_helper_batch_qn")||"";s.addEventListener("change",()=>{localStorage.bilibili_helper_batch_qn=s.value})})());let n=Bx().length,r=window.__INITIAL_STATE__,u=r&&r.videoData&&r.videoData.ugc_season,d2=r&&r.videoData&&r.videoData.owner,mpk=r&&r.videoData&&r.videoData.videos>1&&!(u&&u.sections)&&"mp-"+r.videoData.bvid,c=(u&&u.id?bx5(u.id):[]).concat(d2&&d2.mid?bx5("up"+d2.mid):[]).concat(mpk?bx5(mpk):[]),a=e.getElementById("batch-resume"),s2=e.getElementById("batch-season-row");a.style.display=c.length?"block":"none";let sl=e.getElementById("batch-skip");sl&&sl.parentElement&&sl.parentElement.childNodes.length>1&&(sl.parentElement.childNodes[1].nodeValue=` 跳过上次已下载的集数（已有${c.length}集）`);let vd2=r&&r.videoData,isp=vd2&&vd2.videos>1&&!(vd2.ugc_season&&vd2.ugc_season.sections),ne=bxSn(r),f=isp?`批量下载本视频全部P（共${n}P）`:ne&&n>ne?`批量下载合集（${ne}集/共${n}个分P）`:`批量下载合集（共${n}集）`;i.textContent=bx0.running?`批量下载中…（${bx0.lastStatus.trim()||"进行中"}）`:f,t.style.display="block",s2&&(s2.style.display=n?"block":"none"),bx0.running?(i.disabled=!0,i.classList.add("b-running"),d.style.display=""):(i.disabled=!1,i.classList.remove("b-running"),d.style.display="none"),o.textContent=bx0.running||bx0.lastStatus?bx0.lastStatus:"",(()=>{let bq=e.getElementById("batch-speed");if(!bq||bq.dataset.bound)return;bq.dataset.bound="1",bq.value=localStorage.getItem("bilibili_helper_batch_delay")||"3",bq.addEventListener("change",()=>{localStorage.bilibili_helper_batch_delay=bq.value})})(),(()=>{let bv=e.getElementById("up-btn");bv&&(bv.dataset.bound!=="1"&&(bv.dataset.bound="1",bv.addEventListener("click",()=>Dv(e))),bx0.running?(bv.disabled=!0,bv.classList.add("b-running")):(bv.disabled=!1,bv.classList.remove("b-running")),bx0.lastUplist&&bx8(e,bx0.lastUplist))})()};
 var bxD=async(e,t,P,only)=>{
   if(bx0.running)return;
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];
@@ -311,27 +319,32 @@ var bxD=async(e,t,P,only)=>{
   for(let a=0;a<F0.length;a++){
     if(bx0.cancel)break;
     let h=F0[a],m=bx1(h.title),p=document.createElement("li");
-    p.classList.add("b-cur"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> 等待`,r.appendChild(p);
-    r.scrollTop+r.clientHeight>=r.scrollHeight-60&&(r.scrollTop=r.scrollHeight);
-    if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ↷ 上次已下载，跳过`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
-    o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
     try{
-      if(!h.cid){let pg=await(await window.fetch("https://api.bilibili.com/x/player/pagelist?bvid="+h.bvid,V)).json();if(pg.code!==E.OK||!pg.data||!pg.data.length)throw new Error("获取cid失败");h.cid=pg.data[0].cid}
+      if(!h.cid||h.chk){
+        let pg=await(await window.fetch("https://api.bilibili.com/x/player/pagelist?bvid="+h.bvid,V)).json();
+        if(!pg||pg.code!==E.OK||!pg.data||!pg.data.length)throw new Error(pg&&pg.code!=null?"分P列表获取失败："+(pg.message||"")+"("+pg.code+")":"分P列表获取失败（接口无响应或非JSON）");
+        let ps=pg.data,bt=h.title;h.chk=0,h.cid||(h.cid=ps[0].cid);
+        if(ps.length>1){h.title=bxPn(bt,ps[0].page,(ps[0].part||"").trim()),m=bx1(h.title);let ad=ps.slice(1).map(x=>({aid:h.aid,bvid:h.bvid,cid:x.cid,title:bxPn(bt,x.page,(x.part||"").trim())}));F0.splice(a+1,0,...ad),v("多P展开",h.bvid,"共",ps.length,"个分P")}
+      }
+      p.classList.add("b-cur"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">等待</span>`,r.appendChild(p);
+      r.scrollTop+r.clientHeight>=r.scrollHeight-60&&(r.scrollTop=r.scrollHeight);
+      if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">↷ 上次已下载，跳过</span>`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
+      o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
       let N=await d0(h.aid,h.bvid,h.cid,n);
       if(N.code!==E.OK){let w=N.code===E.VIP_ONLY?"（该集为充电/大会员专属，请确认已登录并已充电）":"";throw new Error((N.message||"获取下载地址失败")+w)}
       if(N.dash){
         let S=[{url:N.dash.audio.base_url,size:N.dash.audio.size},{url:N.dash.video.base_url,size:N.dash.video.size}],_=document.createElement("ul");
         _.className="progress",p.appendChild(_);
         let w=new Set(q.ffmpegUsedFiles);
-        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`,bx6(P,h.cid);
+        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ 已保存</span>`,bx6(P,h.cid);
         let K=[...q.ffmpegUsedFiles].find(V=>!w.has(V));
         K&&(q.ffmpegUsedFiles.delete(K),q.ffmpegInstance.deleteFile(K).catch(()=>{})),[...q.blobUrls].filter(V=>!s.has(V)).forEach(V=>{setTimeout(()=>{try{URL.revokeObjectURL(V)}catch(G1){G1}q.blobUrls.delete(V)},6e4),s.add(V)})
-      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✔ 已保存`}
+      }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ 已保存</span>`}
       else throw new Error("未返回DASH地址，已跳过")
     }catch(N){
       Q1++;let vip=N.code===E.VIP_ONLY||/大会员|充电|登录/.test(N.message||"");vip?Q1v++:Q1x++,F1++;
       let thr=N.code===-799||/频繁|限制|412|风控|未返回DASH/.test(N.message||"");thr?th++:th=0;
-      p.classList.remove("b-cur"),p.classList.add("b-fail"),p.innerHTML=`<span class="b-ep" title="${esc(m)}">${a+1}/${F0.length} ${esc(m)}</span> ✘ ${esc(N.message||N)}`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
+      p.parentNode||r.appendChild(p),p.classList.remove("b-cur"),p.classList.add("b-fail"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✘ ${esc(N.message||N)}</span>`,bx0.failLog.push(`${a+1}. ${h.title} — ${N.message||N}`),bx0.failItems.push(h),bx7(P,h.cid)
     }
     if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢，可点取消）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟");let cr=300e3;while(cr>0&&!bx0.cancel){o.textContent=` 连续受限冷却中…剩${Math.floor(cr/6e4)}分${Math.floor(cr%6e4/1e3)}秒（可点取消）`,bx0.lastStatus=o.textContent;let st=Math.min(cr,1e4);await bx2(st);cr-=st}th=0}
     if(bx0.cancel)break;

@@ -14,7 +14,7 @@
 | [风控与安全语义（R3）](./risk-control.md) | 节奏/退避/去重/降级约束表、沙盒 vs 真机、设计红线 |
 | [验证与证据](./verification.md) | 三条验收命令、harness 覆盖、evidence 目录说明 |
 | [架构与文件说明](./architecture.md) | 文件清单、关键模块、数据流、存储键 |
-| [知识库 / 决策记录（kg）](./KNOWLEDGE.md) | Spec 约束 S1–S8、Knowhow 排错经验、变更溯源 |
+| [知识库 / 决策记录（kg）](./KNOWLEDGE.md) | Spec 约束 S1–S11、Knowhow 排错经验、变更溯源 |
 
 ## 维护
 
@@ -22,4 +22,4 @@
 - 发版 → 更新 `CHANGELOG.md` 与本页「版本」标注。
 - Wiki 内容随 git 提交进入版本控制，与代码同评审。
 
-当前版本：`3.0.36`
+当前版本：`3.0.38`
