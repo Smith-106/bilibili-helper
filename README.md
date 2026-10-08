@@ -3,7 +3,7 @@
 浏览器扩展（Manifest V3），帮助你下载 B 站视频，包括「能看不能缓存」的版权受限番剧、电影、影视、电视剧等内容。
 
 - **商店名称**：bilibili哔哩哔哩下载助手
-- **当前版本**：`3.0.39`
+- **当前版本**：`3.0.40`
 - **清单版本**：Manifest V3
 - **运行方式**：纯前端注入（content script + ffmpeg wasm 合并音视频），无后端依赖
 
@@ -79,7 +79,7 @@
 
 ```bash
 node --check bilibili-helper-content-script.js   # 语法
-node evidence/verify-u1-bxd.mjs                  # 93 项 harness（静态 + 重放 + 预算场景 + 完整性 + 多P展开 + UP下载腿仿真 + 批量行UI + 合并MEMFS防泄漏）
+node evidence/verify-u1-bxd.mjs                  # 94 项 harness（静态 + 重放 + 预算场景 + 完整性 + 多P展开 + UP下载腿仿真 + 批量行UI + 合并MEMFS防泄漏 + 下载停滞续传）
 node evidence/acceptance.mjs                     # 16 项验收门（R1/R2/R3）
 node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上面三门 + 版本同步）
 ```

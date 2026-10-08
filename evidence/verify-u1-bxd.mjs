@@ -287,8 +287,14 @@ try {
   ok('D1 sim全过(17✓: 无cid恰1次pagelist/12行展开/逐P命名/skip生效/失败分类/重试收敛/旧代码对照)', n === 17 && sim.includes('ALL SIM CHECKS PASS'), `got=${n}`);
 } catch (e) { ok('D1 sim全过(17✓: 无cid恰1次pagelist/12行展开/逐P命名/skip生效/失败分类/重试收敛/旧代码对照)', false, 'sim exit!=0'); }
 ok('D2 分P列表失败也必须有行(不得隐身)', src.includes('p.parentNode||r.appendChild(p)'));
+try {
+  const rsm = execSync('node evidence/sim-o0-resume.mjs', { stdio: 'pipe' }).toString();
+  const rn = (rsm.match(/^✓/gm) || []).length;
+  ok('D3 o0停滞续传仿真全过(9✓: 真源码段+受控桩: 干净一致/僵死Range续传/无206回退/403直抛/5轮耗尽)', rn === 9 && rsm.includes('ALL SIM CHECKS PASS'), `got=${rn}`);
+} catch (e) { ok('D3 o0停滞续传仿真全过(9✓: 真源码段+受控I/O)', false, 'sim exit!=0'); }
 ok('A66 批量行结构化(b-idx计数列+b-ep标题+b-st状态, b-cur用outline描边, batch-status块级, reduced-motion全关)', src.includes('<span class="b-idx">') && src.includes('<span class="b-st">') && src.includes('.b-idx{display: inline-block;min-width: 7ch;text-align: right') && src.includes('.b-cur{background: #eef6ff;outline: 2px solid #7cc4e8') && src.includes('#batch-status{display: block') && src.includes('@media (prefers-reduced-motion: reduce)')); // v3.0.38 UI(批量区层次+可读性, 四位宽计数不再随324跳动, 原单行模板逐条迁移见bxD五处row)
 ok('A67 合并MEMFS不泄漏(_0清理输出文件+a0对象URL自回收+t0合并失败显错+beforeunload空实例守护)', src.includes('a.deleteFile(t).catch') && src.includes('q.blobUrls.delete(N)},6e4)') && src.includes('catch(G){a.innerHTML=" ✘ "') && src.includes('q.ffmpegInstance?q.ffmpegInstance.deleteFile(e):Promise.resolve()') && src.includes('catch(G){a.deleteFile(r).catch') && src.includes('✘ "+esc(String(G.message||G));throw G')); // v3.0.39 OOM(长时间批量爆memory access out of bounds: MEMFS输出文件从不删+JS侧buffer常驻+对象URL永不回收+合并失败静默记对账错+beforeunload裸ffmpeg引用; _0失败路径三文件清理+t0显错后重抛保证批量记失败而非✔)
+ok('A68 下载停滞自动续传(o0: 停滞计时断开+Range断点续传×5轮+403/404直抛+416重置)', src.includes('Range:"bytes="+t+"-"') && src.includes('下载停滞超过') && src.includes('att<5') && src.includes('new Blob(K)') && src.includes('G.st===403') && src.includes('G.st===416')); // v3.0.40 卡住(55%不动: 旧o0纯fetch+ReadableStream无停滞超时, TCP半死则l.read()永不resolve进度永冻; 改: 每块重置停滞计时(o0.stallMs默认20s, 秒数动态拼串), 超时cancel+抛错→Range续传, 服务端不支持206则回退全量重下, 403/404直抛不空转, 416重置偏移, 5轮耗尽才抛)
 
 // ---- 报告 ----
 const report = {

@@ -6,7 +6,7 @@
 
 ```bash
 node --check bilibili-helper-content-script.js   # 语法
-node evidence/verify-u1-bxd.mjs                  # 93 项 harness
+node evidence/verify-u1-bxd.mjs                  # 94 项 harness
 node evidence/acceptance.mjs                     # 16 项验收门
 node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上面三门 + 版本同步）
 ```
@@ -23,6 +23,7 @@ node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上�
 - **D2 失败行不得隐身**：分P列表失败（抛错在行渲染之前）也必须渲染 ✘ 行（`p.parentNode||r.appendChild(p)`），否则失败清单有、进度行无，对不上账。
 - **A66 批量行结构化（v3.0.38）**：`b-idx` 等宽计数列 + `b-ep` 标题 + `b-st` 状态词；`b-cur` 用 `outline` 全描边替代侧色条；`#batch-status` 块级独占一行；`prefers-reduced-motion` 下批量区动画全关。
 - **A67 合并 MEMFS 防泄漏（v3.0.39）**：`_0` 清理回调删输出文件 `t`（失败路径三文件全删并重抛）；`a0` 对象 URL 60s 自回收；`t0` 合并失败行内显错（`✘ 原因`）且重抛保证批量记失败而非 ✔；`beforeunload` 空实例守护（`q.ffmpegInstance?…`）。
+- **A68 下载停滞自动续传（v3.0.40）**：`o0` 每块重置 20s 停滞计时，超时 `cancel` + 抛错 → `Range: bytes=<已收>-` 断点续传（分片保留不丢）；服务端无 206 回退全量重下；轮间 1.5s×轮次退避，5 轮耗尽才抛；首轮与旧行为一致（无 Range 全量拉）。
 
 ## acceptance.mjs（16 项）
 
