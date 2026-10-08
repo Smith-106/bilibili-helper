@@ -6,7 +6,7 @@
 
 ```bash
 node --check bilibili-helper-content-script.js   # 语法
-node evidence/verify-u1-bxd.mjs                  # 92 项 harness
+node evidence/verify-u1-bxd.mjs                  # 93 项 harness
 node evidence/acceptance.mjs                     # 16 项验收门
 node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上面三门 + 版本同步）
 ```
@@ -22,6 +22,7 @@ node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上�
 - **D1–D2 UP 批量下载腿离线仿真（v3.0.37 补）**：`evidence/sim-up-batch.mjs` 取真 `bxD` 源码段（未改写一字）+ 受控 I/O（编排 pagelist/playurl/`-10403`/`-799`）跑全程。5 条无 cid 条目（UP 列表形状）→ 恰 5 次 pagelist → 就地展开 12 行（4+3+1+1+3）→ playurl 按逐分P cid 调用 9 次 → 结束行「成功 8 跳过 2 失败 2（需会员/登录 1，其他 1）」；行渲染 12 条 + 失败 2 条✘；「重试失败 2 集」一键收敛（成功 2/失败 0，只补 2 次 playurl）；对照组（HEAD 旧 `bxD`）只产出 P1（3 文件无 `_P` 命名）且 skip 永不命中（跳过 0）。
 - **D2 失败行不得隐身**：分P列表失败（抛错在行渲染之前）也必须渲染 ✘ 行（`p.parentNode||r.appendChild(p)`），否则失败清单有、进度行无，对不上账。
 - **A66 批量行结构化（v3.0.38）**：`b-idx` 等宽计数列 + `b-ep` 标题 + `b-st` 状态词；`b-cur` 用 `outline` 全描边替代侧色条；`#batch-status` 块级独占一行；`prefers-reduced-motion` 下批量区动画全关。
+- **A67 合并 MEMFS 防泄漏（v3.0.39）**：`_0` 清理回调删输出文件 `t`（失败路径三文件全删并重抛）；`a0` 对象 URL 60s 自回收；`t0` 合并失败行内显错（`✘ 原因`）且重抛保证批量记失败而非 ✔；`beforeunload` 空实例守护（`q.ffmpegInstance?…`）。
 
 ## acceptance.mjs（16 项）
 

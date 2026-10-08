@@ -2,6 +2,16 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.39] - 2026-02-14
+
+### Fixed（长时间批量下载爆 `memory access out of bounds`：合并器 MEMFS 越用越满）
+- **现场**：批量下载跑到中途某集，合并时抛 `✘ RuntimeError: memory access out of bounds`。wasm 内存实测 `init=32MB / max=2048MB`（可增长但有顶），旧链路每集在 MEMFS 里留下**输出文件从不删**（`_0` 的清理回调只删输入 `r/N`，不删输出 `t`；批量下载腿的"上一集删"逻辑找的也是"本集新增"——而输出文件是**本集新增**，被 `ffmpegUsedFiles.delete(K)` 移出集合后永远没人删），跑几十集高清就把 2GB 顶爆。
+- **堵四处泄漏**：`_0` 清理回调加 `a.deleteFile(t)`（输出文件随本集一起删）；`a0` 对象 URL 加 60s 自回收（旧逻辑只 `q0` 登记、永不 `revoke`，靠批量/关闭页才扫一次）；`t0` 合并失败加 `catch` 显错（旧 `try/finally` 无 `catch`，爆了只剩"合并中…"转圈）；`beforeunload` 的 `ffmpeg.deleteFile` 裸引用改 `q.ffmpegInstance?.deleteFile` 空实例守护（旧代码在实例未建时自身抛错）。
+- **附带**：合并成功后 JS 侧 `arrayBuffer`（`c`）置空引用（`t0` 已有 `N/t/c=null`，本次确认保留），`readFile` 返回的 `n.buffer` 在 `a0` 建 Blob 后 `e=null` 释放。
+
+### Verified
+- `node --check` OK + `mod-parse-check` OK；`verify-u1-bxd.mjs` **93 项全绿**（新增 A67 静态断言钉住 `deleteFile(t)`/`blobUrls.delete(N)`/`catch(G)` 显错/`q.ffmpegInstance?` 守护四处；sim-up-batch 17✓ 与 B6–B13 不受合并链影响照常全过）；`acceptance.mjs` 16 项全绿；`accept-selfcheck.mjs` 全绿（92→93，A67 双侧核对，版本同步 3.0.39）。
+
 ## [3.0.38] - 2026-02-14
 
 ### Changed（批量下载区 UI：层次、状态列、描边、可读性）

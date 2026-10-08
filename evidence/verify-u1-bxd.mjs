@@ -288,6 +288,7 @@ try {
 } catch (e) { ok('D1 sim全过(17✓: 无cid恰1次pagelist/12行展开/逐P命名/skip生效/失败分类/重试收敛/旧代码对照)', false, 'sim exit!=0'); }
 ok('D2 分P列表失败也必须有行(不得隐身)', src.includes('p.parentNode||r.appendChild(p)'));
 ok('A66 批量行结构化(b-idx计数列+b-ep标题+b-st状态, b-cur用outline描边, batch-status块级, reduced-motion全关)', src.includes('<span class="b-idx">') && src.includes('<span class="b-st">') && src.includes('.b-idx{display: inline-block;min-width: 7ch;text-align: right') && src.includes('.b-cur{background: #eef6ff;outline: 2px solid #7cc4e8') && src.includes('#batch-status{display: block') && src.includes('@media (prefers-reduced-motion: reduce)')); // v3.0.38 UI(批量区层次+可读性, 四位宽计数不再随324跳动, 原单行模板逐条迁移见bxD五处row)
+ok('A67 合并MEMFS不泄漏(_0清理输出文件+a0对象URL自回收+t0合并失败显错+beforeunload空实例守护)', src.includes('a.deleteFile(t).catch') && src.includes('q.blobUrls.delete(N)},6e4)') && src.includes('catch(G){a.innerHTML=" ✘ "') && src.includes('q.ffmpegInstance?q.ffmpegInstance.deleteFile(e):Promise.resolve()') && src.includes('catch(G){a.deleteFile(r).catch') && src.includes('✘ "+esc(String(G.message||G));throw G')); // v3.0.39 OOM(长时间批量爆memory access out of bounds: MEMFS输出文件从不删+JS侧buffer常驻+对象URL永不回收+合并失败静默记对账错+beforeunload裸ffmpeg引用; _0失败路径三文件清理+t0显错后重抛保证批量记失败而非✔)
 
 // ---- 报告 ----
 const report = {
