@@ -222,7 +222,7 @@ const q = { mergeEl: null, mergeNote: '', splitGap: 0, ffmpegInstance: null, ffm
 const bytesOf = (u) => { const c = new Uint8Array(u.length); c.set(u); return c.buffer; };
 const blobs = { 'audio-url': audio, 'video-url': video };
 let mode = 'small';
-const o0 = async (url) => ({ url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: async () => { if (mode === 'midboom') throw new Error('alloc'); return bytesOf(blobs[url]); } });
+const o0 = async (url) => ({ url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); return bytesOf(blobs[url]); } });
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = (data, name) => { saved.push(name + ':' + (data && data.length) + ':' + (data && findAscii(data, 'VIDE') >= 0 && findAscii(data, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -249,6 +249,14 @@ q.mergeNote = '';
 let wire3 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '008_课', mk()); } catch (e) { wire3 = e; }
 ok('W3 400到700MB复制失败也不进ffmpeg', wire3 === null && merges === 0 && saved.length === 2 && saved[0].includes('008_课_视频.mp4') && saved[1].includes('008_课_音频.m4a'), `merges=${merges} ${saved.join('|')} ${wire3 && wire3.message}`);
+saved.length = 0;
+mode = 'nowasm';
+q.noWasm = true;
+q.mergeNote = '';
+let wire4 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '009_课', mk()); } catch (e) { wire4 = e; }
+q.noWasm = false;
+ok('W4 上次撑住浏览器的这一集重试不再进ffmpeg', wire4 === null && merges === 0 && saved.length === 2 && saved[0].includes('009_课_视频.mp4') && saved[1].includes('009_课_音频.m4a'), `merges=${merges} ${saved.join('|')} ${wire4 && wire4.message}`);
 
 const z0 = page.indexOf('_0=async');
 const z1 = page.indexOf('var U=', z0);
