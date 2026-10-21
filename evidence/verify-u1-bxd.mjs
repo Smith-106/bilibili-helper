@@ -303,9 +303,9 @@ ok('A69 合并器每集销毁且OOM自动换新实例重试一次', src.includes
 try {
   const fb = execSync('node evidence/sim-merge-fallback.mjs', { stdio: 'pipe' }).toString();
   const fbn = (fb.match(/^✓/gm) || []).length;
-  ok('D5 合并OOM分开保存仿真全过(8✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4/超限不进wasm)', fbn === 8 && fb.includes('ALL SIM CHECKS PASS'), `got=${fbn}`);
-} catch (e) { ok('D5 合并OOM分开保存仿真全过(8✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4/超限不进wasm)', false, 'sim exit!=0'); }
-ok('A70 合并OOM改为分开保存音视频(不把已下好的数据丢掉再重试)', src.includes('o+"_视频.mp4"') && src.includes('o+"_音频.m4a"') && src.includes('q.mergeNote="已分开保存音视频"') && src.includes('✔ ${esc(q.mergeNote||"已保存")}') && src.includes('q.mergeMax||700*1024*1024') && src.includes('超过浏览器合并上限') && src.includes('a[download]')); // v3.0.42 失败改分开保存; v3.0.43 音视频合计超过700MB时不再进wasm(峰值约2倍, 上限2GB, 硬闯会卡死页面且兜底来不及), 批量行重挂保存链接
+  ok('D5 合并OOM分开保存仿真全过(9✓: 不丢已下载数据/先视频后音频/其它合并错误也分开保存/成功只存mp4/超限不进wasm/下载失败仍抛)', fbn === 9 && fb.includes('ALL SIM CHECKS PASS'), `got=${fbn}`);
+} catch (e) { ok('D5 合并OOM分开保存仿真全过(9✓: 不丢已下载数据/先视频后音频/其它合并错误也分开保存/成功只存mp4/超限不进wasm/下载失败仍抛)', false, 'sim exit!=0'); }
+ok('A70 合并OOM改为分开保存音视频(不把已下好的数据丢掉再重试)', src.includes('o+"_视频.mp4"') && src.includes('o+"_音频.m4a"') && src.includes('q.mergeNote="已分开保存音视频"') && src.includes('✔ ${esc(q.mergeNote||"已保存")}') && src.includes('q.mergeMax||700*1024*1024') && src.includes('超过浏览器合并上限') && src.includes('a[download]') && src.includes('合并失败（')); // v3.0.42 失败改分开保存; v3.0.43 音视频合计超过700MB时不再进wasm(峰值约2倍, 上限2GB, 硬闯会卡死页面且兜底来不及), 批量行重挂保存链接
 ok('A71 批量汇总单列分开保存(不把未合并的集算进纯成功)', src.includes('Qs=0') && src.includes('q.mergeNote&&Qs++') && src.includes('${Qs?" 分开"+Qs:""}') && src.includes('其中分开保存的是视频和音频两个文件')); // v3.0.44 分开保存原先并进「成功」，汇总看起来像都合并好了; Qs=0 时文案与旧版逐字相同, 避免把未合并的集藏起来
 ok('A68 下载停滞自动续传(o0: 停滞计时断开+Range断点续传×5轮+403/404直抛+416重置)', src.includes('Range:"bytes="+t+"-"') && src.includes('下载停滞超过') && src.includes('att<5') && src.includes('new Blob(K)') && src.includes('G.st===403') && src.includes('G.st===416')); // v3.0.40 卡住(55%不动: 旧o0纯fetch+ReadableStream无停滞超时, TCP半死则l.read()永不resolve进度永冻; 改: 每块重置停滞计时(o0.stallMs默认20s, 秒数动态拼串), 超时cancel+抛错→Range续传, 服务端不支持206则回退全量重下, 403/404直抛不空转, 416重置偏移, 5轮耗尽才抛)
 

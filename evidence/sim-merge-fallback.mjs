@@ -34,7 +34,7 @@ function run(mode) {
   const logs = [];
   let merges = 0;
   const q = { mergeEl: null, mergeNote: '', splitGap: 0, mergeMax: mode === 'big' ? 10 : undefined, ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
-  const o0 = async (url) => ({ url, bytes: url.length, size: mode === 'big' ? 8 : 0 });
+  const o0 = async (url) => { if (mode === 'dl') throw new Error('下载请求失败(403)'); return { url, bytes: url.length, size: mode === 'big' ? 8 : 0 }; };
   const _0 = async () => {
     merges++;
     if (mode === 'oom') throw new Error('memory access out of bounds');
@@ -62,7 +62,7 @@ ok('T1 状态与日志说明分开保存', oom.status.innerHTML.includes('分开
 const bad = run('other');
 let badErr = null;
 try { await bad.t0(true, bad.btn, bad.parts, '002_课', bad.status); } catch (e) { badErr = e; }
-ok('T2 非OOM仍抛错且不分开保存', !!badErr && /exec failed/.test(badErr.message) && bad.saved.length === 0, String(badErr && badErr.message));
+ok('T2 其它合并错误也分开保存并带上原因', badErr === null && bad.saved.length === 2 && bad.status.innerHTML.includes('exec failed'), bad.status.innerHTML);
 
 const good = run('ok');
 await good.t0(true, good.btn, good.parts, '003_课', good.status);
@@ -73,6 +73,11 @@ let bigErr = null;
 try { await big.t0(true, big.btn, big.parts, '004_课', big.status); } catch (e) { bigErr = e; }
 ok('T4 超过上限不进wasm', bigErr === null && big.merges === 0 && big.saved.join('|') === '004_课_视频.mp4:video-url|004_课_音频.m4a:audio-url', `merges=${big.merges} ${big.saved.join('|')}`);
 ok('T4 记下可再点的保存链接', big.status.innerHTML.includes('超过浏览器合并上限') && big.q.mergeSaves && big.q.mergeSaves.map((s) => s.name).join('|') === '004_课_视频.mp4|004_课_音频.m4a');
+
+const dl = run('dl');
+let dlErr = null;
+try { await dl.t0(true, dl.btn, dl.parts, '005_课', dl.status); } catch (e) { dlErr = e; }
+ok('T5 下载失败仍抛错不假装保存', !!dlErr && /403/.test(String(dlErr.message || dlErr)) && dl.saved.length === 0, String(dlErr && dlErr.message));
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
