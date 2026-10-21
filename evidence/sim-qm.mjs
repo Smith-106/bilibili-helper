@@ -250,5 +250,32 @@ let wire3 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '008_课', mk()); } catch (e) { wire3 = e; }
 ok('W3 400到700MB复制失败也不进ffmpeg', wire3 === null && merges === 0 && saved.length === 2 && saved[0].includes('008_课_视频.mp4') && saved[1].includes('008_课_音频.m4a'), `merges=${merges} ${saved.join('|')} ${wire3 && wire3.message}`);
 
+const z0 = page.indexOf('_0=async');
+const z1 = page.indexOf('var U=', z0);
+const run0 = new Function('T0', 'D', 'qK', 'q', 'f', 'v', page.slice(z0, z1) + '\nreturn _0;');
+async function bootCase(size, failFirst) {
+  let boots = 0;
+  const q = { _oomR: 0, mergeEl: null };
+  const logs = [];
+  const T0 = async () => {
+    boots++;
+    const mine = boots;
+    return {
+      writeFile: async () => { if (failFirst && mine === 1) throw new Error('RuntimeError: memory access out of bounds'); },
+      exec: async () => {},
+      deleteFile: async () => {},
+      readFile: async () => ({ buffer: new ArrayBuffer(4) }),
+    };
+  };
+  const _0 = run0(T0, async (x) => x, () => {}, q, () => {}, (m) => logs.push(m));
+  let err = null;
+  try { await _0('ext', { size }, { size }); } catch (e) { err = e; }
+  return { boots, err, logs };
+}
+const small = await bootCase(10 * 1024 * 1024, true);
+ok('R1 小文件内存不足会换新合并器再试一次', small.err === null && small.boots === 2, `boots=${small.boots} ${small.err && small.err.message}`);
+const large = await bootCase(100 * 1024 * 1024, true);
+ok('R2 大文件内存不足不再重试', large.err && /memory access out of bounds/.test(large.err.message) && large.boots === 1 && large.logs.some((m) => m.includes('不再重试')), `boots=${large.boots} ${large.logs.join('|')}`);
+
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

@@ -61,5 +61,6 @@
 - v3.0.48：`pairs` 不再要求 moof 紧挨 mdat。中间的 free/sidx 等随片段一起拷贝，base-data-offset 按「moof + 中间盒子 + mdat 头」重算。找不到 mdat 时 `qM.why=分片后面没有数据`。仿真 10 项。
 - v3.0.49：mdat 不再先复制成中间缓冲区再复制进成品，只写一次。合计超过 `q.wasmSkip`（默认 400MB）时先丢掉 Blob 再 `qM`，失败则分开保存且不调用 `_0`。低于该值仍可回退 ffmpeg。仿真 11 项。
 - v3.0.50：400MB 到 700MB 在 `arrayBuffer` 或 `qM` 抛错时，原先 catch 条件不满足就会落到 `_0`。现改为只要 `sum>wasmSkip` 就不再调用 `_0`：手里还有数据就分开保存，没有就抛「这一集太大，页面里留不住」。仿真 12 项。
+- v3.0.51：`_0` 用 `size||byteLength||length` 合计，只有不超过 `q.wasmRetryMax`（默认 80MB）才在 OOM 后 `qK` 并递归重试一次。更大则打「不再重试，改为分开保存」后抛出，由 `t0` 分开保存。没有长度的输入合计为 0，不重试。仿真 14 项。D4 的小样本 Uint8Array 仍会重试。
 
 [← 返回文档首页](./index.md)
