@@ -190,6 +190,20 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.q;
   delete globalThis.window;
 }
+{
+  const store = { bilibili_helper_partial: JSON.stringify({ name: 'v.mp4', bytes: 2 }) };
+  const writes = [];
+  const seeks = [];
+  let range = '';
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { dir: { getFileHandle() {} }, partialName: 'v.mp4', spillTo: async () => ({ write: async (c) => { writes.push(new TextDecoder().decode(c)); }, seek: async (at) => { seeks.push(at); }, close: async () => {} }) };
+  globalThis.window = { fetch: async (_u, opt) => { range = opt && opt.headers && opt.headers.Range || ''; return { ok: true, status: 206, headers: H({ 'content-range': 'bytes 2-3/4', 'content-length': '2' }), body: mkBody([chunk('cd')]) }; } };
+  const packed = await o0('http://x/v.m4s', 4, () => {});
+  ok('T13 关掉页面后重试仍从记下的断点接着下', range === 'bytes=2-' && packed && packed.streamed === true && packed.size === 4 && writes.join('') === 'cd' && seeks[0] === 2 && !store.bilibili_helper_partial, `range=${range} writes=${writes.join('')} ${store.bilibili_helper_partial || ''}`);
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
