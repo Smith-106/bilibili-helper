@@ -257,7 +257,7 @@ let mode = 'small';
 let inflight = 0, maxInflight = 0;
 let arm = null;
 let partWrites = null;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; if (q.watchMark) arm.marked = String(globalThis.sessionStorage && globalThis.sessionStorage.getItem('bilibili_helper_nomerge') || '').includes(q.watchMark); arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'blind') { const u = new Uint8Array(4); u.size = 4; return u; } if (mode === 'blind2') { const u = new Uint8Array(2); u.size = 2; return u; } if (mode === 'needdir') { if (!q.dir) throw Object.assign(new Error('need'), { needDir: true }); return { noHold: true, streamed: true, size: 4 }; } if (mode === 'u8') return new Uint8Array(8); if (mode === 'alloc') return { size: 8, arrayBuffer: async () => { throw new RangeError('Array buffer allocation failed'); } }; if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; if (q.watchMark) arm.marked = String(globalThis.sessionStorage && globalThis.sessionStorage.getItem('bilibili_helper_nomerge') || '').includes(q.watchMark); arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'blind') { const u = new Uint8Array(4); u.size = 4; return u; } if (mode === 'blind2') { const u = new Uint8Array(2); u.size = 2; return u; } if (mode === 'needdir') { if (!q.dir) throw Object.assign(new Error('need'), { needDir: true }); return { noHold: true, streamed: true, size: 4 }; } if (mode === 'u8') return new Uint8Array(8); if (mode === 'blob') return new Blob([new Uint8Array(6)]); if (mode === 'alloc') return { size: 8, arrayBuffer: async () => { throw new RangeError('Array buffer allocation failed'); } }; if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error(q.memBoom || 'wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -416,6 +416,19 @@ q.mergeWhy = '';
 let wireBefore = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 4 }], '023_课', mk()); } catch (e) { wireBefore = e; }
 ok('W34 下另一份之前就把合并结果算进去', wireBefore === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('先保存这一份再下另一份'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireBefore && wireBefore.message}`);
+globalThis.performance = { memory: { usedJSHeapSize: 40, jsHeapSizeLimit: 100 } };
+mode = 'blob';
+delete q.noMerge;
+arm = null;
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+q.holdMax = 1024 * 1024 * 1024;
+let wireBlob = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 6 }, { url: 'video-url', size: 1 }], '025块', mk()); } catch (e) { wireBlob = e; }
+ok('W36 还不是字节块时按三份来留', wireBlob === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('不再把两份放在一起'), `${q.mergeNote} ${wireBlob && wireBlob.message}`);
+delete q.holdMax;
 globalThis.performance = prevPerf;
 mode = 'alloc';
 saved.length = 0;

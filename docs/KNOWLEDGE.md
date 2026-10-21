@@ -114,5 +114,6 @@
 - v3.0.101：有 `jsHeapSizeLimit` 时，合并前从 `used+heldNow>limit*0.7` 改为 `used+heldNow*2>limit*0.7`。合并仿真 49 项。
 - v3.0.102：下第二份前从 `used+nextBytes` 改为 `used+heldBytes+nextBytes*2`，把合并结果也算进去。放不下就先保存已有的一份。合并仿真 50 项。
 - v3.0.103：没有 `jsHeapSizeLimit` 时，下第二份前从 `heldBytes>holdMax` 改为 `(heldBytes+nextBytes)*2>holdMax`。已有的一份本身还没超过时，说明写成「再留一份合并结果会放不下」。合并仿真 51 项。
+- v3.0.104：两份不都是 `Uint8Array` 时，`reserve=heldNow*3`，否则仍是 `heldNow*2`。合并前用 `used+reserve` 和 `reserve>holdMax`。合并仿真 52 项。
 
 [← 返回文档首页](./index.md)
