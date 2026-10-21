@@ -275,11 +275,23 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
 {
   const prev = globalThis.performance;
   globalThis.performance = {};
-  globalThis.q = { holdMax: 3 };
+  globalThis.q = { holdMax: 3, dirAsked: true };
   globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
-  const packed5 = await o0('http://x/v.m4s', 4, () => {});
-  const text5 = new TextDecoder().decode(new Uint8Array(await packed5.blob.arrayBuffer()));
-  ok('T19 不报告剩余空间且单份已经较大时不拼成第二块', packed5 && packed5.noHold === true && !(packed5 instanceof Uint8Array) && text5 === 'abcd', `text=${text5}`);
+  let err5 = null;
+  try { await o0('http://x/v.m4s', 4, () => {}); } catch (e) { err5 = e; }
+  ok('T19 不报告剩余空间且没有文件夹时较大的一份先停住', err5 && err5.needDir === true && /请先选择文件夹/.test(err5.message) && globalThis.q.dirAsked === false, `${err5 && err5.message}`);
+  globalThis.performance = prev;
+  delete globalThis.q;
+  delete globalThis.window;
+}
+{
+  const prev = globalThis.performance;
+  const writes = [];
+  globalThis.performance = {};
+  globalThis.q = { holdMax: 3, dir: { getFileHandle: async () => ({}) }, spillTo: async () => ({ write: async (c) => { writes.push(new TextDecoder().decode(c)); }, close: async () => {} }) };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed6 = await o0('http://x/v.m4s', 4, () => {});
+  ok('T20 不报告剩余空间且已选文件夹时较大的一份边下边写', packed6 && packed6.streamed === true && writes.join('') === 'abcd', `writes=${writes.join('')}`);
   globalThis.performance = prev;
   delete globalThis.q;
   delete globalThis.window;
