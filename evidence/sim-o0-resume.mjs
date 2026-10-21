@@ -296,6 +296,28 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.q;
   delete globalThis.window;
 }
+{
+  const a = src.indexOf('R=async');
+  const b = src.indexOf('}},qM=', a);
+  const body = src.slice(a, b + 2).replace(/^R=/, '');
+  let calls = 0;
+  let sawSpill = false;
+  const q = {};
+  const o0stub = async () => {
+    calls++;
+    if (calls === 1) throw Object.assign(new Error('need'), { needDir: true });
+    sawSpill = typeof q.spillTo === 'function';
+    return { streamed: true, size: 4 };
+  };
+  let picks = 0;
+  globalThis.showDirectoryPicker = async () => { picks++; q.dir = { getFileHandle() {}, createWritable() {} }; return q.dir; };
+  const R = eval('(function(q,o0){return ' + body + '})')(q, o0stub);
+  const btn = { classList: { add() {}, remove() {} } };
+  const row = { innerHTML: '' };
+  await R(btn, { url: 'http://x/v.m4s', size: 4 }, '课', row);
+  ok('T21 单个视频太大时先选文件夹再下一次', calls === 2 && picks === 1 && sawSpill === true && row.innerHTML.includes('已边下边写入文件夹'), `calls=${calls} picks=${picks} spill=${sawSpill} ${row.innerHTML}`);
+  delete globalThis.showDirectoryPicker;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
