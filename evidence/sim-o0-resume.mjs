@@ -137,6 +137,26 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.q;
   delete globalThis.window;
 }
+{
+  let fetches = 0, readers = 0;
+  globalThis.q = { dirAsked: true, jsMergeMax: 3 };
+  globalThis.window = { fetch: async () => { fetches++; return { ok: true, status: 200, headers: H({ 'content-length': '10' }), body: { cancel() {}, getReader() { readers++; return mkReader([chunk('abcd')]); } } }; } };
+  let err = null;
+  try { await o0('http://x/v.m4s', 10, () => {}); } catch (e) { err = e; }
+  ok('T9 已知超限且没文件夹时不读正文并要求重选', fetches === 1 && readers === 0 && err && err.needDir === true && /请先选择文件夹再重试/.test(err.message) && globalThis.q.dirAsked === false, `fetches=${fetches} readers=${readers} ${err && err.message}`);
+  delete globalThis.q;
+  delete globalThis.window;
+}
+{
+  let pulls = 0;
+  globalThis.q = { dirAsked: true, jsMergeMax: 3 };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({}), body: { getReader() { const r = mkReader([chunk('ab'), chunk('cd'), chunk('ef')]); const read = r.read.bind(r); r.read = () => { pulls++; return read(); }; return r; } } }) };
+  let err = null;
+  try { await o0('http://x/v.m4s', 0, () => {}); } catch (e) { err = e; }
+  ok('T10 体积未知但越积越大时停住并要求重选', pulls === 2 && err && err.needDir === true && globalThis.q.dirAsked === false, `pulls=${pulls} ${err && err.message}`);
+  delete globalThis.q;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
