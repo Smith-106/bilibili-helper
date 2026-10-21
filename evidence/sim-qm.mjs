@@ -403,6 +403,23 @@ q.mergeWhy = '';
 let wireAlloc = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018d_课', mk()); } catch (e) { wireAlloc = e; }
 ok('W22 合并时放不下就分开保存，不再往下走', wireAlloc === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('合并时页面放不下'), `${q.mergeNote} ${wireAlloc && wireAlloc.message}`);
+mode = 'alloc';
+delete q.noMerge;
+q.mergeWhy = '';
+q.mergeNote = '';
+saved.length = 0;
+merges = 0;
+let wireAgain = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018e_课', mk()); } catch (e) { wireAgain = e; }
+mode = 'small';
+q.mergeWhy = '';
+saved.length = 0;
+merges = 0;
+let wireSkip = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018e_课', mk()); } catch (e) { wireSkip = e; }
+ok('W23 同一集再次下载时不再把两份叠在一起', wireAgain === null && wireSkip === null && merges === 0 && saved.length === 2 && q.noMerge && q.noMerge['018e_课'] === 1 && q.mergeNote.includes('上次在页面里放不下'), `${q.mergeNote} ${wireSkip && wireSkip.message}`);
+delete q.noMerge;
+q.mergeWhy = '';
 mode = 'small';
 arm = null;
 saved.length = 0;

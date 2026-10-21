@@ -103,5 +103,6 @@
 - v3.0.90：真正合并前，`heapTight` 用 `usedJSHeapSize + heldNow`。`heldNow` 只算两份的 `byteLength` 或 `Blob.size`，给合并结果留出同样一份。超过 0.7 就分开保存。合并仿真 38 项。
 - v3.0.91：拷贝或 `qM` 抛出 `allocation failed`、`Invalid array length`、`out of memory`、`memory access out of bounds` 时，立刻 `split` 并 return，不再落到 ffmpeg。说明是「合并时页面放不下，改为分开保存」。合并仿真 39 项。
 - v3.0.92：已知长度大于 `jsHeapSizeLimit` 的一成，且已用加这一份超过七成时，把下载上限降到这一份以下。没文件夹抛 `needDir`，有 `spillTo` 则边写。小于一成的一份不触发，页面已满时仍可交 `Blob`。续传仿真 30 项。
+- v3.0.93：`split` 记下 `q.noMerge[o]`。同一页再次进入 `t0` 时直接 `streamOnly`，说明是「这一集上次在页面里放不下，这次分开保存」。不写 localStorage，刷新后会再试合成。合并仿真 40 项。
 
 [← 返回文档首页](./index.md)
