@@ -76,5 +76,6 @@
 - v3.0.63：`a0` 在有 `q.dir` 时 `w.write(e)`，不再先 `new Blob([e])`。`blob` 只在点击保存时由 `asBlob` 现包。写完把参数置空。仿真 S1 断言写入的是 `raw` 而不是 `blob`。
 - v3.0.64：`new Uint8Array(total)` 抛出 allocation failed / Invalid array length / out of memory，或测试开关 `o0.forceNoHold` 时，`o0` 返回 `{noHold:true,size,blob}`，`blob` 是 `new Blob(K)`，不再要求一整块连续内存。`t0` 见到 `m.noHold` 就先把 `got` 里已有的存掉，再 `a0(m.blob)`，原因句是「这一份太大，页面里留不住一整块，已直接保存」。单集 `R` 用 `if(r&&r.noHold)r=r.blob`。续传仿真 11 项，合并仿真 26 项。
 - v3.0.65：`Blob` 也包不成，或测试开关 `o0.forceParts` 时，返回 `{noHold:true,size,parts:K}`，不把小块收成一个文件。有 `q.dir` 就按小块 `write` 后置空，原因句是「这一份太大，已按小块写入文件夹」。没有文件夹则 `q.dirAsked=!1` 并抛出「请先选择文件夹再重试」，下一次批量会重新询问。续传仿真 12 项，合并仿真 28 项。
+- v3.0.66：`o0` 每收到一块，若 `globalThis.q.dir` 和 `q.spillTo` 都在，且已知总长或已收字节超过 `q.jsMergeMax`（默认 1200MB），就把已有小块和之后的小块直接 `write`，不再放进 `K`。下完返回 `{noHold:true,streamed:true,size}`。`t0` 和单集 `R` 在调用前设置 `q.spillTo` 打开对应文件。原因句是「这一份超过页面能放下的大小，已边下边写入文件夹」。不超过上限的仍留在页面里合并。续传仿真 13 项，合并仿真 29 项。
 
 [← 返回文档首页](./index.md)

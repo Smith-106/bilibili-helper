@@ -257,7 +257,7 @@ let mode = 'small';
 let inflight = 0, maxInflight = 0;
 let arm = null;
 let partWrites = null;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -329,6 +329,16 @@ ok('W11 没有文件夹时要求先选择再重试', wireAsk && /请先选择文
 mode = 'small';
 q.dir = null;
 arm = null;
+partWrites = null;
+saved.length = 0;
+mode = 'streamed';
+q.mergeNote = '';
+q.mergeWhy = '';
+q.dirNote = '';
+let wireStream = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '016_课', mk()); } catch (e) { wireStream = e; }
+ok('W12 边下边写入的那份不再进入合并', wireStream === null && merges === 0 && saved.length === 0 && q.mergeNote.includes('边下边写入文件夹') && q.dirNote === '已写入所选文件夹', `${q.mergeNote} saved=${saved.length} ${wireStream && wireStream.message}`);
+mode = 'small';
 saved.length = 0;
 mode = 'big';
 q.mergeNote = '';

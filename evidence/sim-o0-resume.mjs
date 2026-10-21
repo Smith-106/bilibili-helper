@@ -127,6 +127,16 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   o0.forceParts = false;
   delete globalThis.window;
 }
+{
+  const got = [];
+  let closed = 0;
+  globalThis.q = { dir: { getFileHandle() {} }, jsMergeMax: 3, spillTo: async () => ({ write: async (c) => { got.push(c.byteLength); }, close: async () => { closed++; } }) };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed = await o0('http://x/v.m4s', 4, () => {});
+  ok('T8 单份超过上限就边下边写入且不留整块', packed && packed.streamed === true && packed.size === 4 && got.join(',') === '2,2' && closed === 1, `size=${packed && packed.size} writes=${got.join(',')} closed=${closed}`);
+  delete globalThis.q;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
