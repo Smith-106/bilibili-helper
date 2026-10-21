@@ -96,5 +96,6 @@
 - v3.0.83：没有 `jsHeapSizeLimit` 时，`o0` 的已知长度停住点和边下边写点都改用 `min(jsMergeMax, holdMax)`。没文件夹抛 `needDir`，有 `spillTo` 则边写。有内存接口时仍用 `jsMergeMax`。续传仿真 25 项。
 - v3.0.84：单个视频的 `R` 在 `needDir` 且还没有 `q.dir` 时，调用一次 `showDirectoryPicker`，选到文件夹就再下一次。已经问过、不是 `needDir`、或没有选择函数，就照原错误抛出。续传仿真 26 项。
 - v3.0.85：合集的 `t0` 对每一份用同样的只问一次循环。选到文件夹后重新设置 `spillTo` 再下这一份。合并仿真 36 项。
+- v3.0.86：`R` 和 `t0` 在 `NotAllowedError` 或 `SecurityError` 时把 `q.dir` 和 `q.dirAsked` 清掉。同一次循环里已经问过就不再弹，下次重试才会重新选。续传仿真 27 项。
 
 [← 返回文档首页](./index.md)

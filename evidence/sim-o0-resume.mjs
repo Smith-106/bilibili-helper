@@ -318,6 +318,27 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   ok('T21 单个视频太大时先选文件夹再下一次', calls === 2 && picks === 1 && sawSpill === true && row.innerHTML.includes('已边下边写入文件夹'), `calls=${calls} picks=${picks} spill=${sawSpill} ${row.innerHTML}`);
   delete globalThis.showDirectoryPicker;
 }
+{
+  const a = src.indexOf('R=async');
+  const b = src.indexOf('}},qM=', a);
+  const body = src.slice(a, b + 2).replace(/^R=/, '');
+  let calls = 0;
+  const q = {};
+  const o0stub = async () => {
+    calls++;
+    if (calls === 1) throw Object.assign(new Error('need'), { needDir: true });
+    const err = new Error('permission');
+    err.name = 'NotAllowedError';
+    throw err;
+  };
+  let picks = 0;
+  globalThis.showDirectoryPicker = async () => { picks++; q.dir = { getFileHandle() {} }; q.dirAsked = true; return q.dir; };
+  const R = eval('(function(q,o0){return ' + body + '})')(q, o0stub);
+  let err = null;
+  try { await R({ classList: { add() {}, remove() {} } }, { url: 'http://x/v.m4s', size: 4 }, '课', { innerHTML: '' }); } catch (e) { err = e; }
+  ok('T22 文件夹权限失效时丢掉它，下次才会重新选', calls === 2 && picks === 1 && err && err.name === 'NotAllowedError' && q.dir === null && q.dirAsked === false, `calls=${calls} picks=${picks} dir=${q.dir} asked=${q.dirAsked} ${err && err.name}`);
+  delete globalThis.showDirectoryPicker;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
