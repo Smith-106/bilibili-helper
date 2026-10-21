@@ -23,7 +23,7 @@ function mk() {
   n.querySelectorAll = () => n.children.filter((c) => c && c.download);
   return n;
 }
-const document = { createElement: () => mk() };
+const document = { createElement: () => mk(), get cookie() { return ''; }, set cookie(_) {} };
 const esc = (s) => String(s);
 const C = () => '1B';
 const F = () => ({ baseUrl: 'ext' });

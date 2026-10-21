@@ -269,7 +269,7 @@ function mk() {
   return n;
 }
 const cookieJar = new Map();
-const pageDoc = { createElement: () => mk(), get cookie() { return [...cookieJar.entries()].map(([k, v]) => k + '=' + v).join('; '); }, set cookie(raw) { const text = String(raw), part = text.split(';')[0], i = part.indexOf('='); if (i < 0) return; const k = part.slice(0, i); if (text.includes('max-age=0')) cookieJar.delete(k); else cookieJar.set(k, part.slice(i + 1)); } };
+const pageDoc = { createElement: () => mk(), get cookie() { return [...cookieJar.entries()].map(([k, v]) => k + '=' + v).join('; '); }, set cookie(raw) { const text = String(raw), part = text.split(';')[0], i = part.indexOf('='); if (i < 0) return; const k = part.slice(0, i); if (k === 'bhnmnow' && !q.keepNow) return; if (text.includes('max-age=0')) cookieJar.delete(k); else cookieJar.set(k, part.slice(i + 1)); } };
 const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document', 'R', `var ${seg}; return t0;`)(o0, _0, a0, () => ({ baseUrl: 'ext' }), q, vlog, (s) => String(s), () => '1B', pageDoc, async () => { throw new Error('R'); });
 let wireErr = null;
 const list1 = mk();
@@ -617,6 +617,32 @@ q.mergeWhy = '';
 let wireDie2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '035早', mk()); } catch (e) { wireDie2 = e; }
 ok('W45 第一份还没下完就中断，重试仍分开保存', wireDie !== null && earlyNote.includes('035早') && wireDie2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${earlyNote} ${q.mergeNote} ${wireDie && wireDie.message} ${wireDie2 && wireDie2.message}`);
+q.keepNow = true;
+const prevSessSet = globalThis.sessionStorage.setItem;
+globalThis.sessionStorage.setItem = () => { throw new Error('session dead'); };
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+cookieJar.clear();
+mode = 'die';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireFast = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '036急', mk()); } catch (e) { wireFast = e; }
+const fastNote = String(pageDoc.cookie || '');
+globalThis.sessionStorage.setItem = prevSessSet;
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'u8';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireFast2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '036急', mk()); } catch (e) { wireFast2 = e; }
+ok('W46 名单还没写完也先记住这一集', wireFast !== null && fastNote.includes('bhnmnow=' + encodeURIComponent('036急')) && wireFast2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${fastNote.slice(0, 80)} ${q.mergeNote} ${wireFast2 && wireFast2.message}`);
+q.keepNow = false;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
