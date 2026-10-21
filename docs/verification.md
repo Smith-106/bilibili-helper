@@ -6,7 +6,7 @@
 
 ```bash
 node --check bilibili-helper-content-script.js   # 语法
-node evidence/verify-u1-bxd.mjs                  # 97 项 harness
+node evidence/verify-u1-bxd.mjs                  # 99 项 harness
 node evidence/acceptance.mjs                     # 16 项验收门
 node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上面三门 + 版本同步）
 ```
@@ -25,6 +25,7 @@ node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上�
 - **A67 合并 MEMFS 防泄漏（v3.0.39）**：`_0` 清理回调删输出文件 `t`（失败路径三文件全删并重抛）；`a0` 对象 URL 60s 自回收；`t0` 合并失败行内显错（`✘ 原因`）且重抛保证批量记失败而非 ✔；`beforeunload` 空实例守护（`q.ffmpegInstance?…`）。
 - **A68 下载停滞自动续传（v3.0.40）**：`o0` 每块重置 20s 停滞计时，超时 `cancel` + 抛错 → `Range: bytes=<已收>-` 断点续传（分片保留不丢）；服务端无 206 回退全量重下；轮间 1.5s×轮次退避，5 轮耗尽才抛；首轮与旧行为一致（无 Range 全量拉）。续传时写一条日志（第 N 次、已收字节）。
 - **A69 / D4 合并器每集销毁（v3.0.41）**：`deleteFile` 不缩小 wasm 堆，爆掉的实例被 `T0` 缓存，失败重试打在同一具尸体上。`qK` 每集 `terminate` 并置空；核心 blob URL 缓存；`load` 失败不缓存；OOM 自动换新实例重试 1 次，行内与日志提示「重建合并器」，仍失败则改成可读原因。
+- **A70 / D5 合并 OOM 分开保存（v3.0.42）**：单集峰值约等于音视频进 wasm 再加成品，新实例重试照样爆，而且失败分支把已经下好的 blob 丢掉。重建一次仍失败时，改为依次保存 `*_视频.mp4` 与 `*_音频.m4a`，批量行显示「已分开保存音视频」，不再记失败。读成品前先删掉 wasm 里的两个输入，降低读回时的峰值。
 
 ## acceptance.mjs（16 项）
 

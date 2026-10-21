@@ -52,5 +52,6 @@
 - v3.0.39：修长时间批量爆 `memory access out of bounds`——wasm 内存 init 32MB/max 2048MB，旧合并链每集在 MEMFS 留输出文件从不删（`_0` 只删输入 `r/N`；批量“删上一集”找的是本集新增而输出正是本集新增，被移出集合后永不删），几十集高清即顶爆。改：`_0` 清理回调加删输出 `t`（失败路径三文件全删并重抛）+ `a0` 对象 URL 60s 自回收 + `t0` 合并失败行内显错且重抛（批量记失败而非 ✔）+ `beforeunload` 空实例守护；harness 同步（A67 静态，93 项全绿）。
 - v3.0.40：修下载卡住不动（如 9.90MB 停 55%）——旧 `o0` 纯 `fetch` + `ReadableStream` 无停滞超时，CDN 限流/连接僵死时 `l.read()` 永不 resolve 进度永冻。改：每块重置 20s 停滞计时，超时 `cancel` + 抛错 → `Range: bytes=<已收>-` 断点续传（分片保留）；无 206 回退全量重下；轮间 1.5s×轮次退避，5 轮耗尽才抛；进度回调 `try/catch` 防面板销毁中断；harness 同步（A68 静态，94 项全绿）。
 - v3.0.41：修 `memory access out of bounds` 重试仍失败——`deleteFile` 不缩 wasm 堆（上限 2GB），爆掉或涨满的 `ffmpeg` 实例被 `T0` 一直复用，手动重试打在同一具尸体上。改：每集合并完 `terminate` 并置空（核心 blob URL 缓存，不重复拉取 wasm）；`load` 失败不缓存坏实例；OOM 自动换新实例重试 1 次，行内提示「正在重建合并器」；仍失败改可读文案并重抛（批量记失败）。下载续传时补一条日志。仿真 `sim-ffmpeg-recycle.mjs` 10 项（D4）+ A69，harness 97 项全绿。
+- v3.0.42：单集太大时换新实例仍会 OOM（峰值≈两路输入进 wasm + 成品，ffmpeg-core 无 WORKERFS）。失败分支原先把已下载的 blob 丢掉，重试等于再下一次再爆一次。改：重建一次仍失败则分开保存 `*_视频.mp4` 与 `*_音频.m4a`（间隔可调 `q.splitGap`），批量行「✔ 已分开保存音视频」，本集不算失败。读成品前先删 wasm 输入。仿真 `sim-merge-fallback.mjs` 6 项（D5）+ A70，harness 99 项。
 
 [← 返回文档首页](./index.md)

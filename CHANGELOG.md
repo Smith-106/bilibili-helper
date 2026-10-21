@@ -2,6 +2,16 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.42] - 2026-10-08
+
+### Fixed（单集 `memory access out of bounds`：换新合并器重试还是失败，而且已经下好的数据被丢掉）
+- **根因**：v3.0.41 解决的是「坏实例被复用」。单集本身太大时，峰值约等于音频+视频写进 wasm 再加一份成品（wasm 上限 2GB，且这份 ffmpeg-core 没有 WORKERFS）。新实例照样爆。`t0` 的 catch 又把已经下载完的两个 blob 丢在块作用域里，重试等于重新下载再爆一次。
+- **修**：合并器仍先自动重建并重试 1 次。还失败，就把已下载的视频、音频分开保存为 `*_视频.mp4` 和 `*_音频.m4a`（两次点击间隔 800ms，避免浏览器丢掉第二个）。本集不再记失败。批量行显示「✔ 已分开保存音视频」，日志说明可用播放器或本地 ffmpeg 合并。
+- **峰值**：读回成品前先删除 wasm 里的两路输入，再 `readFile`，避免读出时三份文件同时占着堆。
+
+### Verified
+- `evidence/sim-merge-fallback.mjs` 6 项（OOM 不抛、先视频后音频、其它错误仍抛、成功只存一个 mp4）；`verify-u1-bxd.mjs` **99 项全绿**（D5 + A70）；`acceptance.mjs` 16 项；`accept-selfcheck.mjs` 全绿。
+
 ## [3.0.41] - 2026-10-08
 
 ### Fixed（`RuntimeError: memory access out of bounds` 失败重试还是失败）
