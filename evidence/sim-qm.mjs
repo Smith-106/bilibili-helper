@@ -75,10 +75,12 @@ function boxes(b) {
   }
   return out;
 }
+async function u8(x) { if (!x) return null; if (x instanceof Uint8Array) return x; return new Uint8Array(await x.arrayBuffer()); }
 const video = makeBasic('VIDE');
 const audio = makeBasic('AUDI');
-const merged = qM(video, audio);
+const merged = await u8(qM(video, audio));
 ok('B1 普通mp4能合并', merged && findAscii(merged, 'VIDE') >= 0 && findAscii(merged, 'AUDI') >= 0, merged && merged.length);
+ok('M1 合并结果是分段Blob不再整段复制', qM(video, audio) instanceof Blob, '');
 const ids = [];
 if (merged) {
   for (let i = 0; i + 8 < merged.length; i++) {
@@ -124,8 +126,9 @@ function makeFrag(tag) {
 }
 const fv = makeFrag('VIDE');
 const fa = makeFrag('AUDI');
-const fm = qM(fv, fa);
+const fm = await u8(qM(fv, fa));
 ok('F1 分片mp4能合并', fm && findAscii(fm, 'VIDE') >= 0 && findAscii(fm, 'AUDI') >= 0);
+ok('M2 分片合并结果也是分段Blob', qM(fv, fa) instanceof Blob, '');
 let bases = [];
 if (fm) {
   for (let i = 0; i + 24 < fm.length; i++) {
@@ -156,7 +159,7 @@ function makeLoose(tag) {
 }
 const lv = makeLoose('VIDE');
 const la = makeLoose('AUDI');
-const lm = qM(lv, la);
+const lm = await u8(qM(lv, la));
 let looseOk = false;
 let looseNote = '';
 if (lm) {
@@ -203,7 +206,7 @@ function makeGap(tag) {
 }
 const gv = makeGap('VIDE');
 const ga = makeGap('AUDI');
-const gm = qM(gv, ga);
+const gm = await u8(qM(gv, ga));
 let gapBases = [];
 if (gm) {
   for (let i = 0; i + 24 < gm.length; i++) {
@@ -227,7 +230,7 @@ function makeEof(tag) {
 }
 const ev = makeEof('VIDE');
 const ea = makeEof('AUDI');
-const em = qM(ev, ea);
+const em = await u8(qM(ev, ea));
 let eofWalk = 0;
 let eofCovered = false;
 if (em) {
@@ -253,7 +256,7 @@ const blobs = { 'audio-url': audio, 'video-url': video };
 let mode = 'small';
 const o0 = async (url) => ({ url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } });
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
-const a0 = (data, name) => { saved.push(name + ':' + (data && data.length) + ':' + (data && findAscii(data, 'VIDE') >= 0 && findAscii(data, 'AUDI') >= 0)); };
+const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
 function mk() {
   const n = { children: [], style: {}, className: '', textContent: '', innerHTML: '' };
