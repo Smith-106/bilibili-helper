@@ -643,6 +643,34 @@ let wireFast2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '036急', mk()); } catch (e) { wireFast2 = e; }
 ok('W46 名单还没写完也先记住这一集', wireFast !== null && fastNote.includes('bhnmnow=' + encodeURIComponent('036急')) && wireFast2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${fastNote.slice(0, 80)} ${q.mergeNote} ${wireFast2 && wireFast2.message}`);
 q.keepNow = false;
+q.keepNow = true;
+let hangReq = null;
+let hangOpens = 0;
+globalThis.indexedDB = { open() { const req = {}; hangOpens++; if (hangOpens === 1) hangReq = req; else queueMicrotask(() => { if (req.onerror) req.onerror(); }); return req; } };
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'die';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+const pendingHang = t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '037先', mk());
+const midNote = String(pageDoc.cookie || '');
+if (hangReq && hangReq.onerror) hangReq.onerror();
+let wireHang = null;
+try { await pendingHang; } catch (e) { wireHang = e; }
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'u8';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireHang2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '037先', mk()); } catch (e) { wireHang2 = e; }
+ok('W47 数据库还没返回也已经记住', wireHang !== null && midNote.includes('bhnmnow=' + encodeURIComponent('037先')) && wireHang2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${midNote.slice(0, 80)} ${q.mergeNote} ${wireHang2 && wireHang2.message}`);
+q.keepNow = false;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
