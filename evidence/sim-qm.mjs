@@ -339,6 +339,19 @@ let wireStream = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '016_课', mk()); } catch (e) { wireStream = e; }
 ok('W12 边下边写入的那份不再进入合并', wireStream === null && merges === 0 && saved.length === 0 && q.mergeNote.includes('边下边写入文件夹') && q.dirNote === '已写入所选文件夹', `${q.mergeNote} saved=${saved.length} ${wireStream && wireStream.message}`);
 mode = 'small';
+{
+  const revoked = [];
+  const prev = globalThis.URL;
+  globalThis.URL = { revokeObjectURL: (u) => revoked.push(u) };
+  globalThis.q = { blobUrls: new Set(['blob:a', 'blob:b']), epBlobs: ['blob:a', 'blob:b'] };
+  const a = page.indexOf('qRel=()=>');
+  const b = page.indexOf('return n}', a);
+  const qRel = new Function(page.slice(a, b + 'return n}'.length) + '\nreturn qRel;')();
+  const n = qRel();
+  ok('W13 下一集开始前释放上一集的下载链接', n === 2 && revoked.join(',') === 'blob:a,blob:b' && globalThis.q.epBlobs.length === 0 && !globalThis.q.blobUrls.has('blob:a'), `n=${n} ${revoked.join(',')}`);
+  globalThis.URL = prev;
+  delete globalThis.q;
+}
 saved.length = 0;
 mode = 'big';
 q.mergeNote = '';
