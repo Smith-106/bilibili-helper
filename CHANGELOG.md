@@ -2,6 +2,16 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.53] - 2026-10-08
+
+### Fixed（默认不再进 ffmpeg，下载过程里不会再出现 memory access out of bounds）
+- 页面里能合并的，仍合成一个 mp4。
+- 页面里合并不了的，直接分开保存视频和音频，状态写「这一集不进 ffmpeg，改为分开保存音视频」。不再先试 ffmpeg，也就不会再报 `RuntimeError: memory access out of bounds`，也不需要再为这个错误点重试。
+- 只有把 `q.useWasm` 设为 true 才会再用 ffmpeg。
+
+### Verified
+- `sim-merge-fallback.mjs` 默认路径 `merges===0`；`sim-qm.mjs` 15 项；`verify` 102 项；selfcheck 全绿。
+
 ## [3.0.52] - 2026-10-08
 
 ### Fixed（点「重试失败」会把同一集再送进 ffmpeg，还是内存不足）

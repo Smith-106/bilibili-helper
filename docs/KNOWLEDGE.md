@@ -63,5 +63,6 @@
 - v3.0.50：400MB 到 700MB 在 `arrayBuffer` 或 `qM` 抛错时，原先 catch 条件不满足就会落到 `_0`。现改为只要 `sum>wasmSkip` 就不再调用 `_0`：手里还有数据就分开保存，没有就抛「这一集太大，页面里留不住」。仿真 12 项。
 - v3.0.51：`_0` 用 `size||byteLength||length` 合计，只有不超过 `q.wasmRetryMax`（默认 80MB）才在 OOM 后 `qK` 并递归重试一次。更大则打「不再重试，改为分开保存」后抛出，由 `t0` 分开保存。没有长度的输入合计为 0，不重试。仿真 14 项。D4 的小样本 Uint8Array 仍会重试。
 - v3.0.52：批量 catch 若是 OOM / `页面里留不住`，给该集打上 `h.noWasm`，行文改为「点重试会分开保存，不再进 ffmpeg」。下一轮 `t0` 前 `q.noWasm=true`，`_0` 之前分开保存。其它失败原因不打这个标记。仿真 15 项。
+- v3.0.53：`t0` 在调用 `_0` 前若 `q.useWasm` 不为 true，有音视频就分开保存并 return。默认下载路径不再进入 ffmpeg.wasm，因此不会再抛 `memory access out of bounds`。页面内 `qM` 成功仍是一个 mp4。`sim-merge-fallback` 的 T1 断言 `merges===0`。
 
 [← 返回文档首页](./index.md)

@@ -33,7 +33,7 @@ function run(mode) {
   const saved = [];
   const logs = [];
   let merges = 0;
-  const q = { mergeEl: null, mergeNote: '', splitGap: 0, mergeMax: mode === 'big' ? 10 : undefined, ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
+  const q = { mergeEl: null, mergeNote: '', splitGap: 0, mergeMax: mode === 'big' ? 10 : undefined, useWasm: mode === 'other' || mode === 'ok', ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
   const o0 = async (url) => { if (mode === 'dl') throw new Error('下载请求失败(403)'); return { url, bytes: url.length, size: mode === 'big' ? 8 : 0 }; };
   const _0 = async () => {
     merges++;
@@ -55,7 +55,7 @@ function run(mode) {
 const oom = run('oom');
 let oomErr = null;
 try { await oom.t0(true, oom.btn, oom.parts, '001_课', oom.status); } catch (e) { oomErr = e; }
-ok('T1 OOM不抛错', oomErr === null, String(oomErr && oomErr.message));
+ok('T1 OOM不抛错', oomErr === null && oom.merges === 0, `merges=${oom.merges} ${oomErr && oomErr.message}`);
 ok('T1 先视频后音频', oom.saved.join('|') === '001_课_视频.mp4:video-url|001_课_音频.m4a:audio-url', oom.saved.join('|'));
 ok('T1 状态与日志说明分开保存', oom.status.innerHTML.includes('分开保存') && oom.q.mergeNote === '已分开保存音视频' && oom.logs.some((x) => x.includes('分开保存音视频')));
 
