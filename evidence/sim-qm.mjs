@@ -365,6 +365,18 @@ ok('W14 同一集第二份开始前释放第一份链接', wireRel === null && m
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
 saved.length = 0;
+mode = 'small';
+q.mergeNote = '';
+q.mergeWhy = '';
+const prevPerf = globalThis.performance;
+globalThis.performance = { memory: { usedJSHeapSize: 80, jsHeapSizeLimit: 100 } };
+arm = { seen: 0, saved: -1 };
+let wireHeap = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '018_课', mk()); } catch (e) { wireHeap = e; }
+ok('W15 页面已较满时先保存再下另一份', wireHeap === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面已经比较满'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireHeap && wireHeap.message}`);
+globalThis.performance = prevPerf;
+arm = null;
+saved.length = 0;
 mode = 'big';
 q.mergeNote = '';
 let wire2 = null;
