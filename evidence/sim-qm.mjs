@@ -526,6 +526,32 @@ q.mergeWhy = '';
 let wireSpan2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], longName(0), mk()); } catch (e) { wireSpan2 = e; }
 ok('W41 一条页面记录写满后记到下一条', wireSpan === null && wireSpan2 === null && merges === 0 && String(pageDoc.cookie).includes('bhnm1=') && allNotes.includes(longName(0)) && allNotes.includes(longName(22)) && q.mergeNote.includes('上次在页面里放不下'), `cookies=${pageDoc.cookie.slice(0, 80)} ${q.mergeNote} ${wireSpan2 && wireSpan2.message}`);
+const idbData = new Map();
+globalThis.indexedDB = { open() { const req = {}; queueMicrotask(() => { const db = { _stores: new Set(), objectStoreNames: { contains: (name) => db._stores.has(name) }, createObjectStore(name) { db._stores.add(name); }, transaction(name) { if (!db._stores.has(name)) throw new Error('no store'); return { objectStore: () => ({ get(key) { const r = {}; queueMicrotask(() => { r.result = idbData.get(key); if (r.onsuccess) r.onsuccess(); }); return r; }, put(value, key) { idbData.set(key, value); const r = {}; queueMicrotask(() => { if (r.onsuccess) r.onsuccess(); }); return r; } }) }; }, close() {} }; req.result = db; if (req.onupgradeneeded) req.onupgradeneeded(); if (req.onsuccess) req.onsuccess(); }); return req; } };
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'alloc';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+const dbName = (n) => ('032' + String(n).padStart(3, '0') + 'y'.repeat(80)).slice(0, 80);
+let wireDb = null;
+try { for (let n = 0; n < 177; n++) await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], dbName(n), mk()); } catch (e) { wireDb = e; }
+const dbList = idbData.get('list') || [];
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireDb2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], dbName(0), mk()); } catch (e) { wireDb2 = e; }
+ok('W42 八条都满时仍记在浏览器数据库', wireDb === null && wireDb2 === null && merges === 0 && dbList.includes(dbName(0)) && dbList.includes(dbName(176)) && q.mergeNote.includes('上次在页面里放不下'), `db=${dbList.length} ${q.mergeNote} ${wireDb2 && wireDb2.message}`);
+delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
 globalThis.performance = prevPerf;
