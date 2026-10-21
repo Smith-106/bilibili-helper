@@ -229,6 +229,20 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const store = { bilibili_helper_partial: JSON.stringify({ 'v.mp4': 2 }) };
+  const cuts = [];
+  const seeks = [];
+  const writes = [];
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { dir: { getFileHandle: async () => ({ getFile: async () => ({ size: 8 }) }) }, partialName: 'v.mp4', spillTo: async () => ({ write: async (c) => { writes.push(new TextDecoder().decode(c)); }, seek: async (at) => { seeks.push(at); }, truncate: async (at) => { cuts.push(at); }, close: async () => {} }) };
+  globalThis.window = { fetch: async (_u, opt) => ({ ok: true, status: 206, headers: H({ 'content-range': 'bytes 2-3/4', 'content-length': '2' }), body: mkBody([chunk('cd')]) }) };
+  const packed3 = await o0('http://x/v.mp4', 4, () => {});
+  ok('T16 文件比断点长时先截掉旧尾巴再接着写', packed3 && packed3.streamed === true && packed3.size === 4 && cuts[0] === 2 && seeks[0] === 2 && writes.join('') === 'cd', `cuts=${cuts.join(',')} seeks=${seeks.join(',')} writes=${writes.join('')}`);
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
