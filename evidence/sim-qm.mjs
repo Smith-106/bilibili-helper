@@ -221,7 +221,8 @@ let merges = 0;
 const q = { mergeEl: null, mergeNote: '', splitGap: 0, ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
 const bytesOf = (u) => { const c = new Uint8Array(u.length); c.set(u); return c.buffer; };
 const blobs = { 'audio-url': audio, 'video-url': video };
-const o0 = async (url) => ({ url, size: blobs[url].length, arrayBuffer: async () => bytesOf(blobs[url]) });
+let big = false;
+const o0 = async (url) => ({ url, size: big ? 500 * 1024 * 1024 : blobs[url].length, arrayBuffer: async () => bytesOf(blobs[url]) });
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = (data, name) => { saved.push(name + ':' + (data && data.length) + ':' + (data && findAscii(data, 'VIDE') >= 0 && findAscii(data, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -236,6 +237,12 @@ const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document',
 let wireErr = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '006_课', mk()); } catch (e) { wireErr = e; }
 ok('W1 页面内合并成功则不进wasm', wireErr === null && merges === 0 && saved.length === 1 && saved[0].startsWith('006_课.mp4:') && saved[0].endsWith(':true'), `merges=${merges} ${saved.join('|')} ${wireErr && wireErr.message}`);
+saved.length = 0;
+big = true;
+q.mergeNote = '';
+let wire2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '007_课', mk()); } catch (e) { wire2 = e; }
+ok('W2 超过400MB仍在页面内合并且不进ffmpeg', wire2 === null && merges === 0 && saved.length === 1 && saved[0].startsWith('007_课.mp4:') && saved[0].endsWith(':true'), `merges=${merges} ${saved.join('|')} ${wire2 && wire2.message}`);
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
