@@ -118,6 +118,15 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   o0.forceNoHold = false;
   delete globalThis.window;
 }
+{
+  o0.forceParts = true;
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed = await o0('http://x/v.m4s', 4, () => {});
+  const text = packed && packed.parts ? new TextDecoder().decode(new Uint8Array([...packed.parts[0], ...packed.parts[1]])) : '';
+  ok('T7 连小块文件也包不成时仍交出每一小块', packed && packed.noHold === true && !packed.blob && packed.parts && packed.parts.length === 2 && text === 'abcd', `n=${packed && packed.parts && packed.parts.length} ${text}`);
+  o0.forceParts = false;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

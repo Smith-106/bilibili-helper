@@ -256,7 +256,8 @@ const blobs = { 'audio-url': audio, 'video-url': video };
 let mode = 'small';
 let inflight = 0, maxInflight = 0;
 let arm = null;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+let partWrites = null;
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -307,6 +308,26 @@ let wireHold = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '013_课', mk()); } catch (e) { wireHold = e; }
 ok('W9 拼不成一整块时下完一份就保存且不进合并', wireHold === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面里留不住一整块'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${saved.join('|')} ${wireHold && wireHold.message}`);
 mode = 'small';
+arm = null;
+saved.length = 0;
+mode = 'parts';
+q.mergeNote = '';
+q.mergeWhy = '';
+q.dirNote = '';
+partWrites = [];
+q.dir = { getFileHandle: async (name) => ({ createWritable: async () => ({ write: async (c) => { partWrites.push(name + ':' + (c.byteLength || c.length)); }, close: async () => {} }) }) };
+arm = { seen: 0, saved: -1 };
+let wireParts = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '014_课', mk()); } catch (e) { wireParts = e; }
+ok('W10 包不成文件时按小块写入文件夹', wireParts === null && merges === 0 && arm.saved === 1 && partWrites.length === 2 && q.mergeNote.includes('已按小块写入文件夹') && q.dirNote === '已写入所选文件夹', `writes=${partWrites.join('|')} ${q.mergeNote} ${wireParts && wireParts.message}`);
+q.dir = null;
+q.dirAsked = true;
+arm = { seen: 0, saved: -1 };
+let wireAsk = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '015_课', mk()); } catch (e) { wireAsk = e; }
+ok('W11 没有文件夹时要求先选择再重试', wireAsk && /请先选择文件夹再重试/.test(wireAsk.message) && q.dirAsked === false, `${wireAsk && wireAsk.message} asked=${q.dirAsked}`);
+mode = 'small';
+q.dir = null;
 arm = null;
 saved.length = 0;
 mode = 'big';
