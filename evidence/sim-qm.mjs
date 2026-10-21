@@ -134,6 +134,57 @@ if (fm) {
 }
 const fOk = bases.length === 2 && bases[0].id === 1 && bases[1].id === 2 && new TextDecoder().decode(fm.slice(bases[0].base, bases[0].base + 4)) === 'VIDE' && new TextDecoder().decode(fm.slice(bases[1].base, bases[1].base + 4)) === 'AUDI';
 ok('F2 分片偏移和音轨号正确', fOk, JSON.stringify(bases));
+
+function makeLoose(tag) {
+  const payload = new TextEncoder().encode(tag);
+  const ft = ftyp();
+  const tk = new Uint8Array(32);
+  w32(tk, 0, 32);
+  tk.set([116, 107, 104, 100], 4);
+  w32(tk, 20, 1);
+  const trex = box('trex', (() => { const p = new Uint8Array(20); w32(p, 4, 1); return p; })());
+  const moov = box('moov', cat(mvhd(), box('trak', tk), box('mvex', trex)));
+  const tfPay = new Uint8Array(8);
+  w32(tfPay, 4, 1);
+  const trunPay = new Uint8Array(12);
+  trunPay[3] = 1;
+  w32(trunPay, 4, 1);
+  const moofLen = 8 + 8 + box('tfhd', tfPay).length + box('trun', trunPay).length;
+  w32(trunPay, 8, ft.length + moov.length + moofLen + 8);
+  const moof = box('moof', box('traf', cat(box('tfhd', tfPay), box('trun', trunPay))));
+  return cat(ft, moov, moof, box('mdat', payload));
+}
+const lv = makeLoose('VIDE');
+const la = makeLoose('AUDI');
+const lm = qM(lv, la);
+let looseOk = false;
+let looseNote = '';
+if (lm) {
+  const hits = [];
+  const walk = (start, end, moofStart) => {
+    let o = start;
+    while (o + 8 <= end) {
+      const size = r32(lm, o);
+      if (size < 8 || o + size > end) break;
+      const type = String.fromCharCode(lm[o + 4], lm[o + 5], lm[o + 6], lm[o + 7]);
+      if (type === 'moof') walk(o + 8, o + size, o);
+      else if (type === 'traf') walk(o + 8, o + size, moofStart);
+      else if (type === 'trun' && moofStart != null) {
+        const rel = r32(lm, o + 16);
+        hits.push(new TextDecoder().decode(lm.slice(moofStart + rel, moofStart + rel + 4)));
+      }
+      o += size;
+    }
+  };
+  walk(0, lm.length, null);
+  const flagOn = [];
+  for (let i = 0; i + 16 < lm.length; i++) {
+    if (String.fromCharCode(lm[i + 4], lm[i + 5], lm[i + 6], lm[i + 7]) === 'tfhd') flagOn.push((r32(lm, i + 8) & 131072) !== 0);
+  }
+  looseOk = hits.join(',') === 'VIDE,AUDI' && flagOn.length === 2 && flagOn.every(Boolean);
+  looseNote = hits.join(',') + ' flags=' + flagOn.join(',');
+}
+ok('F3 没有基准偏移的分片也能合并', looseOk, looseNote || 'no merge ' + qM.why);
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
 ok('N2 一个分片一个普通不硬合', qM(video, fa) === null);
 

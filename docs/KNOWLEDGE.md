@@ -56,6 +56,7 @@
 - v3.0.43：合计超过 700MB（`q.mergeMax`）不再进 wasm，避免页面在 OOM 时被撑死、兜底来不及。分开保存后批量行会清掉进度区，所以把 `a[download]` 记到 `q.mergeSaves` 再挂回行上。仿真 8 项，harness 仍 99 项。
 - v3.0.44：分开保存被算进「成功」，汇总看不出有没有合成一个文件。`Qs` 单独计数；进度和结束语在 `Qs>0` 时显示「分开 N」，并写明是视频和音频两个文件。`Qs=0` 时文案与旧版逐字相同（UP 批量仿真不回归）。harness 100 项。
 - v3.0.45：分开保存原先只认固定的 OOM 文案。worker 抛出的 `RuntimeError` / `Aborted(...)` 对不上，批量记失败，重试再合并一次还是失败。改为音视频都在手时，任何合并错误都分开保存，并把原因截到 80 字写进行里。下载失败仍抛。`_0` 的一次自动重试也认这两类文案。仿真 9 项。
-- v3.0.46：`qM` 在页面内合并普通 mp4（改 stco/co64）和分片 mp4（改 tfhd 的 base-data-offset 与音轨号）。合计不超过 `q.jsMergeMax`（默认 1200MB）且两边都是同一类时，直接保存一个 mp4，不进 wasm。结构认不出则回退。仿真 `sim-qm.mjs` 8 项（D6）+ A72。harness 102 项。wasm 上限仍是 2GB，认不出的大文件还是分开保存。
+- v3.0.46：`qM` 在页面内合并普通 mp4（改 stco/co64）和分片 mp4（改 tfhd 的 base-data-offset 与音轨号）。合计不超过 `q.jsMergeMax`（默认 1200MB）且两边都是同一类时，直接保存一个 mp4，不进 wasm。结构认不出则回退。仿真 `sim-qm.mjs`（D6）+ A72。harness 102 项。wasm 上限仍是 2GB，认不出的大文件还是分开保存。
+- v3.0.47：tfhd 既无 base-data-offset 也无 default-base-is-moof 时不再放弃。按 trun 的 data_offset 是否落在 mdat 内，改成相对分片并置 0x20000。对不上则 `qM.why`，日志写「页面内合并跳过：」。仿真 9 项。
 
 [← 返回文档首页](./index.md)
