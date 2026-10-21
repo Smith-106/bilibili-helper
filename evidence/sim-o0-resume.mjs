@@ -204,6 +204,18 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const store = { bilibili_helper_partial: JSON.stringify({ 'a.mp4': 2, 'b.mp4': 5 }) };
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { dir: { getFileHandle() {} }, partialName: 'a.mp4', spillTo: async () => ({ write: async () => {}, seek: async () => {}, close: async () => {} }) };
+  globalThis.window = { fetch: async (_u, opt) => ({ ok: true, status: 206, headers: H({ 'content-range': 'bytes 2-3/4', 'content-length': '2' }), body: mkBody([chunk('cd')]) }) };
+  const packed = await o0('http://x/a.mp4', 4, () => {});
+  const left = JSON.parse(store.bilibili_helper_partial || '{}');
+  ok('T14 下完一个文件不会清掉另一个文件的断点', packed && packed.streamed === true && left['a.mp4'] == null && left['b.mp4'] === 5, JSON.stringify(left));
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
