@@ -407,7 +407,8 @@ saved.length = 0;
   const folder = bxShown({ message: '这一份页面里留不住一整块，请先选择文件夹再重试' });
   const wasm = bxShown(new Error('RuntimeError: memory access out of bounds'));
   const plain = bxShown(new Error('下载请求失败(403)'));
-  ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)', `${folder.shown} | ${wasm.shown}`);
+  const lost = bxShown(new Error('这一集太大，页面里留不住'));
+  ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)' && lost.shown.includes('重新下载') && !lost.shown.includes('不再进 ffmpeg'), `${folder.shown} | ${wasm.shown} | ${lost.shown}`);
 }
 mode = 'big';
 q.mergeNote = '';
