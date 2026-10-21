@@ -111,5 +111,6 @@
 - v3.0.98：`n>0 && !streamOnly` 时、调用下一份下载前，就写入 `bilibili_helper_nomerge`。第二份把页面撑住时记录已经在。合成成功仍删除。合并仿真 46 项。
 - v3.0.99：同一份记录同时写入 `localStorage`。读取时两个存储合并。关掉标签页后仍能对上。合成成功时两个存储都删掉这一集。合并仿真 47 项。
 - v3.0.100：没有 `jsHeapSizeLimit` 时，合并前的判断从 `heldNow>holdMax` 改为 `heldNow*2>holdMax`，给合并结果留出同样大的一份。合并仿真 48 项。
+- v3.0.101：有 `jsHeapSizeLimit` 时，合并前从 `used+heldNow>limit*0.7` 改为 `used+heldNow*2>limit*0.7`。合并仿真 49 项。
 
 [← 返回文档首页](./index.md)

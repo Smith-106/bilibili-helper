@@ -394,6 +394,17 @@ q.mergeWhy = '';
 let wireCopy = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018c_课', mk()); } catch (e) { wireCopy = e; }
 ok('W21 合并前再留一份会过满时分开保存', wireCopy === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('不再把两份放在一起'), `${q.mergeNote} ${wireCopy && wireCopy.message}`);
+globalThis.performance = { memory: { usedJSHeapSize: 50, jsHeapSizeLimit: 100 } };
+mode = 'u8';
+delete q.noMerge;
+arm = null;
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireOut = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '022_课', mk()); } catch (e) { wireOut = e; }
+ok('W33 报告了剩余空间但再留一份结果会过满时分开保存', wireOut === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('不再把两份放在一起'), `${q.mergeNote} ${wireOut && wireOut.message}`);
 globalThis.performance = prevPerf;
 mode = 'alloc';
 saved.length = 0;
