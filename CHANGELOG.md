@@ -2,6 +2,17 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.41] - 2026-10-08
+
+### Fixed（`RuntimeError: memory access out of bounds` 失败重试还是失败）
+- **根因**：v3.0.39 只补上了 MEMFS 文件删除。`deleteFile` 不缩小 wasm 线性内存（上限 2GB，只涨不缩）。合并器实例被 `T0` 缓存整段会话，堆一旦顶满或 worker 已死，后面每一集和「重试失败集」都打在同一具尸体上，所以重试必失败。
+- **修**：新增 `qK`，每集合并读出结果后 `terminate()` 并 `q.ffmpegInstance=null`，下一集新建 worker，wasm 堆从 32MB 重新长。ffmpeg 核心四个 blob URL 缓存在 `q.ffmpegCore`，不重复拉取 31MB wasm。`load` 失败不再把坏实例写进缓存。
+- **自动重试**：`memory access out of bounds` / `out of memory` 时销毁旧实例，自动重试本集恰好 1 次。进度行改为「内存不足，正在重建合并器并重试…」，日志同时打一条。仍失败则行内与失败清单改为「合并内存不足（已自动重建合并器重试仍失败，请降低清晰度或改用兼容模式）」，并继续记为失败而不是 ✔。
+- **下载反馈**：续传轮次写日志「下载连接停滞，正在从已收 N 字节续传（第 k 次）」。
+
+### Verified
+- `node --check` OK；`evidence/sim-ffmpeg-recycle.mjs` 10 项（两集各销毁、OOM 换新实例成功、两次 OOM 封顶、load 失败不缓存）；`verify-u1-bxd.mjs` **97 项全绿**（D4 + A69）；`acceptance.mjs` 16 项；`accept-selfcheck.mjs` 全绿。
+
 ## [3.0.40] - 2026-02-14
 
 ### Fixed（下载卡住不动，如停在 55%：`o0` 无停滞超时，TCP 半死则永远等）
