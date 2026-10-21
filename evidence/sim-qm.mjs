@@ -551,6 +551,29 @@ q.mergeWhy = '';
 let wireDb2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], dbName(0), mk()); } catch (e) { wireDb2 = e; }
 ok('W42 八条都满时仍记在浏览器数据库', wireDb === null && wireDb2 === null && merges === 0 && dbList.includes(dbName(0)) && dbList.includes(dbName(176)) && q.mergeNote.includes('上次在页面里放不下'), `db=${dbList.length} ${q.mergeNote} ${wireDb2 && wireDb2.message}`);
+globalThis.indexedDB = { open() { const req = {}; queueMicrotask(() => { if (req.onerror) req.onerror(); }); return req; } };
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'alloc';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+const wideName = (n) => ('033' + String(n).padStart(3, '0') + 'z'.repeat(80)).slice(0, 80);
+let wireWide = null;
+try { for (let n = 0; n < 177; n++) await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], wideName(n), mk()); } catch (e) { wireWide = e; }
+const wideNotes = String(pageDoc.cookie).split('; ').filter((p) => /^bhnm\d*=/.test(p)).map((p) => decodeURIComponent(p.slice(p.indexOf('=') + 1))).join('\n');
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireWide2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], wideName(0), mk()); } catch (e) { wireWide2 = e; }
+ok('W43 数据库不可用时改记更多条', wireWide === null && wireWide2 === null && merges === 0 && wideNotes.includes(wideName(0)) && wideNotes.includes(wideName(176)) && q.mergeNote.includes('上次在页面里放不下'), `kept=${wideNotes.includes(wideName(0))} ${q.mergeNote} ${wireWide2 && wireWide2.message}`);
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
