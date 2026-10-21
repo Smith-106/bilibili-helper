@@ -353,6 +353,18 @@ mode = 'small';
   delete globalThis.q;
 }
 saved.length = 0;
+mode = 'small';
+q.jsMergeMax = 10;
+q.mergeNote = '';
+q.mergeWhy = '';
+let relAt = -1;
+q.rel = () => { relAt = saved.length; };
+let wireRel = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '017_课', mk()); } catch (e) { wireRel = e; }
+ok('W14 同一集第二份开始前释放第一份链接', wireRel === null && merges === 0 && relAt === 1 && saved.length === 2, `relAt=${relAt} saved=${saved.length} ${wireRel && wireRel.message}`);
+q.rel = null;
+q.jsMergeMax = 1200 * 1024 * 1024;
+saved.length = 0;
 mode = 'big';
 q.mergeNote = '';
 let wire2 = null;
