@@ -542,14 +542,25 @@ let wireBlind = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 4 }, { url: 'video-url', size: 4 }], '019_课', mk()); } catch (e) { wireBlind = e; }
 ok('W17 不报告剩余空间且这一份已经较大时先保存', wireBlind === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('不报告剩余空间'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireBlind && wireBlind.message}`);
 mode = 'blind2';
-q.holdMax = 3;
+q.holdMax = 5;
 arm = null;
 saved.length = 0;
 q.mergeNote = '';
 q.mergeWhy = '';
 let wireBlind2 = null;
-try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 2 }], '020_课', mk()); } catch (e) { wireBlind2 = e; }
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 0 }], '020_课', mk()); } catch (e) { wireBlind2 = e; }
 ok('W18 不报告剩余空间且两份加起来已经较大时分开保存', wireBlind2 === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('两份加起来已经较大'), `${q.mergeNote} ${saved.join('|')} ${wireBlind2 && wireBlind2.message}`);
+mode = 'blind2';
+q.holdMax = 5;
+delete q.noMerge;
+arm = { seen: 0, saved: -1 };
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireBlind3 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 2 }], '024结果', mk()); } catch (e) { wireBlind3 = e; }
+ok('W35 不报告剩余空间时下另一份之前就给合并结果留位置', wireBlind3 === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('再留一份合并结果会放不下'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireBlind3 && wireBlind3.message}`);
 mode = 'u8';
 q.holdMax = 20;
 delete q.noMerge;
@@ -559,7 +570,7 @@ merges = 0;
 q.mergeNote = '';
 q.mergeWhy = '';
 let wireTwice = null;
-try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '021_课', mk()); } catch (e) { wireTwice = e; }
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 1 }], '021_课', mk()); } catch (e) { wireTwice = e; }
 ok('W32 再留一份合并结果也会放不下时分开保存', wireTwice === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('两份加起来已经较大'), `${q.mergeNote} ${wireTwice && wireTwice.message}`);
 delete q.holdMax;
 globalThis.performance = prevPerf;
