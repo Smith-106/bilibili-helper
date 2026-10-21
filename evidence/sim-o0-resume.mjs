@@ -339,6 +339,20 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   ok('T22 文件夹权限失效时丢掉它，下次才会重新选', calls === 2 && picks === 1 && err && err.name === 'NotAllowedError' && q.dir === null && q.dirAsked === false, `calls=${calls} picks=${picks} dir=${q.dir} asked=${q.dirAsked} ${err && err.name}`);
   delete globalThis.showDirectoryPicker;
 }
+{
+  const store = {};
+  let n = 0;
+  const denied = () => Object.assign(new Error('write denied'), { name: 'NotAllowedError' });
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { partialName: 'v.mp4', dir: { getFileHandle: async () => ({}) }, spillTo: async () => ({ write: async () => {}, seek: async () => {}, truncate: async () => {}, close: async () => {} }) };
+  globalThis.window = { fetch: async () => { n++; if (n > 1) throw denied(); return { ok: true, status: 200, headers: H({ 'content-length': '4' }), body: { getReader: () => ({ read() { const e = denied(); e._once = true; return this.sent ? Promise.reject(e) : (this.sent = true, Promise.resolve({ done: false, value: chunk('ab') })); }, cancel() { return Promise.resolve(); } }) } }; } };
+  let err = null;
+  try { await o0('http://x/v.mp4', 4, () => {}); } catch (e) { err = e; }
+  ok('T23 保存已收到的部分时仍留着权限失效这个名字', err && err.name === 'NotAllowedError' && /点重试会接着下/.test(err.message), `${err && err.name} ${err && err.message}`);
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
