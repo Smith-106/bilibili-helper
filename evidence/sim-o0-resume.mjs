@@ -157,6 +157,16 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.q;
   delete globalThis.window;
 }
+{
+  const prev = globalThis.performance;
+  globalThis.performance = { memory: { usedJSHeapSize: 80, jsHeapSizeLimit: 100 } };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed = await o0('http://x/v.m4s', 4, () => {});
+  const text = new TextDecoder().decode(new Uint8Array(await packed.blob.arrayBuffer()));
+  ok('T11 页面已较满时不拼整块改交Blob', packed && packed.noHold === true && !(packed instanceof Uint8Array) && text === 'abcd', `text=${text}`);
+  globalThis.performance = prev;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
