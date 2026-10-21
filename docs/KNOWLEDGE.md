@@ -117,5 +117,6 @@
 - v3.0.104：两份不都是 `Uint8Array` 时，`reserve=heldNow*3`，否则仍是 `heldNow*2`。合并前用 `used+reserve` 和 `reserve>holdMax`。合并仿真 52 项。
 - v3.0.105：`localStorage.setItem` 失败时，只写入当前集和去掉序号后的名字，再试一次。合并仿真 53 项。
 - v3.0.106：`qSave` 在写入失败后按旧到新丢掉其他名字，直到写下或只剩当前集。合并仿真 54 项。
+- v3.0.107：本地名单连一个名字都写不下时，把去掉序号后的名字写入 `document.cookie` 的 `bhnm`。读取时对上就分开保存。合成成功后清掉。合并仿真 55 项。
 
 [← 返回文档首页](./index.md)

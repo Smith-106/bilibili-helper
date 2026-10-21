@@ -268,7 +268,8 @@ function mk() {
   n.querySelectorAll = () => [];
   return n;
 }
-const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document', 'R', `var ${seg}; return t0;`)(o0, _0, a0, () => ({ baseUrl: 'ext' }), q, vlog, (s) => String(s), () => '1B', { createElement: () => mk() }, async () => { throw new Error('R'); });
+const pageDoc = { createElement: () => mk(), cookie: '' };
+const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document', 'R', `var ${seg}; return t0;`)(o0, _0, a0, () => ({ baseUrl: 'ext' }), q, vlog, (s) => String(s), () => '1B', pageDoc, async () => { throw new Error('R'); });
 let wireErr = null;
 const list1 = mk();
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '006_课', list1); } catch (e) { wireErr = e; }
@@ -455,6 +456,29 @@ let wireTrim = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '027留', mk()); } catch (e) { wireTrim = e; }
 const keptTrim = String(quotaStore.bilibili_helper_nomerge || '');
 ok('W38 写不下时只丢掉放不下的旧集', wireTrim === null && merges === 0 && keptTrim.includes('027留') && keptTrim.includes('乙') && !keptTrim.includes('甲'), `${keptTrim} ${wireTrim && wireTrim.message}`);
+globalThis.localStorage.setItem = () => { throw new Error('QuotaExceededError'); };
+globalThis.localStorage.removeItem = () => { throw new Error('QuotaExceededError'); };
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+pageDoc.cookie = '';
+delete q.noMerge;
+mode = 'alloc';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireCookie = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '028记', mk()); } catch (e) { wireCookie = e; }
+const cookieNote = String(pageDoc.cookie || '');
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireCookie2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '028记', mk()); } catch (e) { wireCookie2 = e; }
+ok('W39 本地名单一个名字也写不下时记在页面里', wireCookie === null && wireCookie2 === null && merges === 0 && cookieNote.includes('bhnm=' + encodeURIComponent('028记')) && q.mergeNote.includes('上次在页面里放不下'), `${cookieNote} ${q.mergeNote} ${wireCookie2 && wireCookie2.message}`);
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
 globalThis.performance = prevPerf;
