@@ -167,6 +167,29 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   globalThis.performance = prev;
   delete globalThis.window;
 }
+{
+  const writes = [];
+  const seeks = [];
+  let n = 0;
+  globalThis.q = {
+    dir: { getFileHandle() {} },
+    partialName: 'v.mp4',
+    spillTo: async () => ({ write: async (c) => { writes.push(new TextDecoder().decode(c)); }, seek: async (at) => { seeks.push(at); }, close: async () => {} }),
+  };
+  globalThis.window = { fetch: async (_u, opt) => {
+    n++;
+    const range = opt && opt.headers && opt.headers.Range;
+    if (!range) return { ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab')], 0) };
+    if (n < 6) return { ok: true, status: 206, headers: H({ 'content-range': 'bytes 2-3/4', 'content-length': '2' }), body: mkBody([], 0) };
+    return { ok: true, status: 206, headers: H({ 'content-range': 'bytes 2-3/4', 'content-length': '2' }), body: mkBody([chunk('cd')]) };
+  } };
+  let err = null;
+  try { await o0('http://x/v.m4s', 4, () => {}); } catch (e) { err = e; }
+  const again = await o0('http://x/v.m4s', 4, () => {});
+  ok('T12 失败后留下已收部分且重试接着下', err && /点重试会接着下/.test(err.message) && globalThis.q.partial == null && again && again.streamed === true && again.size === 4 && writes.join('') === 'abcd' && seeks[0] === 2, `writes=${writes.join('')} seeks=${seeks.join(',')} size=${again && again.size} ${err && err.message}`);
+  delete globalThis.q;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

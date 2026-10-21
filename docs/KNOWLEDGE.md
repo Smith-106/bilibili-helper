@@ -83,5 +83,6 @@
 - v3.0.70：下另一份之前看 `globalThis.performance.memory`。`usedJSHeapSize` 超过 `jsHeapSizeLimit` 的 0.7，且已有一份在 `got` 里，就先 `a0` 保存并清空，原因句是「页面已经比较满，先保存这一份再下另一份」。两份都已在页面里时，直接分开保存，文案是「不再把两份放在一起」。没有 `performance.memory` 的环境不改变原来的合并。合并仿真 32 项。
 - v3.0.71：`o0` 在 `new Uint8Array(total)` 之前用同一个 0.7 阈值。页面已较满时走原来的不拼整块分支，优先交 `Blob`，交不出再交小块。页面有空时仍拼成一整块。续传仿真 16 项。
 - v3.0.72：`bxShown` 在失败文案里区分「请先选择文件夹」和合并内存不足。前者显示「点重试会先请你选择文件夹」，后者仍是「不再进 ffmpeg」。批量行用 `bxShown(N)`。合并仿真 33 项。
+- v3.0.73：选了文件夹且五次都失败、已经收到字节时，把已有小块写入该文件，`q.partial={name,bytes}`，错误句带「点重试会接着下」。下次同一文件名从该字节 `Range` 续传，`createWritable({keepExistingData:true})` 后 `seek`，不再把已有部分读回页面。下完清掉 `q.partial`。没选文件夹时仍是从头再下。续传仿真 17 项。
 
 [← 返回文档首页](./index.md)
