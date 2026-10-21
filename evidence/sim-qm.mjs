@@ -257,7 +257,7 @@ let mode = 'small';
 let inflight = 0, maxInflight = 0;
 let arm = null;
 let partWrites = null;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'blind') { const u = new Uint8Array(4); u.size = 4; return u; } if (mode === 'blind2') { const u = new Uint8Array(2); u.size = 2; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -375,6 +375,29 @@ let wireHeap = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '018_课', mk()); } catch (e) { wireHeap = e; }
 ok('W15 页面已较满时先保存再下另一份', wireHeap === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面已经比较满'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireHeap && wireHeap.message}`);
 globalThis.performance = prevPerf;
+arm = null;
+saved.length = 0;
+mode = 'blind';
+q.wasmSkip = 3;
+q.mergeNote = '';
+q.mergeWhy = '';
+globalThis.performance = {};
+arm = { seen: 0, saved: -1 };
+let wireBlind = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 4 }, { url: 'video-url', size: 4 }], '019_课', mk()); } catch (e) { wireBlind = e; }
+ok('W17 不报告剩余空间且这一份已经较大时先保存', wireBlind === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('不报告剩余空间'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireBlind && wireBlind.message}`);
+mode = 'blind2';
+q.wasmSkip = 3;
+arm = null;
+saved.length = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireBlind2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 2 }], '020_课', mk()); } catch (e) { wireBlind2 = e; }
+ok('W18 不报告剩余空间且两份加起来已经较大时分开保存', wireBlind2 === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('两份加起来已经较大'), `${q.mergeNote} ${saved.join('|')} ${wireBlind2 && wireBlind2.message}`);
+delete q.wasmSkip;
+globalThis.performance = prevPerf;
+mode = 'small';
 arm = null;
 saved.length = 0;
 {
