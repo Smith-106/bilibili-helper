@@ -374,6 +374,16 @@ arm = { seen: 0, saved: -1 };
 let wireHeap = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '018_课', mk()); } catch (e) { wireHeap = e; }
 ok('W15 页面已较满时先保存再下另一份', wireHeap === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面已经比较满'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireHeap && wireHeap.message}`);
+globalThis.performance = { memory: { usedJSHeapSize: 60, jsHeapSizeLimit: 100 } };
+mode = 'small';
+arm = { seen: 0, saved: -1 };
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireNext = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 20 }], '018b_课', mk()); } catch (e) { wireNext = e; }
+ok('W20 下一份放下去会过满时先保存再下', wireNext === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面已经比较满'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireNext && wireNext.message}`);
 globalThis.performance = prevPerf;
 arm = null;
 saved.length = 0;

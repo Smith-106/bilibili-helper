@@ -99,5 +99,6 @@
 - v3.0.86：`R` 和 `t0` 在 `NotAllowedError` 或 `SecurityError` 时把 `q.dir` 和 `q.dirAsked` 清掉。同一次循环里已经问过就不再弹，下次重试才会重新选。续传仿真 27 项。
 - v3.0.87：`bxShown` 看到错误名是 `NotAllowedError` 或 `SecurityError` 时，说明写成「文件夹权限失效，点重试会重新选择」，不再把浏览器英文原句直接给用户。合并仿真 36 项。
 - v3.0.88：第五次失败并已写入部分时，新错误会带上原来的 `G.name`。权限失效不会在「点重试会接着下」这句里丢掉。续传仿真 28 项。
+- v3.0.89：下另一份前，`heapTight` 用 `usedJSHeapSize + 下一份 size` 和 `jsHeapSizeLimit * 0.7` 比。第一份不加自己的预告大小。超过就先保存。合并仿真 37 项。
 
 [← 返回文档首页](./index.md)
