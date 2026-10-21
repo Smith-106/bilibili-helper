@@ -66,5 +66,6 @@
 - v3.0.53：`t0` 在调用 `_0` 前若 `q.useWasm` 不为 true，有音视频就分开保存并 return。默认下载路径不再进入 ffmpeg.wasm，因此不会再抛 `memory access out of bounds`。页面内 `qM` 成功仍是一个 mp4。`sim-merge-fallback` 的 T1 断言 `merges===0`。
 - v3.0.54：`qM` 一开始把 `why` 设为「结构未识别」，成功返回前清空。`t0` 每集把 `q.mergeWhy` 清空；只有真的调用过 `qM` 才把原因附到 `mergeNote`。批量重画行之后仍能看到「已分开保存音视频（原因）」。仿真 16 项。
 - v3.0.55：`bxD` 开头若还没有 `q.dir` 且存在 `showDirectoryPicker`，同一页只问一次。`a0` 有 `q.dir` 时 `getFileHandle`+`createWritable` 写文件，不 `dispatchEvent`。失败则清掉 `q.dir` 并退回点击。结果行在 `dirNote` 非空时附加「已写入所选文件夹」。仿真 18 项。
+- v3.0.56：分片 `mdat` 的 size 为 0 表示直到文件末尾。原样拷进合并文件后，前面的视频数据块会吞掉后面的音频。`patchPair` 在 `r32(md,0)===0` 时把长度写成 `md.length`；超过 2^32-1 则 `qM.why="数据块太长"` 并返回空。仿真 19 项。
 
 [← 返回文档首页](./index.md)

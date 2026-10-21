@@ -212,6 +212,35 @@ if (gm) {
 }
 const gapOk = gapBases.length === 2 && new TextDecoder().decode(gm.slice(gapBases[0], gapBases[0] + 4)) === 'VIDE' && new TextDecoder().decode(gm.slice(gapBases[1], gapBases[1] + 4)) === 'AUDI';
 ok('F4 分片和数据之间夹了别的盒子也能合并', gapOk, JSON.stringify(gapBases) + (qM.why ? ' ' + qM.why : ''));
+function makeEof(tag) {
+  const file = makeFrag(tag);
+  let o = 0;
+  let last = 0;
+  while (o + 8 <= file.length) {
+    const size = r32(file, o);
+    if (size < 8 || o + size > file.length) break;
+    last = o;
+    o += size;
+  }
+  w32(file, last, 0);
+  return file;
+}
+const ev = makeEof('VIDE');
+const ea = makeEof('AUDI');
+const em = qM(ev, ea);
+let eofWalk = 0;
+let eofCovered = false;
+if (em) {
+  let o = 0;
+  while (o + 8 <= em.length) {
+    const size = r32(em, o);
+    if (size < 8 || o + size > em.length) break;
+    eofWalk++;
+    o += size;
+  }
+  eofCovered = o === em.length && eofWalk >= 4;
+}
+ok('F5 长度到文件尾的数据块合并后仍能分开音视频', !!em && eofCovered && findAscii(em, 'VIDE') >= 0 && findAscii(em, 'AUDI') >= 0, `walk=${eofWalk} covered=${eofCovered} ${qM.why || ''}`);
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
 ok('N2 一个分片一个普通不硬合', qM(video, fa) === null);
 
