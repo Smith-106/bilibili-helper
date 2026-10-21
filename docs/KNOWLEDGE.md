@@ -91,5 +91,6 @@
 - v3.0.78：没有 `performance.memory` 时，已在 `got` 里的 `Uint8Array` 或 `Blob` 超过 `q.wasmSkip`（默认 400MB），下另一份之前先保存。两份的 `byteLength` 加起来也超过这个值时，分开保存，原因句分别是「这一份已经较大」和「两份加起来已经较大」。只带虚假 `size`、不是真正字节块的对象不触发。合并仿真 35 项。
 - v3.0.79：`bxShown` 把「页面里留不住」且不是 wasm 错误的失败写成「点重试会重新下载后再分开保存」。带「请先选择文件夹」的仍走选文件夹说明。`RuntimeError` 一类仍是「不再进 ffmpeg」。合并仿真 35 项。
 - v3.0.80：`resumeFrom>0` 但没有 `q.dir` 和 `q.spillTo` 时，不发请求。抛出 `needDir`，文案是「已有未下完的部分，请先选择文件夹再接着下」，并把 `dirAsked` 清掉。本机断点保留。续传仿真 22 项。
+- v3.0.81：上面这条只在 `globalThis.showDirectoryPicker` 是函数时抛出。否则把 `resumeFrom` 和该文件名的断点清掉，从头下完整文件，避免不能选文件夹的浏览器每次重试都停在同一句。续传仿真 23 项。
 
 [← 返回文档首页](./index.md)
