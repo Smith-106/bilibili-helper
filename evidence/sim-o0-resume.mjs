@@ -109,5 +109,15 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
 }
 
+{
+  o0.forceNoHold = true;
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed = await o0('http://x/v.m4s', 4, () => {});
+  const text = packed && packed.blob ? new TextDecoder().decode(new Uint8Array(await packed.blob.arrayBuffer())) : '';
+  ok('T6 拼不成一整块时直接交出已下载的小块', packed && packed.noHold === true && packed.size === 4 && text === 'abcd', `size=${packed && packed.size} ${text}`);
+  o0.forceNoHold = false;
+  delete globalThis.window;
+}
+
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

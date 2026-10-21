@@ -256,7 +256,7 @@ const blobs = { 'audio-url': audio, 'video-url': video };
 let mode = 'small';
 let inflight = 0, maxInflight = 0;
 let arm = null;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -297,6 +297,16 @@ try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-ur
 ok('W8 实际体积已很大且下一份未知时先保存再下另一份', wireFat === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('下一份体积未知'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${saved.join('|')} ${wireFat && wireFat.message}`);
 mode = 'small';
 q.jsMergeMax = 1200 * 1024 * 1024;
+arm = null;
+saved.length = 0;
+mode = 'nohold';
+q.mergeNote = '';
+q.mergeWhy = '';
+arm = { seen: 0, saved: -1 };
+let wireHold = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '013_课', mk()); } catch (e) { wireHold = e; }
+ok('W9 拼不成一整块时下完一份就保存且不进合并', wireHold === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('页面里留不住一整块'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${saved.join('|')} ${wireHold && wireHold.message}`);
+mode = 'small';
 arm = null;
 saved.length = 0;
 mode = 'big';

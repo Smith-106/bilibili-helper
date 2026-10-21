@@ -74,5 +74,6 @@
 - v3.0.61：下载前把 `d` 里各份的 `size` 加总。超过 `q.jsMergeMax`（默认 1200MB）则 `streamOnly`：每份 `await a0` 后不放进 `got`，再下下一份。`mergeNote` 为「已分开保存音视频（两份加起来太大，不能同时放在页面里）」。体积未知或加总不超过上限时仍两份都留下再合并。仿真 24 项。
 - v3.0.62：每一份下完后看实际 `byteLength`。后面各份的 `size` 都有且加总超过上限，或后面有一份没报体积且这一份已超过上限的一半，就把已在 `got` 里的先存掉并改走 `streamOnly`。原因句是「这一份已经很大且下一份体积未知，不能再同时放下另一份」。能确定放得下的仍合并。仿真 25 项。
 - v3.0.63：`a0` 在有 `q.dir` 时 `w.write(e)`，不再先 `new Blob([e])`。`blob` 只在点击保存时由 `asBlob` 现包。写完把参数置空。仿真 S1 断言写入的是 `raw` 而不是 `blob`。
+- v3.0.64：`new Uint8Array(total)` 抛出 allocation failed / Invalid array length / out of memory，或测试开关 `o0.forceNoHold` 时，`o0` 返回 `{noHold:true,size,blob}`，`blob` 是 `new Blob(K)`，不再要求一整块连续内存。`t0` 见到 `m.noHold` 就先把 `got` 里已有的存掉，再 `a0(m.blob)`，原因句是「这一份太大，页面里留不住一整块，已直接保存」。单集 `R` 用 `if(r&&r.noHold)r=r.blob`。续传仿真 11 项，合并仿真 26 项。
 
 [← 返回文档首页](./index.md)
