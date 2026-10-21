@@ -109,5 +109,6 @@
 - v3.0.96：`bxShown` 和合并失败的 catch 都认 `allocation failed`、`Invalid array length`、`Invalid typed array length`。有两份就 `split`，说明是「合并内存不足，不再继续」，不再把英文嵌进句子。没有两份就抛中文，列表显示「点重试会分开保存，不再进 ffmpeg」。合并仿真 44 项。
 - v3.0.97：`bilibili_helper_nomerge` 的键会去掉开头的三位序号。`001_课` 能对上以前记下的 `005_课`。合成成功时，同一集的序号键和裸名字一起删掉。合并仿真 45 项。
 - v3.0.98：`n>0 && !streamOnly` 时、调用下一份下载前，就写入 `bilibili_helper_nomerge`。第二份把页面撑住时记录已经在。合成成功仍删除。合并仿真 46 项。
+- v3.0.99：同一份记录同时写入 `localStorage`。读取时两个存储合并。关掉标签页后仍能对上。合成成功时两个存储都删掉这一集。合并仿真 47 项。
 
 [← 返回文档首页](./index.md)
