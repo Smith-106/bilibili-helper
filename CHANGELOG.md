@@ -2,6 +2,15 @@
 
 本项目遵循语义化版本。所有显著变更记录于此。
 
+## [3.0.96] - 2026-10-08
+
+### Changed（内存错误不再显示英文，改为分开保存）
+- 以前合并器报 `RuntimeError: memory access out of bounds`，或页面报 `Array buffer allocation failed` 时，这一行会直接显示英文。重试看起来还是同一次失败。
+- 现在这种错误改成「合并内存不足」。两份还在就分开保存，不再把英文原文放进说明。列表里也会写成「点重试会分开保存，不再进 ffmpeg」。
+
+### Verified
+- `sim-qm.mjs` 44 项；`verify` 102 项；selfcheck 全绿。
+
 ## [3.0.95] - 2026-10-08
 
 ### Changed（合并前先记住这一集，成功后再忘掉）

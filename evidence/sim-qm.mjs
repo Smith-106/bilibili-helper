@@ -258,7 +258,7 @@ let inflight = 0, maxInflight = 0;
 let arm = null;
 let partWrites = null;
 const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = partWrites ? partWrites.length : saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; if (mode === 'fat') { const u = new Uint8Array(600); u.size = 600; return u; } if (mode === 'blind') { const u = new Uint8Array(4); u.size = 4; return u; } if (mode === 'blind2') { const u = new Uint8Array(2); u.size = 2; return u; } if (mode === 'needdir') { if (!q.dir) throw Object.assign(new Error('need'), { needDir: true }); return { noHold: true, streamed: true, size: 4 }; } if (mode === 'u8') return new Uint8Array(8); if (mode === 'alloc') return { size: 8, arrayBuffer: async () => { throw new RangeError('Array buffer allocation failed'); } }; if (mode === 'nohold') return { noHold: true, size: blobs[url].length, blob: new Blob([blobs[url]]) }; if (mode === 'parts') return { noHold: true, size: blobs[url].length, parts: [blobs[url]] }; if (mode === 'streamed') return { noHold: true, streamed: true, size: 4 }; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
-const _0 = async () => { merges++; throw new Error('wasm should not run'); };
+const _0 = async () => { merges++; throw new Error(q.memBoom || 'wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
 function mk() {
@@ -510,6 +510,8 @@ mode = 'small';
   const lost = bxShown(new Error('这一集太大，页面里留不住'));
   const dead = bxShown(Object.assign(new Error('The request is not allowed'), { name: 'NotAllowedError' }));
   ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)' && lost.shown.includes('重新下载') && !lost.shown.includes('不再进 ffmpeg') && dead.shown === '文件夹权限失效，点重试会重新选择', `${folder.shown} | ${wasm.shown} | ${lost.shown} | ${dead.shown}`);
+  const alloc = bxShown(new Error('Array buffer allocation failed'));
+  ok('W26 分配失败也说成分开保存，不再显示英文', alloc.oom === true && alloc.shown.includes('不再进 ffmpeg') && !alloc.shown.includes('allocation'), alloc.shown);
 }
 mode = 'big';
 q.mergeNote = '';
@@ -539,6 +541,20 @@ const st5 = mk();
 let wire5 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '010_课', st5); } catch (e) { wire5 = e; }
 ok('W5 合并不了时结果里写明原因且不进ffmpeg', wire5 === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('结构未识别') && st5.innerHTML.includes('结构未识别'), `note=${q.mergeNote} html=${st5.innerHTML} ${wire5 && wire5.message}`);
+saved.length = 0;
+merges = 0;
+mode = 'bad';
+q.useWasm = true;
+q.memBoom = 'RuntimeError: memory access out of bounds';
+q.mergeNote = '';
+q.mergeWhy = '';
+delete q.noMerge;
+let wireMem = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 1 }, { url: 'video-url', size: 1 }], '010b_课', mk()); } catch (e) { wireMem = e; }
+ok('W27 合并器报内存错误时分开保存且不再带英文', wireMem === null && saved.length === 2 && q.mergeNote.includes('合并内存不足') && !q.mergeNote.includes('RuntimeError'), `${q.mergeNote} ${wireMem && wireMem.message}`);
+q.useWasm = false;
+q.memBoom = '';
+delete q.noMerge;
 
 const z0 = page.indexOf('_0=async');
 const z1 = page.indexOf('var U=', z0);
