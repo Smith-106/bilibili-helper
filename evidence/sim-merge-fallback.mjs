@@ -20,6 +20,7 @@ function mk() {
   const n = { children: [], style: {}, className: '', textContent: '', innerHTML: '' };
   n.classList = { add() {}, remove() {}, toggle() {} };
   n.appendChild = (c) => { n.children.push(c); return c; };
+  n.querySelectorAll = () => n.children.filter((c) => c && c.download);
   return n;
 }
 const document = { createElement: () => mk() };
@@ -31,19 +32,24 @@ const R = async () => { throw new Error('R should not run'); };
 function run(mode) {
   const saved = [];
   const logs = [];
-  const q = { mergeEl: null, mergeNote: '', splitGap: 0, ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
-  const o0 = async (url) => ({ url, bytes: url.length });
+  let merges = 0;
+  const q = { mergeEl: null, mergeNote: '', splitGap: 0, mergeMax: mode === 'big' ? 10 : undefined, ffmpegInstance: null, ffmpegUsedFiles: new Set(), blobUrls: new Set() };
+  const o0 = async (url) => ({ url, bytes: url.length, size: mode === 'big' ? 8 : 0 });
   const _0 = async () => {
+    merges++;
     if (mode === 'oom') throw new Error('memory access out of bounds');
     if (mode === 'other') throw new Error('exec failed');
     return [new Uint8Array([1, 2, 3]).buffer, () => {}];
   };
-  const a0 = (data, name) => { saved.push(name + ':' + data.url); };
+  const a0 = (data, name, parent) => {
+    saved.push(name + ':' + (data && data.url));
+    parent && parent.appendChild({ download: name, getAttribute: (k) => (k === 'download' ? name : 'blob:' + name) });
+  };
   const v = (...a) => logs.push(a.join(' '));
   const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document', 'R', `var ${seg}; return t0;`)(o0, _0, a0, F, q, v, esc, C, document, R);
   const btn = { classList: { add() {}, remove() {} } };
   const status = mk();
-  return { t0, q, saved, logs, status, btn, parts: [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 9 }] };
+  return { t0, q, saved, logs, merges, status, btn, parts: [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 9 }] };
 }
 
 const oom = run('oom');
@@ -51,7 +57,7 @@ let oomErr = null;
 try { await oom.t0(true, oom.btn, oom.parts, '001_课', oom.status); } catch (e) { oomErr = e; }
 ok('T1 OOM不抛错', oomErr === null, String(oomErr && oomErr.message));
 ok('T1 先视频后音频', oom.saved.join('|') === '001_课_视频.mp4:video-url|001_课_音频.m4a:audio-url', oom.saved.join('|'));
-ok('T1 状态与日志说明分开保存', oom.status.innerHTML.includes('分开保存') && oom.q.mergeNote === '已分开保存音视频' && oom.logs.some((x) => x.includes('分开保存视频和音频')));
+ok('T1 状态与日志说明分开保存', oom.status.innerHTML.includes('分开保存') && oom.q.mergeNote === '已分开保存音视频' && oom.logs.some((x) => x.includes('分开保存音视频')));
 
 const bad = run('other');
 let badErr = null;
@@ -61,6 +67,12 @@ ok('T2 非OOM仍抛错且不分开保存', !!badErr && /exec failed/.test(badErr
 const good = run('ok');
 await good.t0(true, good.btn, good.parts, '003_课', good.status);
 ok('T3 合并成功只保存一个mp4', good.saved.join('|') === '003_课.mp4:undefined' && good.q.mergeNote === '' && good.status.innerHTML === '已完成', good.saved.join('|') + ' / ' + good.status.innerHTML);
+
+const big = run('big');
+let bigErr = null;
+try { await big.t0(true, big.btn, big.parts, '004_课', big.status); } catch (e) { bigErr = e; }
+ok('T4 超过上限不进wasm', bigErr === null && big.merges === 0 && big.saved.join('|') === '004_课_视频.mp4:video-url|004_课_音频.m4a:audio-url', `merges=${big.merges} ${big.saved.join('|')}`);
+ok('T4 记下可再点的保存链接', big.status.innerHTML.includes('超过浏览器合并上限') && big.q.mergeSaves && big.q.mergeSaves.map((s) => s.name).join('|') === '004_课_视频.mp4|004_课_音频.m4a');
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

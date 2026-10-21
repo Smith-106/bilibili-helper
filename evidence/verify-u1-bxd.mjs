@@ -303,9 +303,9 @@ ok('A69 合并器每集销毁且OOM自动换新实例重试一次', src.includes
 try {
   const fb = execSync('node evidence/sim-merge-fallback.mjs', { stdio: 'pipe' }).toString();
   const fbn = (fb.match(/^✓/gm) || []).length;
-  ok('D5 合并OOM分开保存仿真全过(6✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4)', fbn === 6 && fb.includes('ALL SIM CHECKS PASS'), `got=${fbn}`);
-} catch (e) { ok('D5 合并OOM分开保存仿真全过(6✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4)', false, 'sim exit!=0'); }
-ok('A70 合并OOM改为分开保存音视频(不把已下好的数据丢掉再重试)', src.includes('o+"_视频.mp4"') && src.includes('o+"_音频.m4a"') && src.includes('q.mergeNote="已分开保存音视频"') && src.includes('✔ ${esc(q.mergeNote||"已保存")}')); // v3.0.42 单集峰值≈音视频进wasm+成品, 新实例重试照样爆且catch把blob丢掉; 改: 重建一次仍失败则把已下载的视频/音频分开保存, 批量行显示已分开保存音视频
+  ok('D5 合并OOM分开保存仿真全过(8✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4/超限不进wasm)', fbn === 8 && fb.includes('ALL SIM CHECKS PASS'), `got=${fbn}`);
+} catch (e) { ok('D5 合并OOM分开保存仿真全过(8✓: 不丢已下载数据/先视频后音频/其它错误仍抛/成功只存mp4/超限不进wasm)', false, 'sim exit!=0'); }
+ok('A70 合并OOM改为分开保存音视频(不把已下好的数据丢掉再重试)', src.includes('o+"_视频.mp4"') && src.includes('o+"_音频.m4a"') && src.includes('q.mergeNote="已分开保存音视频"') && src.includes('✔ ${esc(q.mergeNote||"已保存")}') && src.includes('q.mergeMax||700*1024*1024') && src.includes('超过浏览器合并上限') && src.includes('a[download]')); // v3.0.42 失败改分开保存; v3.0.43 音视频合计超过700MB时不再进wasm(峰值约2倍, 上限2GB, 硬闯会卡死页面且兜底来不及), 批量行重挂保存链接
 ok('A68 下载停滞自动续传(o0: 停滞计时断开+Range断点续传×5轮+403/404直抛+416重置)', src.includes('Range:"bytes="+t+"-"') && src.includes('下载停滞超过') && src.includes('att<5') && src.includes('new Blob(K)') && src.includes('G.st===403') && src.includes('G.st===416')); // v3.0.40 卡住(55%不动: 旧o0纯fetch+ReadableStream无停滞超时, TCP半死则l.read()永不resolve进度永冻; 改: 每块重置停滞计时(o0.stallMs默认20s, 秒数动态拼串), 超时cancel+抛错→Range续传, 服务端不支持206则回退全量重下, 403/404直抛不空转, 416重置偏移, 5轮耗尽才抛)
 
 // ---- 报告 ----
