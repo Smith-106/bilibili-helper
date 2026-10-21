@@ -216,6 +216,19 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const store = { bilibili_helper_partial: JSON.stringify({ 'v.mp4': 2 }) };
+  let range = 'none';
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { dir: { getFileHandle: async () => ({ getFile: async () => ({ size: 0 }) }) }, partialName: 'v.mp4', spillTo: async () => ({ write: async () => {}, seek: async () => {}, close: async () => {} }) };
+  globalThis.window = { fetch: async (_u, opt) => { range = (opt && opt.headers && opt.headers.Range) || ''; return { ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }; } };
+  const packed2 = await o0('http://x/v.mp4', 4, () => {});
+  const text = new TextDecoder().decode(packed2);
+  ok('T15 文件夹里没有那么长的文件就从头下并清掉断点', range === '' && text === 'abcd' && packed2.byteLength === 4 && !store.bilibili_helper_partial, `range=${range} text=${text} left=${store.bilibili_helper_partial || ''}`);
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
