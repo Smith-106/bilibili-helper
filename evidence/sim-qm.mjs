@@ -255,7 +255,8 @@ const bytesOf = (u) => { const c = new Uint8Array(u.length); c.set(u); return c.
 const blobs = { 'audio-url': audio, 'video-url': video };
 let mode = 'small';
 let inflight = 0, maxInflight = 0;
-const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); inflight--; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
+let arm = null;
+const o0 = async (url) => { inflight++; maxInflight = Math.max(maxInflight, inflight); await Promise.resolve(); if (arm && arm.seen === 1) { arm.saved = saved.length; arm.seen = 2; } else if (arm && arm.seen === 0) arm.seen = 1; inflight--; return { url, size: mode === 'big' ? 500 * 1024 * 1024 : mode === 'midboom' ? 250 * 1024 * 1024 : blobs[url].length, arrayBuffer: mode === 'nowasm' ? undefined : async () => { if (mode === 'midboom') throw new Error('alloc'); if (mode === 'bad') return new Uint8Array(32).buffer; return bytesOf(blobs[url]); } }; };
 const _0 = async () => { merges++; throw new Error('wasm should not run'); };
 const a0 = async (data, name) => { const u = typeof Blob === 'function' && data instanceof Blob ? new Uint8Array(await data.arrayBuffer()) : data; saved.push(name + ':' + (u && u.length) + ':' + (u && findAscii(u, 'VIDE') >= 0 && findAscii(u, 'AUDI') >= 0)); };
 const vlog = () => {};
@@ -275,6 +276,16 @@ const rowV = list1.children[1] && list1.children[1].children[0] && list1.childre
 ok('W1 页面内合并成功则不进wasm', wireErr === null && merges === 0 && saved.length === 1 && saved[0].startsWith('006_课.mp4:') && saved[0].endsWith(':true'), `merges=${merges} ${saved.join('|')} ${wireErr && wireErr.message}`);
 ok('W0 音视频排队下载不同时占两份小块', maxInflight === 1, `max=${maxInflight}`);
 ok('W6 先下完的那份不再写成等待合并', rowA.includes('正在下另一份') && !String(rowA).includes('等待合并') && rowV.includes('正在合并'), `${rowA} || ${rowV}`);
+saved.length = 0;
+q.jsMergeMax = 10;
+q.mergeNote = '';
+arm = { seen: 0, saved: -1 };
+const stBig = mk();
+let wireBig = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '011_课', stBig); } catch (e) { wireBig = e; }
+ok('W7 预告体积超过上限时下完一份就保存', wireBig === null && merges === 0 && arm.saved === 1 && saved.length === 2 && saved[0].includes('011_课_音频.m4a') && saved[1].includes('011_课_视频.mp4') && q.mergeNote.includes('不能同时放在页面里'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${saved.join('|')} ${wireBig && wireBig.message}`);
+q.jsMergeMax = 1200 * 1024 * 1024;
+arm = null;
 saved.length = 0;
 mode = 'big';
 q.mergeNote = '';

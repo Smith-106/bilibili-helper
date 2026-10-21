@@ -71,5 +71,6 @@
 - v3.0.58：`o0` 不再 `return new Blob(K)`。拼成一份 `Uint8Array`，每 16 块让出一次主线程，`K[ci]=null` 后 `u.size=u.byteLength`。进度回调第三参为「正在整理已下载的数据，请勿重试」。`t0` 对 `instanceof Uint8Array` 直接使用，不再 `arrayBuffer()`。续传仿真 10 项。
 - v3.0.59：`t0` 不再 `d.map` 加 `Promise.all` 并行拉音频和视频。`for` 循环里 `await o0`，`got.push(m)` 后再取 `[N,t]`。同一时刻只有一条流在堆积小块。仿真断言 `maxInflight===1`。22 项。
 - v3.0.60：每一份下完后的文案按是不是最后一份区分。`n<d.length-1` 写「已下载完成，正在下另一份」，最后一份写「已下载完成，正在合并」。不再出现「等待合并」。仿真 23 项。
+- v3.0.61：下载前把 `d` 里各份的 `size` 加总。超过 `q.jsMergeMax`（默认 1200MB）则 `streamOnly`：每份 `await a0` 后不放进 `got`，再下下一份。`mergeNote` 为「已分开保存音视频（两份加起来太大，不能同时放在页面里）」。体积未知或加总不超过上限时仍两份都留下再合并。仿真 24 项。
 
 [← 返回文档首页](./index.md)
