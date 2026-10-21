@@ -17,7 +17,7 @@ const src = fs.readFileSync('bilibili-helper-content-script.js', 'utf8');
 const i = src.indexOf('o0=async');
 const j = src.indexOf('}},R=async(', i);
 const seg = src.slice(i, j + 2); // 含闭合的 }}，得完整 o0=async...=>{...}
-ok('S0 取到真实o0源码段(续传三件套齐)', seg.includes('Range:"bytes="+t+"-"') && seg.includes('下载停滞超过') && seg.includes('new Blob(K)'));
+ok('S0 取到真实o0源码段(续传三件套齐)', seg.includes('Range:"bytes="+t+"-"') && seg.includes('下载停滞超过') && seg.includes('u.size=u.byteLength') && seg.includes('正在整理已下载的数据，请勿重试'));
 const o0 = eval('(' + seg.replace(/^o0=/, '') + ')');
 o0.stallMs = 300; o0.bk = 20; // 只加速计时，不改逻辑
 
@@ -47,8 +47,10 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
     calls.push(keys.length ? JSON.stringify(opt.headers) : '(full)');
     return { ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) };
   } };
-  const blob = await o0('http://x/v.m4s', 4, () => {});
-  ok('T1 干净下载字节一致', (await blob.text()) === 'abcd');
+  const phases = [];
+  const blob = await o0('http://x/v.m4s', 4, (t, tot, phase) => { if (phase) phases.push(phase); });
+  ok('T1 干净下载字节一致且不再包一层Blob', blob instanceof Uint8Array && blob.size === 4 && new TextDecoder().decode(blob) === 'abcd', `size=${blob && blob.size}`);
+  ok('T1 整理时提示不要重试', phases.includes('正在整理已下载的数据，请勿重试'), phases.join('|'));
   ok('T1 首轮无Range头(与旧行为一致)', calls.length === 1 && !calls[0].includes('Range'), calls.join('|'));
   delete globalThis.window;
 }
@@ -67,7 +69,7 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   } };
   const prog = [];
   const blob = await o0('http://x/v.m4s', 4, (t, tot) => prog.push(t + '/' + tot));
-  ok('T2 僵死后Range续传字节完整', (await blob.text()) === 'abcd');
+  ok('T2 僵死后Range续传字节完整', blob instanceof Uint8Array && new TextDecoder().decode(blob) === 'abcd');
   ok('T2 第二轮带Range: bytes=2-', calls[1] === 'bytes=2-', calls.join(' | '));
   ok('T2 续传等待中刷过进度', prog.length > 0, prog.slice(0, 4).join(','));
   delete globalThis.window;
@@ -83,7 +85,7 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
     return { ok: true, status: 200, headers: H({ 'content-length': '2' }), body: mkBody([chunk('a'), chunk('b')]) }; // 无论是否带Range都回全量
   } };
   const blob = await o0('http://x/v.m4s', 2, () => {});
-  ok('T3 无206回退全量重下字节正确', (await blob.text()) === 'ab' && n === 3, 'fetch=' + n);
+  ok('T3 无206回退全量重下字节正确', blob instanceof Uint8Array && new TextDecoder().decode(blob) === 'ab' && n === 3, 'fetch=' + n);
   delete globalThis.window;
 }
 

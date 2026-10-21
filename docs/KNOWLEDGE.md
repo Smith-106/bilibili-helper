@@ -68,5 +68,6 @@
 - v3.0.55：`bxD` 开头若还没有 `q.dir` 且存在 `showDirectoryPicker`，同一页只问一次。`a0` 有 `q.dir` 时 `getFileHandle`+`createWritable` 写文件，不 `dispatchEvent`。失败则清掉 `q.dir` 并退回点击。结果行在 `dirNote` 非空时附加「已写入所选文件夹」。仿真 18 项。
 - v3.0.56：分片 `mdat` 的 size 为 0 表示直到文件末尾。原样拷进合并文件后，前面的视频数据块会吞掉后面的音频。`patchPair` 在 `r32(md,0)===0` 时把长度写成 `md.length`；超过 2^32-1 则 `qM.why="数据块太长"` 并返回空。仿真 19 项。
 - v3.0.57：`qM` 不再 `new Uint8Array` 整段拼接。普通文件返回 `Blob([head, ...payload views])`，分片返回 `new Blob(pieces)`。size 为 0 时先 `md=new Uint8Array(md)` 再改长度，避免改到源缓冲。`t0` 在两份 `arrayBuffer` 都成功后立刻 `t=null,N=null`，成功条件是 `jm.size||jm.length`。仿真 21 项。
+- v3.0.58：`o0` 不再 `return new Blob(K)`。拼成一份 `Uint8Array`，每 16 块让出一次主线程，`K[ci]=null` 后 `u.size=u.byteLength`。进度回调第三参为「正在整理已下载的数据，请勿重试」。`t0` 对 `instanceof Uint8Array` 直接使用，不再 `arrayBuffer()`。续传仿真 10 项。
 
 [← 返回文档首页](./index.md)
