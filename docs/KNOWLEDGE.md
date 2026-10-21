@@ -58,5 +58,6 @@
 - v3.0.45：分开保存原先只认固定的 OOM 文案。worker 抛出的 `RuntimeError` / `Aborted(...)` 对不上，批量记失败，重试再合并一次还是失败。改为音视频都在手时，任何合并错误都分开保存，并把原因截到 80 字写进行里。下载失败仍抛。`_0` 的一次自动重试也认这两类文案。仿真 9 项。
 - v3.0.46：`qM` 在页面内合并普通 mp4（改 stco/co64）和分片 mp4（改 tfhd 的 base-data-offset 与音轨号）。合计不超过 `q.jsMergeMax`（默认 1200MB）且两边都是同一类时，直接保存一个 mp4，不进 wasm。结构认不出则回退。仿真 `sim-qm.mjs`（D6）+ A72。harness 102 项。wasm 上限仍是 2GB，认不出的大文件还是分开保存。
 - v3.0.47：tfhd 既无 base-data-offset 也无 default-base-is-moof 时不再放弃。按 trun 的 data_offset 是否落在 mdat 内，改成相对分片并置 0x20000。对不上则 `qM.why`，日志写「页面内合并跳过：」。仿真 9 项。
+- v3.0.48：`pairs` 不再要求 moof 紧挨 mdat。中间的 free/sidx 等随片段一起拷贝，base-data-offset 按「moof + 中间盒子 + mdat 头」重算。找不到 mdat 时 `qM.why=分片后面没有数据`。仿真 10 项。
 
 [← 返回文档首页](./index.md)

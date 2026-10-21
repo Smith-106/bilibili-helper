@@ -185,6 +185,33 @@ if (lm) {
   looseNote = hits.join(',') + ' flags=' + flagOn.join(',');
 }
 ok('F3 没有基准偏移的分片也能合并', looseOk, looseNote || 'no merge ' + qM.why);
+
+function makeGap(tag) {
+  const payload = new TextEncoder().encode(tag);
+  const ft = ftyp();
+  const tk = new Uint8Array(32);
+  w32(tk, 0, 32);
+  tk.set([116, 107, 104, 100], 4);
+  w32(tk, 20, 1);
+  const trex = box('trex', (() => { const p = new Uint8Array(20); w32(p, 4, 1); return p; })());
+  const moov = box('moov', cat(mvhd(), box('trak', tk), box('mvex', trex)));
+  const free = box('free', new Uint8Array(8));
+  const dummy = moofPair(1, payload, 0);
+  const base = ft.length + moov.length + dummy.moof.length + free.length + 8;
+  const pair = moofPair(1, payload, base);
+  return cat(ft, moov, pair.moof, free, pair.mdat);
+}
+const gv = makeGap('VIDE');
+const ga = makeGap('AUDI');
+const gm = qM(gv, ga);
+let gapBases = [];
+if (gm) {
+  for (let i = 0; i + 24 < gm.length; i++) {
+    if (String.fromCharCode(gm[i + 4], gm[i + 5], gm[i + 6], gm[i + 7]) === 'tfhd') gapBases.push(r64(gm, i + 16));
+  }
+}
+const gapOk = gapBases.length === 2 && new TextDecoder().decode(gm.slice(gapBases[0], gapBases[0] + 4)) === 'VIDE' && new TextDecoder().decode(gm.slice(gapBases[1], gapBases[1] + 4)) === 'AUDI';
+ok('F4 分片和数据之间夹了别的盒子也能合并', gapOk, JSON.stringify(gapBases) + (qM.why ? ' ' + qM.why : ''));
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
 ok('N2 一个分片一个普通不硬合', qM(video, fa) === null);
 
