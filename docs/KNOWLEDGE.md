@@ -54,5 +54,6 @@
 - v3.0.41：修 `memory access out of bounds` 重试仍失败——`deleteFile` 不缩 wasm 堆（上限 2GB），爆掉或涨满的 `ffmpeg` 实例被 `T0` 一直复用，手动重试打在同一具尸体上。改：每集合并完 `terminate` 并置空（核心 blob URL 缓存，不重复拉取 wasm）；`load` 失败不缓存坏实例；OOM 自动换新实例重试 1 次，行内提示「正在重建合并器」；仍失败改可读文案并重抛（批量记失败）。下载续传时补一条日志。仿真 `sim-ffmpeg-recycle.mjs` 10 项（D4）+ A69，harness 97 项全绿。
 - v3.0.42：单集太大时换新实例仍会 OOM（峰值≈两路输入进 wasm + 成品，ffmpeg-core 无 WORKERFS）。失败分支原先把已下载的 blob 丢掉，重试等于再下一次再爆一次。改：重建一次仍失败则分开保存 `*_视频.mp4` 与 `*_音频.m4a`（间隔可调 `q.splitGap`），批量行「✔ 已分开保存音视频」，本集不算失败。读成品前先删 wasm 输入。仿真 `sim-merge-fallback.mjs`（D5）+ A70。
 - v3.0.43：合计超过 700MB（`q.mergeMax`）不再进 wasm，避免页面在 OOM 时被撑死、兜底来不及。分开保存后批量行会清掉进度区，所以把 `a[download]` 记到 `q.mergeSaves` 再挂回行上。仿真 8 项，harness 仍 99 项。
+- v3.0.44：分开保存被算进「成功」，汇总看不出有没有合成一个文件。`Qs` 单独计数；进度和结束语在 `Qs>0` 时显示「分开 N」，并写明是视频和音频两个文件。`Qs=0` 时文案与旧版逐字相同（UP 批量仿真不回归）。harness 100 项。
 
 [← 返回文档首页](./index.md)

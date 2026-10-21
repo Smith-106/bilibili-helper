@@ -309,7 +309,7 @@ var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementByI
 var bxD=async(e,t,P,only)=>{
   if(bx0.running)return;
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];
-  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Q1v=0,Q1x=0,th=0,st0=Date.now();
+  let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Qs=0,Q1v=0,Q1x=0,th=0,st0=Date.now();
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
   let F0=only&&only.length?only:t;
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
@@ -328,15 +328,15 @@ var bxD=async(e,t,P,only)=>{
       }
       p.classList.add("b-cur"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">等待</span>`,r.appendChild(p);
       r.scrollTop+r.clientHeight>=r.scrollHeight-60&&(r.scrollTop=r.scrollHeight);
-      if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">↷ 上次已下载，跳过</span>`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
-      o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
+      if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">↷ 上次已下载，跳过</span>`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
+      o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
       let N=await d0(h.aid,h.bvid,h.cid,n);
       if(N.code!==E.OK){let w=N.code===E.VIP_ONLY?"（该集为充电/大会员专属，请确认已登录并已充电）":"";throw new Error((N.message||"获取下载地址失败")+w)}
       if(N.dash){
         let S=[{url:N.dash.audio.base_url,size:N.dash.audio.size},{url:N.dash.video.base_url,size:N.dash.video.size}],_=document.createElement("ul");
         _.className="progress",p.appendChild(_);
         let w=new Set(q.ffmpegUsedFiles);
-        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ ${esc(q.mergeNote||"已保存")}</span>`,(q.mergeSaves||[]).forEach(s=>{let el=document.createElement("a");el.href=s.href,el.download=s.name,el.textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)}),q.mergeSaves=null,q.mergeNote="",bx6(P,h.cid);
+        await t0(!0,p,S,`${String(a+1).padStart(3,"0")}_${m}`,_),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ ${esc(q.mergeNote||"已保存")}</span>`,(q.mergeSaves||[]).forEach(s=>{let el=document.createElement("a");el.href=s.href,el.download=s.name,el.textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)}),q.mergeSaves=null,q.mergeNote&&Qs++,q.mergeNote="",bx6(P,h.cid);
         let K=[...q.ffmpegUsedFiles].find(V=>!w.has(V));
         K&&(q.ffmpegUsedFiles.delete(K),q.ffmpegInstance.deleteFile(K).catch(()=>{})),[...q.blobUrls].filter(V=>!s.has(V)).forEach(V=>{setTimeout(()=>{try{URL.revokeObjectURL(V)}catch(G1){G1}q.blobUrls.delete(V)},6e4),s.add(V)})
       }else if(N.durl&&N.durl.length===1){let X1=document.createElement("ul");X1.className="progress",p.appendChild(X1),await R(p,{url:N.durl[0].url,size:N.durl[0].size},`${String(a+1).padStart(3,"0")}_${m}`,X1),Q0++,F1=0,p.classList.remove("b-cur"),p.classList.add("b-ok"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ 已保存</span>`}
@@ -349,13 +349,13 @@ var bxD=async(e,t,P,only)=>{
     if(th>=3){try{localStorage.setItem("bilibili_helper_batch_cool_"+P,String(Date.now()))}catch(_){}o.textContent=` 连续受限${th}次，原地冷却约5分钟继续（已抓不丢，可点取消）…`,bx0.lastStatus=o.textContent,v("下载腿连续受限",th,"次，原地冷却5分钟");let cr=300e3;while(cr>0&&!bx0.cancel){o.textContent=` 连续受限冷却中…剩${Math.floor(cr/6e4)}分${Math.floor(cr%6e4/1e3)}秒（可点取消）`,bx0.lastStatus=o.textContent;let st=Math.min(cr,1e4);await bx2(st);cr-=st}th=0}
     if(bx0.cancel)break;
     let wt=dv*1e3+Math.random()*dv*500;th>0&&(wt=Math.max(wt,dv*(1+th*2)*1e3));F1>=2&&(wt=Math.max(wt,dv*3e3),v("连续失败",F1,"次，已自动延长间隔后继续"));
-    wt>0&&a+1<F0.length&&(o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0} 跳过${Q2} 失败${Q1}）等待${Math.round(wt/1e3)}s后下一集…剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent);
+    wt>0&&a+1<F0.length&&(o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）等待${Math.round(wt/1e3)}s后下一集…剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent);
     await bx2c(wt)
   }
   let et=Math.round((Date.now()-st0)/1e3),es=`用时${Math.floor(et/60)}分${et%60}秒`;
-  if(bx0.cancel)o.textContent=` 已取消（成功${Q0} 跳过${Q2} 失败${Q1}，${es}）`;
-  else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0} 跳过${Q2} 失败0（${es}）`,o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);
-  else o.textContent=` 全部完成：成功${Q0} 跳过${Q2} 失败${Q1}（需会员/登录${Q1v}，其他${Q1x}，${es}）`;
+  if(bx0.cancel)o.textContent=` 已取消（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}，${es}）`;
+  else if(Q1===0)o.textContent=` 🎉 全部完成：成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败0（${es}）`+(Qs?"，其中分开保存的是视频和音频两个文件":""),o.classList.add("b-celebrate"),setTimeout(()=>o.classList.remove("b-celebrate"),900);
+  else o.textContent=` 全部完成：成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}（需会员/登录${Q1v}，其他${Q1x}，${es}）`+(Qs?"，其中分开保存的是视频和音频两个文件":"");
   bx0.lastStatus=o.textContent;
   if(bx0.failLog.length){let K=document.createElement("a");K.href="#nogo",K.className="btn-ghost b-copy",K.textContent="复制失败清单",K.addEventListener("click",V=>{V.preventDefault();let G1=bx0.failLog.join("\n");(navigator.clipboard?navigator.clipboard.writeText(G1):Promise.reject(new Error("no clipboard"))).then(()=>{K.textContent="已复制"},()=>{window.prompt("复制失败清单（Ctrl+C）",G1)})}),o.appendChild(K);if(!only&&bx0.failItems.length){let R2=document.createElement("a");R2.href="#nogo",R2.className="btn-ghost",R2.style.cssText="margin-left:8px",R2.textContent=`重试失败${bx0.failItems.length}集`,R2.addEventListener("click",V=>{V.preventDefault();let Fr=bx0.failItems.slice();bxD(e,t,P,Fr)}),o.appendChild(R2)}}
   i.disabled=!1,i.classList.remove("b-running"),d.style.display="none",d.disabled=!1,bx0.running=!1;
