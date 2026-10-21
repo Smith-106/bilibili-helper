@@ -107,5 +107,6 @@
 - v3.0.94：`split` 同时写入 `sessionStorage` 键 `bilibili_helper_nomerge`。刷新后 `t0` 读到就恢复 `q.noMerge` 并 `streamOnly`。关掉标签页后消失，新开的标签页会再试合成。合并仿真 41 项。
 - v3.0.95：进入拷贝和 `qM` 之前就写入这个键。成功保存一个 mp4 后 `delete m0[o]` 再写回。合并中页面关掉时记录还在，刷新后分开保存。合并仿真 42 项。
 - v3.0.96：`bxShown` 和合并失败的 catch 都认 `allocation failed`、`Invalid array length`、`Invalid typed array length`。有两份就 `split`，说明是「合并内存不足，不再继续」，不再把英文嵌进句子。没有两份就抛中文，列表显示「点重试会分开保存，不再进 ffmpeg」。合并仿真 44 项。
+- v3.0.97：`bilibili_helper_nomerge` 的键会去掉开头的三位序号。`001_课` 能对上以前记下的 `005_课`。合成成功时，同一集的序号键和裸名字一起删掉。合并仿真 45 项。
 
 [← 返回文档首页](./index.md)
