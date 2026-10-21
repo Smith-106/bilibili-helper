@@ -670,6 +670,36 @@ q.mergeWhy = '';
 let wireHang2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '037先', mk()); } catch (e) { wireHang2 = e; }
 ok('W47 数据库还没返回也已经记住', wireHang !== null && midNote.includes('bhnmnow=' + encodeURIComponent('037先')) && wireHang2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${midNote.slice(0, 80)} ${q.mergeNote} ${wireHang2 && wireHang2.message}`);
+q.keepNow = true;
+const order = [];
+const cookieDesc = Object.getOwnPropertyDescriptor(pageDoc, 'cookie');
+Object.defineProperty(pageDoc, 'cookie', { configurable: true, get() { order.push('read'); return cookieDesc.get.call(pageDoc); }, set(value) { order.push('write'); return cookieDesc.set.call(pageDoc, value); } });
+const prevGet = globalThis.sessionStorage.getItem;
+globalThis.sessionStorage.getItem = () => { order.push('get'); throw new Error('session slow'); };
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'die';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireOrder = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '038先', mk()); } catch (e) { wireOrder = e; }
+const wroteBefore = order.indexOf('write') >= 0 && order.indexOf('write') < order.indexOf('get');
+const orderNote = cookieDesc.get.call(pageDoc);
+Object.defineProperty(pageDoc, 'cookie', cookieDesc);
+globalThis.sessionStorage.getItem = prevGet;
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'u8';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireOrder2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '038先', mk()); } catch (e) { wireOrder2 = e; }
+ok('W48 翻名单之前就已经记住', wireOrder !== null && wroteBefore && String(orderNote).includes('bhnmnow=' + encodeURIComponent('038先')) && wireOrder2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `${order.join(',')} ${q.mergeNote} ${wireOrder2 && wireOrder2.message}`);
 q.keepNow = false;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
