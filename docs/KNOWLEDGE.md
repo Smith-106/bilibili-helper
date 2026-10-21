@@ -70,5 +70,6 @@
 - v3.0.57：`qM` 不再 `new Uint8Array` 整段拼接。普通文件返回 `Blob([head, ...payload views])`，分片返回 `new Blob(pieces)`。size 为 0 时先 `md=new Uint8Array(md)` 再改长度，避免改到源缓冲。`t0` 在两份 `arrayBuffer` 都成功后立刻 `t=null,N=null`，成功条件是 `jm.size||jm.length`。仿真 21 项。
 - v3.0.58：`o0` 不再 `return new Blob(K)`。拼成一份 `Uint8Array`，每 16 块让出一次主线程，`K[ci]=null` 后 `u.size=u.byteLength`。进度回调第三参为「正在整理已下载的数据，请勿重试」。`t0` 对 `instanceof Uint8Array` 直接使用，不再 `arrayBuffer()`。续传仿真 10 项。
 - v3.0.59：`t0` 不再 `d.map` 加 `Promise.all` 并行拉音频和视频。`for` 循环里 `await o0`，`got.push(m)` 后再取 `[N,t]`。同一时刻只有一条流在堆积小块。仿真断言 `maxInflight===1`。22 项。
+- v3.0.60：每一份下完后的文案按是不是最后一份区分。`n<d.length-1` 写「已下载完成，正在下另一份」，最后一份写「已下载完成，正在合并」。不再出现「等待合并」。仿真 23 项。
 
 [← 返回文档首页](./index.md)
