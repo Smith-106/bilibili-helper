@@ -479,6 +479,30 @@ q.mergeWhy = '';
 let wireCookie2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '028记', mk()); } catch (e) { wireCookie2 = e; }
 ok('W39 本地名单一个名字也写不下时记在页面里', wireCookie === null && wireCookie2 === null && merges === 0 && cookieNote.includes('bhnm=' + encodeURIComponent('028记')) && q.mergeNote.includes('上次在页面里放不下'), `${cookieNote} ${q.mergeNote} ${wireCookie2 && wireCookie2.message}`);
+pageDoc.cookie = '';
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'alloc';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireMany = null;
+try {
+  await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '030甲', mk());
+  await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '030乙', mk());
+} catch (e) { wireMany = e; }
+const many = decodeURIComponent((String(pageDoc.cookie || '').match(/bhnm=([^;]*)/) || [])[1] || '');
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireMany2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '030甲', mk()); } catch (e) { wireMany2 = e; }
+ok('W40 页面记录能留下不止一集', wireMany === null && wireMany2 === null && merges === 0 && many.includes('030甲') && many.includes('030乙') && q.mergeNote.includes('上次在页面里放不下'), `${many} ${q.mergeNote} ${wireMany2 && wireMany2.message}`);
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
 globalThis.performance = prevPerf;
