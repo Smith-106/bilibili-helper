@@ -376,14 +376,14 @@ const writes = [];
 saveQ.dir = {
   getFileHandle: async (name, opt) => ({
     createWritable: async () => ({
-      write: async (b) => { writes.push(name + ':' + b.size + ':' + opt.create); },
+      write: async (b) => { writes.push(name + ':' + (b.size || b.byteLength) + ':' + opt.create + ':' + (b instanceof Blob ? 'blob' : 'raw')); },
       close: async () => {},
     }),
   }),
 };
 const box1 = fakeDoc.createElement();
 await saveFn(new Uint8Array([1, 2, 3, 4]), 'v.mp4', box1);
-ok('S1 选了文件夹就写入且不再弹第二个下载', writes.join('|') === 'v.mp4:4:true' && clicks.length === 0 && saveQ.dirNote === '已写入所选文件夹' && box1.children.length === 1, writes.join('|'));
+ok('S1 选了文件夹就写入且不再弹第二个下载', writes.join('|') === 'v.mp4:4:true:raw' && clicks.length === 0 && saveQ.dirNote === '已写入所选文件夹' && box1.children.length === 1, writes.join('|'));
 saveQ.dir = { getFileHandle: async () => { throw new Error('no dir'); } };
 saveQ.dirNote = '';
 const box2 = fakeDoc.createElement();
