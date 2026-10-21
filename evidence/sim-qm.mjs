@@ -377,6 +377,15 @@ ok('W15 页面已较满时先保存再下另一份', wireHeap === null && merges
 globalThis.performance = prevPerf;
 arm = null;
 saved.length = 0;
+{
+  const a = page.indexOf('bxShown=e=>');
+  const b = page.indexOf('}};', a);
+  const bxShown = new Function(page.slice(a, b + 3) + '\nreturn bxShown;')();
+  const folder = bxShown({ message: '这一份页面里留不住一整块，请先选择文件夹再重试' });
+  const wasm = bxShown(new Error('RuntimeError: memory access out of bounds'));
+  const plain = bxShown(new Error('下载请求失败(403)'));
+  ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)', `${folder.shown} | ${wasm.shown}`);
+}
 mode = 'big';
 q.mergeNote = '';
 let wire2 = null;
