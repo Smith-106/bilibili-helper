@@ -422,7 +422,8 @@ mode = 'small';
   const wasm = bxShown(new Error('RuntimeError: memory access out of bounds'));
   const plain = bxShown(new Error('下载请求失败(403)'));
   const lost = bxShown(new Error('这一集太大，页面里留不住'));
-  ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)' && lost.shown.includes('重新下载') && !lost.shown.includes('不再进 ffmpeg'), `${folder.shown} | ${wasm.shown} | ${lost.shown}`);
+  const dead = bxShown(Object.assign(new Error('The request is not allowed'), { name: 'NotAllowedError' }));
+  ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)' && lost.shown.includes('重新下载') && !lost.shown.includes('不再进 ffmpeg') && dead.shown === '文件夹权限失效，点重试会重新选择', `${folder.shown} | ${wasm.shown} | ${lost.shown} | ${dead.shown}`);
 }
 mode = 'big';
 q.mergeNote = '';
