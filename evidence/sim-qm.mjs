@@ -421,6 +421,20 @@ ok('W23 同一集再次下载时不再把两份叠在一起', wireAgain === null
 delete q.noMerge;
 q.mergeWhy = '';
 mode = 'small';
+const memStore = {};
+globalThis.sessionStorage = { getItem: (k) => (k in memStore ? memStore[k] : null), setItem: (k, v) => { memStore[k] = String(v); }, removeItem: (k) => { delete memStore[k]; } };
+memStore.bilibili_helper_nomerge = JSON.stringify({ '018f_课': 1 });
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireKeep = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018f_课', mk()); } catch (e) { wireKeep = e; }
+ok('W24 刷新后仍记住这一集不再叠在一起', wireKeep === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('上次在页面里放不下'), `${q.mergeNote} ${wireKeep && wireKeep.message}`);
+delete globalThis.sessionStorage;
+delete q.noMerge;
+q.mergeWhy = '';
+mode = 'small';
 arm = null;
 saved.length = 0;
 mode = 'blind';
