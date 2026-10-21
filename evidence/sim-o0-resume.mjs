@@ -353,6 +353,31 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const prev = globalThis.performance;
+  globalThis.performance = { memory: { usedJSHeapSize: 50, jsHeapSizeLimit: 100 } };
+  globalThis.q = { dirAsked: true };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '30' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  let err = null;
+  try { await o0('http://x/v.m4s', 30, () => {}); } catch (e) { err = e; }
+  ok('T24 这一份放下去会过满且没有文件夹时先停住', err && err.needDir === true && /请先选择文件夹/.test(err.message) && globalThis.q.dirAsked === false, `${err && err.message}`);
+  globalThis.performance = prev;
+  delete globalThis.q;
+  delete globalThis.window;
+}
+{
+  const prev = globalThis.performance;
+  const writes = [];
+  globalThis.performance = { memory: { usedJSHeapSize: 50, jsHeapSizeLimit: 100 } };
+  globalThis.q = { dir: { getFileHandle: async () => ({}) }, spillTo: async () => ({ write: async (c) => { writes.push(new TextDecoder().decode(c)); }, close: async () => {} }) };
+  const big = new Uint8Array(30); big.set([97, 98, 99, 100]);
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '30' }), body: mkBody([big]) }) };
+  const packed = await o0('http://x/v.m4s', 30, () => {});
+  ok('T25 这一份放下去会过满且已选文件夹时边下边写', packed && packed.streamed === true && writes.join('').length === 30 && writes.join('').startsWith('abcd'), `writes=${writes.join('').length}`);
+  globalThis.performance = prev;
+  delete globalThis.q;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
