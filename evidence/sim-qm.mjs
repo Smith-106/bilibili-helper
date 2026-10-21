@@ -574,6 +574,29 @@ q.mergeWhy = '';
 let wireWide2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], wideName(0), mk()); } catch (e) { wireWide2 = e; }
 ok('W43 数据库不可用时改记更多条', wireWide === null && wireWide2 === null && merges === 0 && wideNotes.includes(wideName(0)) && wideNotes.includes(wideName(176)) && q.mergeNote.includes('上次在页面里放不下'), `kept=${wideNotes.includes(wideName(0))} ${q.mergeNote} ${wireWide2 && wireWide2.message}`);
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'alloc';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+const markName = (n) => ('034' + String(n).padStart(3, '0') + 'm'.repeat(80)).slice(0, 80);
+const markHash = (s) => { let h = 2166136261; s = String(s || ''); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(16); };
+let wireTiny = null;
+try { for (let n = 0; n < 665; n++) await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], markName(n), mk()); } catch (e) { wireTiny = e; }
+const markNotes = String(pageDoc.cookie).split('; ').filter((p) => /^bhnm\d*=/.test(p)).map((p) => decodeURIComponent(p.slice(p.indexOf('=') + 1))).join('\n');
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireTiny2 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], markName(0), mk()); } catch (e) { wireTiny2 = e; }
+ok('W44 三十条也满时收成短标记', wireTiny === null && wireTiny2 === null && merges === 0 && markNotes.includes('#' + markHash(markName(0))) && q.mergeNote.includes('上次在页面里放不下'), `${markNotes.includes('#' + markHash(markName(0)))} ${q.mergeNote} ${wireTiny2 && wireTiny2.message}`);
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
