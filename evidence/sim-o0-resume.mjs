@@ -272,6 +272,18 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const prev = globalThis.performance;
+  globalThis.performance = {};
+  globalThis.q = { holdMax: 3 };
+  globalThis.window = { fetch: async () => ({ ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }) };
+  const packed5 = await o0('http://x/v.m4s', 4, () => {});
+  const text5 = new TextDecoder().decode(new Uint8Array(await packed5.blob.arrayBuffer()));
+  ok('T19 不报告剩余空间且单份已经较大时不拼成第二块', packed5 && packed5.noHold === true && !(packed5 instanceof Uint8Array) && text5 === 'abcd', `text=${text5}`);
+  globalThis.performance = prev;
+  delete globalThis.q;
+  delete globalThis.window;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);

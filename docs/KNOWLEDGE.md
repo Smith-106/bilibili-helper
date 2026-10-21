@@ -92,5 +92,6 @@
 - v3.0.79：`bxShown` 把「页面里留不住」且不是 wasm 错误的失败写成「点重试会重新下载后再分开保存」。带「请先选择文件夹」的仍走选文件夹说明。`RuntimeError` 一类仍是「不再进 ffmpeg」。合并仿真 35 项。
 - v3.0.80：`resumeFrom>0` 但没有 `q.dir` 和 `q.spillTo` 时，不发请求。抛出 `needDir`，文案是「已有未下完的部分，请先选择文件夹再接着下」，并把 `dirAsked` 清掉。本机断点保留。续传仿真 22 项。
 - v3.0.81：上面这条只在 `globalThis.showDirectoryPicker` 是函数时抛出。否则把 `resumeFrom` 和该文件名的断点清掉，从头下完整文件，避免不能选文件夹的浏览器每次重试都停在同一句。续传仿真 23 项。
+- v3.0.82：没有 `jsHeapSizeLimit` 时，叠放上限从 `wasmSkip` 的 400MB 改为 `q.holdMax`（默认 128MB）。`o0` 在拼整块前用同一个上限，超过则交 `Blob` 而不再 `new Uint8Array(total)`。有内存接口时仍走 0.7 的满载判断。续传仿真 24 项，合并仿真 35 项。
 
 [← 返回文档首页](./index.md)

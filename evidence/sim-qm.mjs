@@ -378,7 +378,7 @@ globalThis.performance = prevPerf;
 arm = null;
 saved.length = 0;
 mode = 'blind';
-q.wasmSkip = 3;
+q.holdMax = 3;
 q.mergeNote = '';
 q.mergeWhy = '';
 globalThis.performance = {};
@@ -387,7 +387,7 @@ let wireBlind = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 4 }, { url: 'video-url', size: 4 }], '019_课', mk()); } catch (e) { wireBlind = e; }
 ok('W17 不报告剩余空间且这一份已经较大时先保存', wireBlind === null && merges === 0 && arm.saved === 1 && saved.length === 2 && q.mergeNote.includes('不报告剩余空间'), `savedAtSecond=${arm.saved} ${q.mergeNote} ${wireBlind && wireBlind.message}`);
 mode = 'blind2';
-q.wasmSkip = 3;
+q.holdMax = 3;
 arm = null;
 saved.length = 0;
 q.mergeNote = '';
@@ -395,7 +395,7 @@ q.mergeWhy = '';
 let wireBlind2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 2 }, { url: 'video-url', size: 2 }], '020_课', mk()); } catch (e) { wireBlind2 = e; }
 ok('W18 不报告剩余空间且两份加起来已经较大时分开保存', wireBlind2 === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('两份加起来已经较大'), `${q.mergeNote} ${saved.join('|')} ${wireBlind2 && wireBlind2.message}`);
-delete q.wasmSkip;
+delete q.holdMax;
 globalThis.performance = prevPerf;
 mode = 'small';
 arm = null;
