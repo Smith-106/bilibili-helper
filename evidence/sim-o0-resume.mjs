@@ -243,6 +243,20 @@ const H = (map) => ({ get: (h) => (h in map ? map[h] : null) });
   delete globalThis.window;
   delete globalThis.localStorage;
 }
+{
+  const store = { bilibili_helper_partial: JSON.stringify({ 'v.mp4': 2 }) };
+  let fetches = 0;
+  globalThis.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; }, removeItem: (k) => { delete store[k]; } };
+  globalThis.q = { partialName: 'v.mp4', dirAsked: true };
+  globalThis.window = { fetch: async () => { fetches++; return { ok: true, status: 200, headers: H({ 'content-length': '4' }), body: mkBody([chunk('ab'), chunk('cd')]) }; } };
+  let err = null;
+  try { await o0('http://x/v.mp4', 4, () => {}); } catch (e) { err = e; }
+  const left = JSON.parse(store.bilibili_helper_partial || '{}');
+  ok('T17 没有文件夹时不把断点后的半截读进页面', fetches === 0 && err && err.needDir === true && /请先选择文件夹/.test(err.message) && left['v.mp4'] === 2 && globalThis.q.dirAsked === false, `fetches=${fetches} left=${left['v.mp4']} ${err && err.message}`);
+  delete globalThis.q;
+  delete globalThis.window;
+  delete globalThis.localStorage;
+}
 
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
