@@ -444,6 +444,17 @@ q.mergeWhy = '';
 let wireQuota = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '026额', mk()); } catch (e) { wireQuota = e; }
 ok('W37 名单写不下时仍记住这一集', wireQuota === null && merges === 0 && saved.length === 2 && String(quotaStore.bilibili_helper_nomerge || '').includes('026额') && !String(quotaStore.bilibili_helper_nomerge || '').includes('OLD'), `${quotaStore.bilibili_helper_nomerge} ${q.mergeNote} ${wireQuota && wireQuota.message}`);
+quotaSess.bilibili_helper_nomerge = JSON.stringify({ 甲: 1, 乙: 1, 丙: 1 });
+globalThis.localStorage.setItem = (k, v) => { if (k === 'bilibili_helper_nomerge' && Object.keys(JSON.parse(v)).length > 3) throw new Error('QuotaExceededError'); quotaStore[k] = String(v); };
+delete q.noMerge;
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireTrim = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '027留', mk()); } catch (e) { wireTrim = e; }
+const keptTrim = String(quotaStore.bilibili_helper_nomerge || '');
+ok('W38 写不下时只丢掉放不下的旧集', wireTrim === null && merges === 0 && keptTrim.includes('027留') && keptTrim.includes('乙') && !keptTrim.includes('甲'), `${keptTrim} ${wireTrim && wireTrim.message}`);
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
 globalThis.performance = prevPerf;
