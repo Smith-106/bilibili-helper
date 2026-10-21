@@ -294,5 +294,40 @@ ok('R1 小文件内存不足会换新合并器再试一次', small.err === null 
 const large = await bootCase(100 * 1024 * 1024, true);
 ok('R2 大文件内存不足不再重试', large.err && /memory access out of bounds/.test(large.err.message) && large.boots === 1 && large.logs.some((m) => m.includes('不再重试')), `boots=${large.boots} ${large.logs.join('|')}`);
 
+const ai = page.indexOf('a0=(');
+const aj = page.indexOf(',o0=async', ai);
+globalThis.window = globalThis;
+const clicks = [];
+const fakeURL = { createObjectURL: () => 'blob:test', revokeObjectURL: () => {} };
+class FakeMouse {}
+const fakeDoc = {
+  createElement: () => {
+    const n = { children: [], attrs: {}, textContent: '', innerHTML: '' };
+    n.setAttribute = (k, v) => { n.attrs[k] = v; };
+    n.appendChild = (c) => { n.children.push(c); return c; };
+    n.dispatchEvent = () => { clicks.push(n.attrs.download); };
+    return n;
+  },
+};
+const saveQ = { blobUrls: new Set(), dir: null, dirNote: '' };
+const saveFn = new Function('q', 'q0', 'document', 'URL', 'Blob', 'MouseEvent', page.slice(ai, aj) + '\nreturn a0;')(saveQ, (u) => saveQ.blobUrls.add(u), fakeDoc, fakeURL, Blob, FakeMouse);
+const writes = [];
+saveQ.dir = {
+  getFileHandle: async (name, opt) => ({
+    createWritable: async () => ({
+      write: async (b) => { writes.push(name + ':' + b.size + ':' + opt.create); },
+      close: async () => {},
+    }),
+  }),
+};
+const box1 = fakeDoc.createElement();
+await saveFn(new Uint8Array([1, 2, 3, 4]), 'v.mp4', box1);
+ok('S1 选了文件夹就写入且不再弹第二个下载', writes.join('|') === 'v.mp4:4:true' && clicks.length === 0 && saveQ.dirNote === '已写入所选文件夹' && box1.children.length === 1, writes.join('|'));
+saveQ.dir = { getFileHandle: async () => { throw new Error('no dir'); } };
+saveQ.dirNote = '';
+const box2 = fakeDoc.createElement();
+await saveFn(new Uint8Array([9]), 'a.m4a', box2);
+ok('S2 文件夹写入失败就退回点击保存', saveQ.dir === null && clicks[0] === 'a.m4a' && box2.children.some((c) => c.attrs && c.attrs.download === 'a.m4a'), `clicks=${clicks.join('|')} dir=${saveQ.dir}`);
+
 console.log(fail.length ? `SIM-FAIL n=${fail.length}: ${fail.join(' | ')}` : 'ALL SIM CHECKS PASS');
 process.exit(fail.length ? 1 : 0);
