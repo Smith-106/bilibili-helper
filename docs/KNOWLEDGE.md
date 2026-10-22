@@ -219,5 +219,6 @@
 - v3.0.206：没有总状态时补到页面顶部，不行再改标签。`localStorage` 失败则用 `sessionStorage`，下次两边都会读。合并仿真 145 项。
 - v3.0.207：两边存储都失败时写 `bhretry` cookie，再失败写 `window.name` 的 `bhretry:`。下次读到并显示后清掉。合并仿真 146 项。
 - v3.0.208：cookie 和 `window.name` 也失败时，`history.replaceState` 把说明放进 `history.state.bhretry`。显示后删掉该字段。合并仿真 147 项。
+- v3.0.209：浏览记录也失败时，写入 IndexedDB `bilibili_helper_retry` 的 `retry`。下次最多等 1.5 秒。显示后删除。合并仿真 148 项。
 
 [← 返回文档首页](./index.md)
