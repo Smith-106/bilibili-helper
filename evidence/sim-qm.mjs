@@ -902,6 +902,7 @@ const tinyBlind = qM(video, audio);
 ok('W67 不报告剩余空间时也不再整份合成', tinyBlind == null && qM.why === '浏览器没报告剩余空间，不再整份合成', qM.why || '');
 delete globalThis.q;
 globalThis.performance = prevPerf;
+ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantParts') && page.includes('videoU=null;audioU=null;await new Promise(r=>setTimeout(r,0));try{jm=new Blob(owned') && qM(video, audio) instanceof Blob, qM.why || '');
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
 const batchMarkAt = page.indexOf('let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")', batchLoopAt);
