@@ -167,5 +167,6 @@
 - v3.0.154：流的 `pull` 显示 `i+1/owned.length`，每 8 段 `setTimeout(0)`。合并仿真 94 项。
 - v3.0.155：每 8 段若 `usedJSHeapSize>jsHeapSizeLimit*0.7` 就抛 `out of memory` 并重新抛出。外层用 `byteLength` 或 `size` 判断原件是否还在，还在就分开保存。合并仿真 95 项。
 - v3.0.156：`markHead` 从 16408 扩到 32776。32KB 之后的标记不当成加密。合并仿真 96 项。
+- v3.0.157：没有 `jsHeapSizeLimit` 时，`sent` 超过 `mergeHold` 或 `holdMax` 的十六分之一就停。都没设则 8MB。合并仿真 97 项。
 
 [← 返回文档首页](./index.md)
