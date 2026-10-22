@@ -923,7 +923,7 @@ ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
 const batchMarkAt = page.indexOf('let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")', batchLoopAt);
 const batchRelAt = page.indexOf('qRel()', batchMarkAt);
-const armAt = page.indexOf('let arm=ev=>{if(ev&&ev.button)return;if(bx0.running||q.bh0)return;let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")');
+const armAt = page.indexOf('let held="",arm=ev=>{if(ev&&ev.button)return;if(bx0.running||q.bh0)return;let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")');
 const downAt = page.indexOf('addEventListener("pointerdown",arm)', armAt);
 const dxCall = page.indexOf('Dx(e)', downAt);
 const bxCall = page.indexOf('let t=Bx()', dxCall);
@@ -932,6 +932,9 @@ const pickAt = page.indexOf('q.dir=await showDirectoryPicker', useAt);
 ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && armAt > 0 && downAt > armAt && dxCall > downAt && bxCall > dxCall && useAt > 0 && pickAt > useAt, `arm=${armAt} down=${downAt} dx=${dxCall}`);
 const notedAt = page.indexOf('已记下，若这次卡住，下次会分开保存', armAt);
 ok('W72 找合集之前就说明下次会分开', notedAt > armAt && notedAt < downAt, `note=${notedAt}`);
+const upAt = page.indexOf('addEventListener("pointerup",drop)', downAt);
+const cancelAt = page.indexOf('addEventListener("pointercancel",drop)', upAt);
+ok('W73 没点中就清掉这次标记', upAt > downAt && cancelAt > upAt && page.indexOf('q.bh0!==held)return;try{document.cookie="bhx"+held+"=;path=/;max-age=0"}', armAt) > armAt && page.indexOf('held="";Dx(e)', cancelAt) > cancelAt, `up=${upAt} cancel=${cancelAt}`);
 cookieJar.clear();
 q.keepNow = true;
 cookieJar.set('bhxold', '*');
