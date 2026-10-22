@@ -437,6 +437,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W204 没列上的符号也会切开', page.includes('split(/[^\\p{L}\\p{N}]+/u)') && "课程※第三讲标题".split(/[^\p{L}\p{N}]+/u).indexOf("第三讲标题")>=0, 'partrare');
   ok('W205 这一集独有的短段也放开', page.includes('stem.length<4&&String(m).split(/[^\\p{L}\\p{N}]+/u).indexOf(stem)>=0&&!(t||[]).some'), 'partuniq');
   ok('W206 共用短名字会说明留在哪一行', page.includes('短名字别的集也在用，整页没放开，请到对应那一行保存'), 'partshared');
+  ok('W207 等待下一集时仍留着这句说明', page.includes('q.sharedShort=left?"有"+left+"个短名字别的集也在用') && page.includes('+(q.sharedShort?" ｜ "+q.sharedShort:"")'), 'partwait');
   ok('W197 顿号书名号分开的一段也放开', page.includes('split(/[^\\p{L}\\p{N}]+/u)'), 'partbook');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
   ok('W114 单集也记下名字', page.includes('q.saveAs=K||"单集"') && page.includes('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})'), 'onesave');
