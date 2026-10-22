@@ -411,7 +411,8 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W107 没有总状态时改按钮上的字', page.includes('a.btn-ghost') && page.includes('b.textContent="还在下载，结束后才能再试"'), 'busybtn');
   ok('W108 这一轮结束时改回按钮上的字', page.includes('if(b.textContent!=="还在下载，结束后才能再试")b.dataset.was=b.textContent') && page.includes('el.textContent=el.dataset.was;delete el.dataset.was'), 'busyback');
   ok('W109 重试前页面较满先放开上一轮', page.includes('if(only&&only.length){let tight=!0;try{let m=performance&&performance.memory;if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5}catch(_){}if(tight){try{q.rel()}catch(_){}if(o)o.textContent=" 页面较满，重试前先放开上一轮的链接"}}'), 'retryrel');
-  ok('W110 重试这一集先放开它自己的链接', page.includes('el.textContent="这一集重试前已放开，若没保存成功请再下一次"') && page.includes('if(only){try{(p.querySelectorAll?p.querySelectorAll("a[download]"):[])'), 'retryown');
+  ok('W110 重试这一集先放开它自己的链接', page.includes('el.textContent="这一集重试前已放开，若没保存成功请再下一次"') && page.includes('let named=`${String(a+1).padStart(3,"0")}_${m}`'), 'retryown');
+  ok('W111 这一行列不出链接时按文件名找', page.includes('if((!list||!list.length)&&document.querySelectorAll)list=[...document.querySelectorAll("a[download]")].filter(el=>String(el.getAttribute&&el.getAttribute("download")||"").indexOf(named)>=0)'), 'retryname');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
