@@ -262,11 +262,15 @@ ok('F5 长度到文件尾的数据块合并后仍能分开音视频', !!em && eo
   deepPay.set(box('sinf', new Uint8Array(4)), 5000);
   const deepHit = qM(cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', deepPay)), basic(1, new Uint8Array([2]), 80));
   ok('F9 媒体数据 4KB 之后的加密也说明原因', deepHit == null && qM.why === '视频已加密', qM.why || '');
-  const farPay = new Uint8Array(24000);
-  farPay.set(box('sinf', new Uint8Array(4)), 20000);
+  const midPay = new Uint8Array(24000);
+  midPay.set(box('sinf', new Uint8Array(4)), 20000);
+  const midHit = qM(cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', midPay)), basic(1, new Uint8Array([2]), 80));
+  ok('F11 媒体数据 16KB 之后的加密也说明原因', midHit == null && qM.why === '视频已加密', qM.why || '');
+  const farPay = new Uint8Array(44000);
+  farPay.set(box('sinf', new Uint8Array(4)), 40000);
   qM.why = '';
   const farHit = qM(cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', farPay)), basic(1, new Uint8Array([2]), 80));
-  ok('F10 16KB 之后的加密标记先不当成加密', farHit != null || qM.why !== '视频已加密', qM.why || 'merged');
+  ok('F10 32KB 之后的加密标记先不当成加密', farHit != null || qM.why !== '视频已加密', qM.why || 'merged');
 }
 }
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);

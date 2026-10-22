@@ -166,5 +166,6 @@
 - v3.0.153：`pointerup` 在按钮外和 `pointercancel` 调用 `drop`，删掉这次 `bhx` 并清空「已记下」。点中时 `held=""` 后再 `Dx`。合并仿真 93 项。
 - v3.0.154：流的 `pull` 显示 `i+1/owned.length`，每 8 段 `setTimeout(0)`。合并仿真 94 项。
 - v3.0.155：每 8 段若 `usedJSHeapSize>jsHeapSizeLimit*0.7` 就抛 `out of memory` 并重新抛出。外层用 `byteLength` 或 `size` 判断原件是否还在，还在就分开保存。合并仿真 95 项。
+- v3.0.156：`markHead` 从 16408 扩到 32776。32KB 之后的标记不当成加密。合并仿真 96 项。
 
 [← 返回文档首页](./index.md)
