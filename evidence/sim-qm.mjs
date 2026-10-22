@@ -413,11 +413,12 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W109 重试前页面较满先放开上一轮', page.includes('if(only&&only.length){let tight=!0;try{let m=performance&&performance.memory;if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5}catch(_){}if(tight){try{q.rel()}catch(_){}if(o)o.textContent=" 页面较满，重试前先放开上一轮的链接"}}'), 'retryrel');
   ok('W110 重试这一集先放开它自己的链接', page.includes('el.textContent="这一集重试前已放开，若没保存成功请再下一次"') && page.includes('let named=`${String(a+1).padStart(3,"0")}_${m}`'), 'retryown');
   ok('W111 这一行列不出链接时按文件名找', page.includes('if((!list||!list.length)&&document.querySelectorAll)list=[...document.querySelectorAll("a[download]")].filter(el=>String(el.getAttribute&&el.getAttribute("download")||"").indexOf(named)>=0)'), 'retryname');
-  ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}}') && page.includes('q0(N,i||q.saveAs||"")') && page.includes('if(String(q.epNames[href]).indexOf(named)<0)continue'), 'epnames');
+  ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name,size)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}if(size>0){(q.epSizes||(q.epSizes={}))[e]=size}}') && page.includes('q0(N,i||q.saveAs||"",b.size)') && page.includes('if(String(q.epNames[href]).indexOf(named)<0)continue'), 'epnames');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
   ok('W114 单集也记下名字', page.includes('q.saveAs=K||"单集"') && page.includes('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})'), 'onesave');
   ok('W115 没有名字也点不了的旧链接会放开', page.includes('没有名字也点不了的旧链接已放开') && page.includes('document.querySelectorAll("a[href]")'), 'orphan');
-  ok('W116 页面较满时放开还能点但没名字的链接', page.includes('if(els.length&&!full)continue') && page.includes('页面较满，没记下名字的链接已放开') && page.includes('full=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5'), 'fullname');
+  ok('W116 页面较满时放开还能点但没名字的链接', page.includes('if(els.length&&!full&&!blindFull)continue') && page.includes('页面较满，没记下名字的链接已放开') && page.includes('full=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5'), 'fullname');
+  ok('W117 不报告剩余空间时无名大链接会放开', page.includes('let blindFull=blind&&blindSum>(q.holdMax||128*1024*1024)') && page.includes('浏览器没报告剩余空间，没记下名字的大链接已放开'), 'blindbig');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
