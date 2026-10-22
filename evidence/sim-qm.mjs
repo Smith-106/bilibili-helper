@@ -922,10 +922,11 @@ ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
 const batchMarkAt = page.indexOf('let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")', batchLoopAt);
 const batchRelAt = page.indexOf('qRel()', batchMarkAt);
-const earlyAt = page.indexOf('let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")');
-const pickAt = page.indexOf('q.dir=await showDirectoryPicker', earlyAt);
-const zAt = page.indexOf('let n=await z()', earlyAt);
-ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && earlyAt >= 0 && pickAt > earlyAt && zAt > earlyAt, `loop=${batchLoopAt} mark=${batchMarkAt} early=${earlyAt} pick=${pickAt}`);
+const dxAt = page.indexOf('Dx=async e=>{if(bx0.running)return;let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")');
+const bxCall = page.indexOf('let t=Bx()', dxAt);
+const useAt = page.indexOf('let bh0=q.bh0||""');
+const pickAt = page.indexOf('q.dir=await showDirectoryPicker', useAt);
+ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && dxAt > 0 && bxCall > dxAt && useAt > 0 && pickAt > useAt, `dx=${dxAt} bx=${bxCall} use=${useAt} pick=${pickAt}`);
 cookieJar.clear();
 q.keepNow = true;
 cookieJar.set('bhxold', '*');

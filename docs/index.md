@@ -11,4 +11,4 @@
 - [项目 Wiki 索引](./WIKI.md)
 - [更新日志](../CHANGELOG.md)
 
-> 版本：`3.0.147` ｜ Manifest V3 ｜ 无后端依赖
+> 版本：`3.0.148` ｜ Manifest V3 ｜ 无后端依赖
