@@ -1167,6 +1167,7 @@ mode = 'small';
   ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
   ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('q.mergeSaves=null,bx0.failLog.push') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
+  ok('W93 链接失效前会多留一会儿并说明', page.includes('q.blobUrls.delete(N)},6e5)') && page.includes('el.textContent="（链接已失效，若没保存成功请再下一次）"') && !page.includes('q.blobUrls.delete(N)},6e4)'), 'ttl');
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
 ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件");jm=await fh.getFile()'), 'dir');
 ok('W81 合集进度也写到总状态', page.includes('let say=t=>{if(a)a.innerHTML=t;try{if(typeof bx0!="undefined"&&bx0&&bx0.cancel)return;let st=document.getElementById("batch-status")') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
