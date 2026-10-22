@@ -407,6 +407,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W103 重试没有状态时补上一句', page.includes('if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}'), 'retrymake');
   ok('W104 重试按钮写明哪些分开保存', page.includes('分开保存失败${bx0.failItems.length}集') && page.includes('重试失败${bx0.failItems.length}集，其中${bx0.failItems.filter(h=>h.noWasm).length}集分开保存') && page.includes(':`重试失败${bx0.failItems.length}集`'), 'retrybtn');
   ok('W105 重试这一轮再失败仍可再试', page.includes('if(bx0.failItems.length){let R2=') && !page.includes('if(!only&&bx0.failItems.length)'), 'retryagain');
+  ok('W106 还在下载时再点会说明', page.includes('if(bx0.running){try{let st=document.getElementById("batch-status");if(st)st.textContent=" 还在下载，这一轮结束后才能再试"}catch(_){}return}'), 'busy');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
