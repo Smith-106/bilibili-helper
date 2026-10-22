@@ -159,5 +159,6 @@
 - v3.0.146：小块有 `buffer.transfer` 时先挪走，失败才 `slice`。先挪视频再挪音频。合并仿真 88 项。
 - v3.0.147：`markHead` 从 4104 扩到 16408。16KB 之后的标记不当成加密。合并仿真 90 项。
 - v3.0.148：`Dx` 在 `Bx()` 之前写 `bh0`。没有合集就清掉。`bxD` 沿用 `q.bh0`。合并仿真仍是 90 项。
+- v3.0.149：用 `ReadableStream` 逐段 `enqueue`，送出后把 `owned[i]` 置空，再 `Response.blob()`。没有流时才 `new Blob(owned)`。合并仿真 91 项。
 
 [← 返回文档首页](./index.md)

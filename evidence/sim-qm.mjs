@@ -912,11 +912,12 @@ ok('W67 不报告剩余空间时也不再整份合成', tinyBlind == null && qM.
 delete globalThis.q;
 globalThis.performance = prevPerf;
 const videoDrop = page.indexOf('videoU=null;await new Promise(r=>setTimeout(r,0))');
-const audioDrop = page.indexOf('audioU=null;if(a)a.innerHTML="原件已放开，正在做成文件"', videoDrop);
-const blobAt = page.indexOf('try{jm=new Blob(owned', audioDrop);
+const audioDrop = page.indexOf('audioU=null;if(a)a.innerHTML="原件已放开，正在逐段做成文件', videoDrop);
+const blobAt = page.indexOf('owned[i]=null;i++;c.enqueue(p)', audioDrop);
 ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantParts') && videoDrop > 0 && audioDrop > videoDrop && blobAt > audioDrop && qM(video, audio) instanceof Blob, `v=${videoDrop} a=${audioDrop} b=${blobAt} ${qM.why || ''}`);
 const copyNote = page.indexOf('正在挪开原件，若卡住请点重试，重试会分开保存');
-ok('W69 复制和做成文件时说明进度', copyNote > 0 && copyNote < videoDrop && page.indexOf('原件已放开，正在做成文件', copyNote) > copyNote, `copy=${copyNote}`);
+ok('W69 复制和做成文件时说明进度', copyNote > 0 && copyNote < videoDrop && page.indexOf('原件已放开，正在逐段做成文件，若卡住请点重试，重试会分开保存', copyNote) > copyNote, `copy=${copyNote}`);
+ok('W71 逐段做成文件并放开已写入的一段', page.includes('else jm=new Blob(owned,{type:"video/mp4"})') && blobAt > audioDrop, `blob=${blobAt}`);
 ok('W70 能挪走时不再复制一份', page.indexOf('p.buffer.transfer') > 0 && page.indexOf('p.buffer.transfer') < videoDrop, `transfer=${page.indexOf('p.buffer.transfer')}`);
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
