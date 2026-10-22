@@ -872,6 +872,21 @@ let wireFailSave = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '047放', mk()); } catch (e) { wireFailSave = e; }
 ok('W61 整份下载失败会提示重试分开保存', wireFailSave !== null && String(wireFailSave.message).includes('点重试会分开保存') && merges === 0 && saved.length === 0, `${wireFailSave && wireFailSave.message} saved=${saved.length}`);
 q.failSave = false;
+cookieJar.clear();
+q.keepNow = true;
+cookieJar.set('bhxold', '*');
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireStar = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '048星', mk()); } catch (e) { wireStar = e; }
+ok('W62 上次还没写上名字就中断，这次分开保存', wireStar === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('上次在页面里放不下'), `${q.mergeNote} ${saved.length} ${wireStar && wireStar.message}`);
+q.keepNow = false;
+cookieJar.clear();
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
