@@ -1267,6 +1267,7 @@ mode = 'small';
   ok('W184 中断记录和数据库对得上时开头就写上', page.includes('bhx([^=]*)=([^;]*)') && page.includes('qRead().some(x=>x&&(x===name||x===bare||x==="#"+qHash(name)||x==="#"+qHash(bare)))') && page.includes('qDbRead().then(rows=>'), 'whydb');
   ok('W186 数据库晚到仍补上这一集', page.includes('cur.indexOf("正在处理 "+(seq+1)+"/")<0') && page.includes('if(tail&&tail!=="正在重试")return') && !page.includes('setTimeout(()=>r([]),400)'), 'whylate');
   ok('W187 顶部已经换掉时仍补到这一行', page.includes('let want=name,bare0=bare,seq=a,row=p') && page.includes('let line=row.querySelector(".b-st")') && page.includes('if(!t||t==="等待"||t==="正在重试"||t==="这次分开保存，不再合成")line.textContent=" "+why'), 'whyrowlate');
+  ok('W190 失败结果后面也补上', page.includes('else if(t.charAt(0)==="✘"&&t.indexOf(why)<0)line.textContent=" "+t+" ｜ "+why'), 'whyfail');
   ok('W188 还是当前这一集时顶部也补上', page.includes('row.classList.contains("b-cur")') && page.includes('if(/正在处理 \\d+\\//.test(cur)&&cur.indexOf("正在处理 "+(seq+1)+"/")<0)return'), 'whycur');
   ok('W189 两集之间顶部也补上', page.includes('let onThis=row&&row.classList&&row.classList.contains("b-cur"),other=document.querySelector(".b-cur");if(!onThis&&other&&other!==row)return'), 'whybetween');
   ok('W185 页面根上的名字开头就写上', page.includes('getAttribute("data-bh-opfs-for")||"";if(n&&(n===name||n===bare))earlyWhy="留下的文件已经不在，这次分开保存"') && page.includes('getAttribute("data-bh-nmskip")||"";if(n&&(n===name||n===bare))earlyWhy="这一集上次在页面里放不下，这次分开保存"') && page.includes('bhnmskip=([^;]*)/),n=m?decodeURIComponent(m[1]):"";if(n&&(n===name||n===bare))earlyWhy'), 'whyroot');
