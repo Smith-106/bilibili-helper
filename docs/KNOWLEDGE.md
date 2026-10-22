@@ -140,5 +140,6 @@
 - v3.0.127：有 `q.dir` 时 `qM.wantParts` 为真，返回各块而不是 `Blob`，再逐块 `write`。合并仿真 74 项。
 - v3.0.128：没有文件夹但有 `navigator.storage.getDirectory` 时也逐块写入临时目录，再 `getFile` 下载，两分钟后 `removeEntry`。失败才退回 `new Blob`。合并仿真 75 项。
 - v3.0.129：临时目录 `getFile` 成功后，以及文件夹 `close` 之后，执行 `videoU=null;audioU=null`，再下载。合并仿真 76 项。
+- v3.0.130：有文件夹或 `navigator.storage.getDirectory` 时，最后一份的进度是「正在写入，不再整份放在页面里」。否则仍是卡住请点重试。合并仿真 77 项。
 
 [← 返回文档首页](./index.md)
