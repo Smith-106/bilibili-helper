@@ -406,6 +406,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W102 普通失败的重试先写成正在重试', page.includes('st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"'), 'retryplain');
   ok('W103 重试没有状态时补上一句', page.includes('if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}'), 'retrymake');
   ok('W104 重试按钮写明哪些分开保存', page.includes('分开保存失败${bx0.failItems.length}集') && page.includes('重试失败${bx0.failItems.length}集，其中${bx0.failItems.filter(h=>h.noWasm).length}集分开保存') && page.includes(':`重试失败${bx0.failItems.length}集`'), 'retrybtn');
+  ok('W105 重试这一轮再失败仍可再试', page.includes('if(bx0.failItems.length){let R2=') && !page.includes('if(!only&&bx0.failItems.length)'), 'retryagain');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
