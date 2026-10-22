@@ -430,7 +430,8 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W127 浏览记录也没有时记进本地数据库', page.includes('indexedDB.open("bilibili_helper_retry",1)') && page.includes('.put(text,"retry")') && page.includes('.get("retry")') && page.includes('.delete("retry")') && page.includes('setTimeout(()=>fin(""),1500)'), 'retrynote8');
   ok('W128 没有本地数据库时写在页面根上', page.includes('document.documentElement.setAttribute("data-bh-retry",h.noWasm?"这次分开保存，不再合成":"正在重试")') && page.includes('getAttribute("data-bh-retry")') && page.includes('removeAttribute("data-bh-retry")') && page.includes('source:"bilibili-helper-retry"'), 'retrynote9');
   ok('W129 页面根和扩展都写不上时才弹窗', page.includes('catch(____________){try{alert(h.noWasm?"这次分开保存，不再合成":"正在重试")}catch(_____________){'), 'retrynote10');
-  ok('W130 弹窗也出不来时写进结果行', page.includes('q.retryLine=h.noWasm?"这次分开保存，不再合成":"正在重试"') && page.includes('if(q.retryLine){shown+="；"+q.retryLine;q.retryLine=""}') && page.includes('+(q.retryLine?"；"+q.retryLine:"")') && page.includes('${q.retryLine?"；"+esc(q.retryLine):""}'), 'retrynote11');
+  ok('W130 弹窗也出不来时写进结果行', page.includes('q.retryLine=h.noWasm?"这次分开保存，不再合成":"正在重试"') && page.includes('if(q.retryLine)shown+="；"+q.retryLine') && page.includes('+(q.retryLine?"；"+q.retryLine:"")') && page.includes('${q.retryLine?"；"+esc(q.retryLine):""}'), 'retrynote11');
+  ok('W131 结果行写不上时先记进失败记录', page.includes('try{bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`);q.retryLine=""}catch(_){}') && page.indexOf('bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`)') < page.indexOf('p.classList.add("b-fail")') && page.includes('if(q.retryLine){if(o)o.textContent=(o.textContent||"")+"；"+q.retryLine;else document.title=q.retryLine;q.retryLine=""}'), 'retrynote12');
   ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;
@@ -1205,7 +1206,7 @@ mode = 'small';
   ok('W88 已经送出的音频段还能拼回来', page.includes('if(i>=cut)kept.push(p)') && page.includes('for(let k=0;k<kept.length;k++)if(kept[k])rest.push(kept[k])') && page.includes('}).blob();kept=null'), 'kept');
   ok('W89 视频段不再留一份引用', page.includes('if(i>=cut)kept.push(p)') && page.includes('if(i===cut)say("视频段已放开，正在送音频")') && page.indexOf('kept.push(p)') === page.indexOf('if(i>=cut)kept.push(p)') + 'if(i>=cut)'.length, 'novid');
   ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
-  ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('q.mergeSaves=null,bx0.failLog.push') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
+  ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`)') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
   ok('W93 链接失效前会多留一会儿并说明', page.includes('q.blobUrls.delete(N)},6e5)') && page.includes('el.textContent="（链接已失效，若没保存成功请再下一次）"') && !page.includes('q.blobUrls.delete(N)},6e4)'), 'ttl');
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
