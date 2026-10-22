@@ -334,7 +334,7 @@ var bxD=async(e,t,P,only)=>{
       p.classList.add("b-cur"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">等待</span>`,r.appendChild(p);
       r.scrollTop+r.clientHeight>=r.scrollHeight-60&&(r.scrollTop=r.scrollHeight);
       if(u&&u.checked&&bx5(P).includes(h.cid)){Q2++,p.classList.add("b-skip"),p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">↷ 上次已下载，跳过</span>`,o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;continue}
-      o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`,bx0.lastStatus=o.textContent;
+      o.textContent=` 正在处理 ${a+1}/${F0.length}（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}）剩约${Math.max(1,Math.round((F0.length-a-1)*dv*1.25/60))}分`+(h.noWasm?" ｜ 这次分开保存，不再合成":(only?" ｜ 正在重试":"")),bx0.lastStatus=o.textContent;
       let N=await d0(h.aid,h.bvid,h.cid,n);
       if(N.code!==E.OK){let w=N.code===E.VIP_ONLY?"（该集为充电/大会员专属，请确认已登录并已充电）":"";throw new Error((N.message||"获取下载地址失败")+w)}
       if(N.dash){
