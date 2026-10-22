@@ -440,6 +440,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W207 等待下一集时仍留着这句说明', page.includes('q.sharedShort=(shared?"有"+shared+"个短名字别的集也在用') && page.includes('+(q.sharedShort?" ｜ "+q.sharedShort:"")'), 'partwait');
   ok('W209 短名字少了会改数字或去掉', page.includes('if(owners>=2)shared++;else if(owners===1)alone++') && page.includes('有\\d+个短名字别的集也在用'), 'partless');
   ok('W210 只属于一集的短链接也会说明', page.includes('有"+alone+"个短链接只属于一集但仍留在页面上，请到对应那一行保存'), 'partalone');
+  ok('W211 对不上任何一集的短链接也会说明', page.includes('有"+other+"个短链接对不上任何一集，请先点保存') && page.includes('indexOf("blob:")===0)other++'), 'partother');
   ok('W208 完成或取消时仍留着这句说明', page.includes('已取消（成功${Q0}${Qs?" 分开"+Qs:""} 跳过${Q2} 失败${Q1}，${es}）`+(q.sharedShort?" ｜ "+q.sharedShort:"")') && page.includes('，其中分开保存的是视频和音频两个文件":"")+(q.sharedShort?" ｜ "+q.sharedShort:"")'), 'partdone');
   ok('W197 顿号书名号分开的一段也放开', page.includes('split(/[^\\p{L}\\p{N}]+/u)'), 'partbook');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
