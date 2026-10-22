@@ -1230,6 +1230,7 @@ mode = 'small';
   ok('W87 停在音频第一段时这段还没送出', page.includes('if(made<=cut)') && !page.includes('if(oom&&made<cut)'), 'edge');
   ok('W88 已经送出的音频段还能拼回来', page.includes('if(i>=cut)kept.push(p)') && page.includes('for(let k=0;k<kept.length;k++)if(kept[k])rest.push(kept[k])') && page.includes('}).blob();kept=null'), 'kept');
   ok('W89 视频段不再留一份引用', page.includes('if(i>=cut)kept.push(p)') && page.includes('if(i===cut)say("视频段已放开，正在送音频")') && page.indexOf('kept.push(p)') === page.indexOf('if(i>=cut)kept.push(p)') + 'if(i>=cut)'.length, 'novid');
+  ok('W150 页面过半就不再留着音频段', page.includes('if(m2&&m2.jsHeapSizeLimit&&m2.usedJSHeapSize>m2.jsHeapSizeLimit*0.5){kept.length=0') && page.includes('owned[j].buffer===p.buffer)shared=!0') && page.includes('p=new Uint8Array(nb,off,len)'), 'dropkept');
   ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
   ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`)') && page.includes('textContent="保存 "+s.name+"（请尽早点保存，链接大约十分钟后失效）",el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
