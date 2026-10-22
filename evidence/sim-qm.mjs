@@ -806,6 +806,22 @@ globalThis.Blob = function BoomBlob() { throw new Error('Invalid typed array len
 const boom = qM(video, audio);
 globalThis.Blob = RealBlob;
 ok('W56 做成文件失败也说页面放不下', boom == null && qM.why === '合并时页面放不下', qM.why || '');
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+const dirChunks = [];
+q.dir = { getFileHandle: async () => ({ createWritable: async () => ({ write: async (p) => { dirChunks.push(p); }, close: async () => {} }) }) };
+let wireDirMerge = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '044夹', mk()); } catch (e) { wireDirMerge = e; }
+const dirHead = dirChunks[0] && dirChunks[0][4] === 102 && dirChunks[0][5] === 116 && dirChunks[0][6] === 121 && dirChunks[0][7] === 112;
+ok('W57 选了文件夹就直接写入不再做整份', wireDirMerge === null && merges === 0 && saved.length === 0 && dirChunks.length > 1 && dirHead && q.dirNote === '已写入所选文件夹', `chunks=${dirChunks.length} saved=${saved.length} note=${q.dirNote} ${wireDirMerge && wireDirMerge.message}`);
+q.dir = null;
+q.dirNote = '';
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
