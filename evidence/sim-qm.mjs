@@ -244,6 +244,12 @@ if (em) {
   eofCovered = o === em.length && eofWalk >= 4;
 }
 ok('F5 长度到文件尾的数据块合并后仍能分开音视频', !!em && eofCovered && findAscii(em, 'VIDE') >= 0 && findAscii(em, 'AUDI') >= 0, `walk=${eofWalk} covered=${eofCovered} ${qM.why || ''}`);
+{
+  const multiV = cat(ftyp(), box('moov', cat(mvhd(), trak(1, 0), trak(2, 0))), box('mdat', new Uint8Array([1])));
+  const multiA = basic(1, new Uint8Array([2]), 80);
+  const multi = qM(multiV, multiA);
+  ok('F6 不止一条轨道时说明原因', multi == null && qM.why === '视频不止一条轨道', qM.why || '');
+}
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
 ok('N2 一个分片一个普通不硬合', qM(video, fa) === null);
 
