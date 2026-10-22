@@ -259,5 +259,6 @@
 - v3.0.246：再写入 IndexedDB `bilibili_helper_opfs`。读取放在 `bhnmnow` 之后，避免挡住记住。1.5 秒超时。合并仿真 185 项。
 - v3.0.247：留下文件名时立刻 `postMessage`，`pagehide` 再交一次。扩展写入 `bhOpfs`，启动时放回 `data-bh-opfs`。合并仿真 186 项。
 - v3.0.248：`q.opfsKept` 记下后，失败提示改为再取留下的那份，不再说成分开保存。`t0` 开头清掉这个标记。合并仿真 187 项。
+- v3.0.249：取回成功后 `opfsForget` 清掉 `bilibili_helper_nomerge` 和 `bhnmnow`，再交给保存。合并仿真 188 项。
 
 [← 返回文档首页](./index.md)
