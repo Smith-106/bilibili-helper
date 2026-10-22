@@ -887,6 +887,15 @@ try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-ur
 ok('W62 上次还没写上名字就中断，这次分开保存', wireStar === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('上次在页面里放不下'), `${q.mergeNote} ${saved.length} ${wireStar && wireStar.message}`);
 q.keepNow = false;
 cookieJar.clear();
+const wide = (tag, n) => { const payload = new Uint8Array(n); payload.set(new TextEncoder().encode(tag)); const moov0 = box('moov', cat(mvhd(), trak(1, 0))); const off = ftyp().length + moov0.length + 8; return cat(ftyp(), box('moov', cat(mvhd(), trak(1, off))), box('mdat', payload)); };
+globalThis.performance = {};
+q.mergeHold = 48000;
+globalThis.q = q;
+const tighter = qM(wide('VIDE', 2000), wide('AUDI', 2000));
+ok('W63 不报告剩余空间时八分之一以上也分开', tighter == null && qM.why === '合成结果放不下', qM.why || '');
+delete q.mergeHold;
+delete globalThis.q;
+globalThis.performance = prevPerf;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
