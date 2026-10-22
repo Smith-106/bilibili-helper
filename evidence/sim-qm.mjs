@@ -290,7 +290,7 @@ const rowA = list1.children[0] && list1.children[0].children[0] && list1.childre
 const rowV = list1.children[1] && list1.children[1].children[0] && list1.children[1].children[0].textContent;
 ok('W1 页面内合并成功则不进wasm', wireErr === null && merges === 0 && saved.length === 1 && saved[0].startsWith('006_课.mp4:') && saved[0].endsWith(':true'), `merges=${merges} ${saved.join('|')} ${wireErr && wireErr.message}`);
 ok('W0 音视频排队下载不同时占两份小块', maxInflight === 1, `max=${maxInflight}`);
-ok('W6 先下完的那份不再写成等待合并', rowA.includes('正在下另一份') && !String(rowA).includes('等待合并') && rowV.includes('正在合并'), `${rowA} || ${rowV}`);
+ok('W6 先下完的那份不再写成等待合并', rowA.includes('正在下另一份') && !String(rowA).includes('等待合并') && rowV.includes('正在合并') && rowV.includes('重试会分开保存'), `${rowA} || ${rowV}`);
 saved.length = 0;
 q.jsMergeMax = 10;
 q.mergeNote = '';
