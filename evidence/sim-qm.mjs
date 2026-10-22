@@ -931,7 +931,7 @@ ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
 const batchMarkAt = page.indexOf('let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")', batchLoopAt);
 const batchRelAt = page.indexOf('qRel()', batchMarkAt);
-const armAt = page.indexOf('let held="",arm=ev=>{if(ev&&ev.button)return;if(bx0.running||q.bh0)return;let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")');
+const armAt = page.indexOf('let held="",arm=ev=>{if(ev&&ev.button)return;if(bx0.running||q.bh0)return;try{document.cookie="bhnmpend="+encodeURIComponent("*")');
 const downAt = page.indexOf('addEventListener("pointerdown",arm)', armAt);
 const dxCall = page.indexOf('Dx(e)', downAt);
 const bxCall = page.indexOf('let t=Bx()', dxCall);
@@ -942,7 +942,7 @@ const notedAt = page.indexOf('已记下，若这次卡住，下次会分开保�
 ok('W72 找合集之前就说明下次会分开', notedAt > armAt && notedAt < downAt, `note=${notedAt}`);
 const upAt = page.indexOf('addEventListener("pointerup",drop)', downAt);
 const cancelAt = page.indexOf('addEventListener("pointercancel",drop)', upAt);
-ok('W73 没点中就清掉这次标记', upAt > downAt && cancelAt > upAt && page.indexOf('q.bh0!==held)return;try{document.cookie="bhx"+held+"=;path=/;max-age=0"}', armAt) > armAt && page.indexOf('held="";Dx(e)', cancelAt) > cancelAt, `up=${upAt} cancel=${cancelAt}`);
+ok('W73 没点中就清掉这次标记', upAt > downAt && cancelAt > upAt && page.indexOf('q.bh0!==held)return;try{document.cookie="bhnmpend=;path=/;max-age=0"}catch(_){}try{document.cookie="bhx"+held+"=;path=/;max-age=0"}', armAt) > armAt && page.indexOf('held="";Dx(e)', cancelAt) > cancelAt, `up=${upAt} cancel=${cancelAt}`);
 cookieJar.clear();
 q.keepNow = true;
 cookieJar.set('bhxold', '*');
@@ -1162,6 +1162,23 @@ ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.incl
 ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件");jm=await fh.getFile()'), 'dir');
 ok('W81 合集进度也写到总状态', page.includes('let say=t=>{if(a)a.innerHTML=t;try{if(typeof bx0!="undefined"&&bx0&&bx0.cancel)return;let st=document.getElementById("batch-status")') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
 ok('W82 取回文件前先放开音频', page.includes('原件已放开，正在取回文件') && page.indexOf('jm=await fh.getFile()') > page.indexOf('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件")'), 'getfile');
+cookieJar.clear();
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+cookieJar.set('bhnmpend', '*');
+let wirePend = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '049笔', mk()); } catch (e) { wirePend = e; }
+const pendSaved = saved.length, pendNote = q.mergeNote, pendLeft = cookieJar.has('bhnmpend');
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+cookieJar.clear();
+delete q.noMerge;
+ok('W83 按下的第一句就先记一笔', page.includes('bhnmpend="+encodeURIComponent("*")') && page.includes('bhnmpend=;path=/;max-age=0') && page.includes('(?:^|; )bhnmpend=\\*') && page.indexOf('bhnmpend="+encodeURIComponent("*")') < page.indexOf('bhx"+bh0+"="+encodeURIComponent("*")') && wirePend === null && pendSaved === 2 && !pendLeft && pendNote.includes('上次在页面里放不下'), `${pendNote} ${pendSaved} ${pendLeft} ${wirePend && wirePend.message}`);
 }
 mode = 'big';
 q.mergeNote = '';

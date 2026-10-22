@@ -175,5 +175,6 @@
 - v3.0.162：文件夹和 OPFS 按段写入。到 `vCut` 就 `videoU=null`，写完再 `audioU=null`。合并仿真 101 项。
 - v3.0.163：`say` 同时写这一集和 `#batch-status`。`bx0.cancel` 时不盖总状态。合并仿真 102 项。
 - v3.0.164：OPFS `getFile` 之前先 `audioU=null` 并让出。状态是「原件已放开，正在取回文件」。合并仿真 103 项。
+- v3.0.165：`pointerdown` 先写 `bhnmpend=*`，正式 `bhx` 写好后擦掉。下次扫描到它就分开，并只清这一笔。合并仿真 104 项。
 
 [← 返回文档首页](./index.md)
