@@ -267,5 +267,6 @@
 - v3.0.254：集名写入 `bilibili_helper_opfs_for` 和 cookie `bhopfsfor`。重新打开先读回来。合并仿真 193 项。
 - v3.0.255：三处都写不上时把集名交给扩展，键名 `bhOpfsFor`，启动时放回 `data-bh-opfs-for`。合并仿真 194 项。
 - v3.0.256：分开保存的进度和记录优先写 `q.mergeWhy`。没有原因时仍说两份太大。合并仿真 195 项。
+- v3.0.257：进度回调里把 `q.mergeWhy` 写到批量行的 `.b-st`。合并仿真 196 项。
 
 [← 返回文档首页](./index.md)
