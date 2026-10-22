@@ -858,8 +858,8 @@ try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-ur
 ok('W58 没选文件夹也先写入临时目录', wireOpfs === null && merges === 0 && saved.length === 1 && saved[0].includes('045临.mp4') && opfsChunks.length > 1 && blobNews === 0, `chunks=${opfsChunks.length} blobs=${blobNews} ${saved.join('|')} ${wireOpfs && wireOpfs.message}`);
 globalThis.Blob = BlobNow;
 if (prevStorage) globalThis.navigator.storage = prevStorage; else delete globalThis.navigator.storage;
-const droppedAt = page.indexOf('fh.getFile();videoU=null;audioU=null');
-ok('W59 写完就放开两份原件', droppedAt > 0 && page.indexOf('a0(jm', droppedAt) > droppedAt, `at=${droppedAt}`);
+const droppedAt = page.indexOf('fh.getFile();audioU=null');
+ok('W59 写完就放开两份原件', droppedAt > 0 && page.indexOf('if(i+1===cut){videoU=null') > 0 && page.indexOf('if(i+1===cut){videoU=null') < droppedAt && page.indexOf('a0(jm', droppedAt) > droppedAt, `at=${droppedAt}`);
 const writeChunks = [];
 globalThis.navigator.storage = { getDirectory: async () => ({ getFileHandle: async () => ({ createWritable: async () => ({ write: async (p) => { writeChunks.push(p); }, close: async () => {} }), getFile: async () => new Blob(writeChunks, { type: 'video/mp4' }) }), removeEntry: async () => {} }) };
 cookieJar.clear();
@@ -1159,6 +1159,7 @@ mode = 'small';
   const full = bxShown(new Error('合并时页面放不下，点重试会分开保存'));
   ok('W78 页面放不下的失败重试会直接分开', full.oom === true && full.shown.includes('不再进 ffmpeg') && !full.shown.includes('合并时页面放不下'), full.shown);
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
+ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('fh.getFile();audioU=null'), 'dir');
 }
 mode = 'big';
 q.mergeNote = '';
