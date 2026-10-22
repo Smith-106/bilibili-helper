@@ -250,5 +250,6 @@
 - v3.0.237：内存里的逐段结果没有临时文件时，`owned` 超过 4MB 或已用超过一半就抛出 `out of memory`。没有 `ReadableStream` 时仍 `new Blob(owned)`。合并仿真 176 项。
 - v3.0.238：没有 `ReadableStream` 时，`owned` 超过 4MB 或已用超过一半也抛出 `out of memory`，更小的仍 `new Blob(owned)`。合并仿真 177 项。
 - v3.0.239：单集 `pointerdown` 写 `bhx{id}=*`，点击沿用 `q.oneId`。松手不在链接上或 `pointercancel` 会清掉。合并仿真 178 项。
+- v3.0.240：不报告剩余空间时，无名链接即使不到 128MB 也在下一轮放开。有名字的仍留着。页面未过半时，还能点的无名链接仍留着。合并仿真 179 项。
 
 [← 返回文档首页](./index.md)
