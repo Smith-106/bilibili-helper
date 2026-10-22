@@ -416,7 +416,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W103 重试没有状态时补上一句', page.includes('if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}'), 'retrymake');
   ok('W104 重试按钮写明哪些分开保存', page.includes('分开保存失败${bx0.failItems.length}集') && page.includes('重试失败${bx0.failItems.length}集，其中${bx0.failItems.filter(h=>h.noWasm).length}集分开保存') && page.includes(':`重试失败${bx0.failItems.length}集`'), 'retrybtn');
   ok('W105 重试这一轮再失败仍可再试', page.includes('if(bx0.failItems.length){let R2=') && !page.includes('if(!only&&bx0.failItems.length)'), 'retryagain');
-  ok('W106 还在下载时再点会说明', page.includes('if(st)st.textContent=" 还在下载，这一轮结束后才能再试"') && page.includes('if(bx0.running){try{let st=document.getElementById("batch-status")'), 'busy');
+  ok('W106 还在下载时再点会说明', page.includes('let msg="还在下载，这一轮结束后才能再试"') && page.includes('if(bx0.running){try{let st=document.getElementById("batch-status")'), 'busy');
   ok('W107 没有总状态时改按钮上的字', page.includes('a.btn-ghost') && page.includes('b.textContent="还在下载，结束后才能再试"'), 'busybtn');
   ok('W108 这一轮结束时改回按钮上的字', page.includes('if(b.textContent!=="还在下载，结束后才能再试")b.dataset.was=b.textContent') && page.includes('el.textContent=el.dataset.was;delete el.dataset.was'), 'busyback');
   ok('W109 重试前页面较满先放开上一轮', page.includes('if(only&&only.length){let tight=!0;try{let m=performance&&performance.memory;if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5}catch(_){}if(tight){try{q.rel()}catch(_){}if(o)o.textContent=" 页面较满，重试前先放开上一轮的链接"}}'), 'retryrel');
@@ -1260,6 +1260,7 @@ mode = 'small';
   ok('W177 中途改了原因马上写到这一行', page.includes('Object.defineProperty(q,"mergeWhy"') && page.includes('set(v){mergeWhyBox=v||"";try{if(mergeWhyBox&&i&&i.querySelector){let st=i.querySelector(".b-st");if(st)st.textContent=" "+mergeWhyBox}'), 'whyset');
   ok('W178 顶部正在处理也写上原因', page.includes('i.classList.contains("b-cur")&&!i.querySelector(".b-st")') && page.includes('getElementById("batch-status")') && page.includes('indexOf(" ｜ ")') && page.includes('base.trim()+" ｜ "'), 'whytop');
   ok('W179 别的提示换掉顶部时留下原因', page.includes('if(q.mergeWhy&&msg.indexOf(q.mergeWhy)<0&&msg.indexOf(" ｜ ")<0)msg=(msg.trim()?msg.trim()+" ｜ ":"")+q.mergeWhy') && page.includes('if(q.mergeWhy&&msg.indexOf(q.mergeWhy)<0)msg+=" ｜ "+q.mergeWhy'), 'whykeep');
+  ok('W180 再点或取消时也留下原因', page.includes('let msg="还在下载，这一轮结束后才能再试";try{if(q.mergeWhy&&msg.indexOf(q.mergeWhy)<0)msg+=" ｜ "+q.mergeWhy}') && page.includes('let msg="已请求取消，当前集完成后停止";try{if(q.mergeWhy&&msg.indexOf(q.mergeWhy)<0)msg+=" ｜ "+q.mergeWhy}'), 'whybusy');
   ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
   ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`)') && page.includes('textContent="保存 "+s.name+"（请尽早点保存，链接大约十分钟后失效）",el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
