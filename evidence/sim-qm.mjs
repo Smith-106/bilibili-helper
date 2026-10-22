@@ -1156,6 +1156,8 @@ mode = 'small';
   ok('W16 要选文件夹时不再说成ffmpeg失败', folder.oom === true && folder.shown.includes('点重试会先请你选择文件夹') && wasm.shown.includes('不再进 ffmpeg') && plain.shown === '下载请求失败(403)' && lost.shown.includes('重新下载') && !lost.shown.includes('不再进 ffmpeg') && dead.shown === '文件夹权限失效，点重试会重新选择', `${folder.shown} | ${wasm.shown} | ${lost.shown} | ${dead.shown}`);
   const alloc = bxShown(new Error('Array buffer allocation failed'));
   ok('W26 分配失败也说成分开保存，不再显示英文', alloc.oom === true && alloc.shown.includes('不再进 ffmpeg') && !alloc.shown.includes('allocation'), alloc.shown);
+  const full = bxShown(new Error('合并时页面放不下，点重试会分开保存'));
+  ok('W78 页面放不下的失败重试会直接分开', full.oom === true && full.shown.includes('不再进 ffmpeg') && !full.shown.includes('合并时页面放不下'), full.shown);
 }
 mode = 'big';
 q.mergeNote = '';

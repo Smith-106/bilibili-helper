@@ -170,5 +170,6 @@
 - v3.0.157：没有 `jsHeapSizeLimit` 时，`sent` 超过 `mergeHold` 或 `holdMax` 的十六分之一就停。都没设则 8MB。合并仿真 97 项。
 - v3.0.158：每一段送出前看 `used+n` 或 `sent+n`。不满 8 段也会停。合并仿真仍是 97 项。
 - v3.0.159：OPFS 写入失败不再 `slice` 后一次 `new Blob`。按 `vCut` 逐段送出，视频送完置 `videoU=null`。合并仿真 98 项。
+- v3.0.160：`bxShown` 把「合并时页面放不下」算作内存失败。重试会设 `noWasm`，直接分开保存。合并仿真 99 项。
 
 [← 返回文档首页](./index.md)
