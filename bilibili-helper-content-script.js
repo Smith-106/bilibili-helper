@@ -319,8 +319,9 @@ var bxD=async(e,t,P,only)=>{
   let s=new Set(q.blobUrls);
   for(let a=0;a<F0.length;a++){
     if(bx0.cancel)break;
+    let bh=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
     qRel();try{r.querySelectorAll('a[href^="blob:"]').forEach(el=>{el.removeAttribute("href");el.textContent="已交给浏览器，链接已释放"})}catch(_){}
-    q.dirNote="";let h=F0[a],m=bx1(h.title),p=document.createElement("li"),bh=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
+    q.dirNote="";let h=F0[a],m=bx1(h.title),p=document.createElement("li");
     try{
       if(!h.cid||h.chk){
         let pg=await(await window.fetch("https://api.bilibili.com/x/player/pagelist?bvid="+h.bvid,V)).json();
