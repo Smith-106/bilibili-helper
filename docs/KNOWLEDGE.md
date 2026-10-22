@@ -221,5 +221,6 @@
 - v3.0.208：cookie 和 `window.name` 也失败时，`history.replaceState` 把说明放进 `history.state.bhretry`。显示后删掉该字段。合并仿真 147 项。
 - v3.0.209：浏览记录也失败时，写入 IndexedDB `bilibili_helper_retry` 的 `retry`。下次最多等 1.5 秒。显示后删除。合并仿真 148 项。
 - v3.0.210：没有 IndexedDB 时写 `data-bh-retry`。页面写不了就 `postMessage`，由种子脚本代写。显示后清掉。合并仿真 149 项。
+- v3.0.211：页面根和 `postMessage` 都失败时才 `alert`。前面任一处成功都不会弹。合并仿真 150 项。
 
 [← 返回文档首页](./index.md)
