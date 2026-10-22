@@ -261,5 +261,6 @@
 - v3.0.248：`q.opfsKept` 记下后，失败提示改为再取留下的那份，不再说成分开保存。`t0` 开头清掉这个标记。合并仿真 187 项。
 - v3.0.249：取回成功后 `opfsForget` 清掉 `bilibili_helper_nomerge` 和 `bhnmnow`，再交给保存。合并仿真 188 项。
 - v3.0.250：数据库删除最多等 1.5 秒。超时写入 `bilibili_helper_nomerge_skip`，读取时不再因为旧名单拆开。合并仿真 189 项。
+- v3.0.251：跳过名单同时写入 localStorage，短集名再写入 cookie `bhnmskip`。读取顺序是 session、local、cookie。合并仿真 190 项。
 
 [← 返回文档首页](./index.md)
