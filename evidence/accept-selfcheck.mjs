@@ -1,9 +1,9 @@
-// accept-selfcheck.mjs — v3.0.140 单命令自验收(零网络, 确定性):
+// accept-selfcheck.mjs — v3.0.141 单命令自验收(零网络, 确定性):
 //   node evidence/accept-selfcheck.mjs  →  exit 0 全过 / exit 1 任一失败
 // 覆盖 Goal R1/R2/R3:
 //   R1: 主脚本含 window.confirm + cached||partial 条件 + 取消停手复位分支 + H 自定义元素幂等(get判重+try/catch)
 //   R2: node --check + mod-parse-check + verify-u1-bxd.mjs(102✓, 含D1-D6仿真门+A66–A72) + acceptance.mjs(16OK) + A24–A72/B6–B13/D1–D6断言行
-//   R3: manifest 3.0.140 + harness跑后还原verify-report(工作树干净由git负责)
+//   R3: manifest 3.0.141 + harness跑后还原verify-report(工作树干净由git负责)
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 let bad = 0;
@@ -121,11 +121,11 @@ ck("R2 A57 assertion source", h.includes("ok('A57 side-bar移除main撑满"));
 NEW.forEach(l => ck('R2 ' + l.split(' ')[0] + ' assertion source', h.includes("ok('" + l)));
 // R3 version sync
 const mf = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
-ck('R3 manifest 3.0.140', mf.version === '3.0.140', 'got=' + mf.version);
+ck('R3 manifest 3.0.141', mf.version === '3.0.141', 'got=' + mf.version);
 const rm = fs.readFileSync('README.md', 'utf8');
-ck('R3 README 3.0.140', rm.includes('`3.0.140`'));
+ck('R3 README 3.0.141', rm.includes('`3.0.141`'));
 const cl = fs.readFileSync('CHANGELOG.md', 'utf8');
-ck('R3 CHANGELOG 3.0.140', cl.includes('## [3.0.140]'));
+ck('R3 CHANGELOG 3.0.141', cl.includes('## [3.0.141]'));
 // restore harness side-effect
 try { execSync('git checkout -- evidence/verify-report.json', { stdio: 'pipe' }); } catch (_) {}
 console.log(bad === 0 ? 'SELFCHECK-ALL-PASS' : `SELFCHECK-FAIL n=${bad}`);

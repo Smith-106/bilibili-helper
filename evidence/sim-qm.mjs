@@ -4,6 +4,7 @@ const page = readFileSync(new URL('../bilibili-helper-content-script.js', import
 const qi = page.indexOf('qM=(v,a)=>');
 const qj = page.indexOf(',t0=async', qi);
 const qM = new Function(page.slice(qi, qj) + '\nreturn qM;')();
+globalThis.performance = { memory: { usedJSHeapSize: 1, jsHeapSizeLimit: 1024 * 1024 * 1024 } };
 
 const fail = [];
 const ok = (name, cond, extra) => {
@@ -897,6 +898,8 @@ globalThis.q = q;
 const tighter = qM(wide('VIDE', 2000), wide('AUDI', 2000));
 ok('W63 不报告剩余空间时十六分之一以上也分开', tighter == null && qM.why === '浏览器没报告剩余空间，不再整份合成', qM.why || '');
 delete q.mergeHold;
+const tinyBlind = qM(video, audio);
+ok('W67 不报告剩余空间时也不再整份合成', tinyBlind == null && qM.why === '浏览器没报告剩余空间，不再整份合成', qM.why || '');
 delete globalThis.q;
 globalThis.performance = prevPerf;
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
@@ -982,6 +985,7 @@ let wireMark = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '018g_课', mk()); } catch (e) { wireMark = e; }
 const kept = String(keepStore.bilibili_helper_nomerge || '').includes('018g_课');
 mode = 'small';
+globalThis.performance = { memory: { usedJSHeapSize: 1, jsHeapSizeLimit: 1024 * 1024 * 1024 } };
 delete q.noMerge;
 q.mergeWhy = '';
 q.mergeNote = '';
@@ -1010,6 +1014,7 @@ delete globalThis.sessionStorage;
 const earlyStore = {};
 globalThis.sessionStorage = { getItem: (k) => (k in earlyStore ? earlyStore[k] : null), setItem: (k, v) => { earlyStore[k] = String(v); }, removeItem: (k) => { delete earlyStore[k]; } };
 delete q.noMerge;
+globalThis.performance = { memory: { usedJSHeapSize: 1, jsHeapSizeLimit: 1024 * 1024 * 1024 } };
 q.watchMark = '019_课';
 q.mergeWhy = '';
 q.mergeNote = '';
