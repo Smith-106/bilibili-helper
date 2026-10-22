@@ -444,6 +444,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W140 重试时不是 blob 的链接也先放开', page.includes('if(!href)return;if(href.indexOf("blob:")===0)') && page.indexOf('if(!href)return;if(href.indexOf("blob:")===0)') < page.indexOf('el.textContent="这一集重试前已放开，若没保存成功请再下一次"'), 'noblob');
   ok('W141 文件名只有集名时重试也会放开', page.includes('p.querySelectorAll("a[href]")') && page.includes('name===String(m)||name.slice(-String(m).length-1)==="_"+m') && page.includes('nm===String(m)||nm.slice(-String(m).length-1)==="_"+m'), 'namematch');
   ok('W142 链接放开前两分钟先提醒保存', page.includes('if(el.getAttribute("href")===N&&String(el.textContent||"").indexOf("请先保存")<0)el.textContent=el.textContent+"（约两分钟后失效，请先保存）"') && page.includes('if(el.getAttribute("href")===V&&String(el.textContent||"").indexOf("请先保存")<0)el.textContent=el.textContent+"（约两分钟后失效，请先保存）"') && page.includes('},48e4);setTimeout') && page.includes('q.blobUrls.delete(N)},6e5)') && page.includes('q.blobUrls.delete(V)},6e5)'), 'warnsave');
+  ok('W143 回到页面时按已过去的时间补提醒', page.includes('if(!q.pokeBlobs)') && page.includes('addEventListener("visibilitychange",()=>{if(document.hidden)return;q.pokeBlobs()})') && page.includes('(q.blobAt||(q.blobAt={}))[N]=Date.now()') && page.includes('(q.blobAt||(q.blobAt={}))[V]=Date.now()'), 'pokeblobs');
   ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;
