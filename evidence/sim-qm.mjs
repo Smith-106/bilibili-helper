@@ -822,6 +822,25 @@ const dirHead = dirChunks[0] && dirChunks[0][4] === 102 && dirChunks[0][5] === 1
 ok('W57 选了文件夹就直接写入不再做整份', wireDirMerge === null && merges === 0 && saved.length === 0 && dirChunks.length > 1 && dirHead && q.dirNote === '已写入所选文件夹', `chunks=${dirChunks.length} saved=${saved.length} note=${q.dirNote} ${wireDirMerge && wireDirMerge.message}`);
 q.dir = null;
 q.dirNote = '';
+const opfsChunks = [];
+let blobNews = 0;
+const BlobNow = globalThis.Blob;
+globalThis.Blob = class extends BlobNow { constructor(...args) { super(...args); blobNews++; } };
+const prevStorage = globalThis.navigator && globalThis.navigator.storage;
+globalThis.navigator.storage = { getDirectory: async () => ({ getFileHandle: async () => ({ createWritable: async () => ({ write: async (p) => { opfsChunks.push(p); }, close: async () => {} }), getFile: async () => new BlobNow(opfsChunks, { type: 'video/mp4' }) }), removeEntry: async () => {} }) };
+cookieJar.clear();
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireOpfs = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '045临', mk()); } catch (e) { wireOpfs = e; }
+ok('W58 没选文件夹也先写入临时目录', wireOpfs === null && merges === 0 && saved.length === 1 && saved[0].includes('045临.mp4') && opfsChunks.length > 1 && blobNews === 0, `chunks=${opfsChunks.length} blobs=${blobNews} ${saved.join('|')} ${wireOpfs && wireOpfs.message}`);
+globalThis.Blob = BlobNow;
+if (prevStorage) globalThis.navigator.storage = prevStorage; else delete globalThis.navigator.storage;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
