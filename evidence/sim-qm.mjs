@@ -426,8 +426,9 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W192 集名被截断时重试也放开', page.includes('||(!!m&&((stem,raw)=>stem.length>=4&&(String(m).indexOf(stem)===0||String(m).slice(-stem.length)===stem)'), 'partname');
   ok('W193 集名后半段重试也放开', page.includes('String(m).slice(-stem.length)===stem)||stem.length>=2&&String(raw||"").indexOf(String(a+1).padStart(3,"0")+"_")>=0'), 'partsuf');
   ok('W194 集名中间一段重试也放开', page.includes('||stem.length>=6&&String(m).indexOf(stem)>=0||stem.length>=4&&String(raw||"").indexOf(String(a+1).padStart(3,"0")+"_")>=0&&String(m).indexOf(stem)>=0'), 'partmid');
-  ok('W195 短集名或完整一段重试也放开', page.includes('||stem.length>=1&&String(m)===stem||stem.length>=4&&String(m).split(/[_\\s·・:：—–\\/／-]+/).indexOf(stem)>=0'), 'partshort');
-  ok('W196 间隔号冒号横线分开的一段也放开', page.includes('split(/[_\\s·・:：—–\\/／-]+/)'), 'partpunct');
+  ok('W195 短集名或完整一段重试也放开', page.includes('||stem.length>=1&&String(m)===stem||stem.length>=4&&String(m).split(/[_\\s·・:：—–\\/／、《》〈〉「」『』【】［］()（）-]+/).indexOf(stem)>=0'), 'partshort');
+  ok('W196 间隔号冒号横线分开的一段也放开', page.includes('split(/[_\\s·・:：—–\\/／、《》〈〉「」『』【】［］()（）-]+/)'), 'partpunct');
+  ok('W197 顿号书名号分开的一段也放开', page.includes('、《》〈〉「」『』【】'), 'partbook');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
   ok('W114 单集也记下名字', page.includes('q.saveAs=K||"单集"') && page.includes('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})'), 'onesave');
   ok('W115 没有名字也点不了的旧链接会放开', page.includes('没有名字也点不了的旧链接已放开') && page.includes('document.querySelectorAll("a[href]")'), 'orphan');
