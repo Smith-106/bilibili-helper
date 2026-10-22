@@ -896,7 +896,8 @@ ok('W63 不报告剩余空间时八分之一以上也分开', tighter == null &&
 delete q.mergeHold;
 delete globalThis.q;
 globalThis.performance = prevPerf;
-ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a)=>{let id=Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
+ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
+ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 3, 'calls=' + (page.split('catch(_){}return id})()').length - 1));
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
