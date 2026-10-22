@@ -244,5 +244,6 @@
 - v3.0.231：第一段在已用超过 `0.65` 时也停下。没有内存报告也没有自设上限时，`sent+n>4MB` 不再要求 `sent>0`。合并仿真 170 项。
 - v3.0.232：已用超过一半时 `kept.length=0`，不再把音频段留到做成文件之后。后面的段不共用这块内存时，用 `buffer.transfer` 挪走再送出。不到一半时 `kept` 仍在。合并仿真 171 项。
 - v3.0.233：内存里的逐段做成文件，若临时写入有 `getWriter`，先 `pipeTo` 再 `getFile`。否则仍 `Response.blob()`。合并仿真 172 项。
+- v3.0.234：临时写入只有 `write` 时，先包成 `WritableStream` 再 `pipeTo`。包不起来仍 `Response.blob()`。合并仿真 173 项。
 
 [← 返回文档首页](./index.md)
