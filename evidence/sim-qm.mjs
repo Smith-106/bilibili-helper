@@ -413,7 +413,8 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W109 重试前页面较满先放开上一轮', page.includes('if(only&&only.length){let tight=!0;try{let m=performance&&performance.memory;if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5}catch(_){}if(tight){try{q.rel()}catch(_){}if(o)o.textContent=" 页面较满，重试前先放开上一轮的链接"}}'), 'retryrel');
   ok('W110 重试这一集先放开它自己的链接', page.includes('el.textContent="这一集重试前已放开，若没保存成功请再下一次"') && page.includes('let named=`${String(a+1).padStart(3,"0")}_${m}`'), 'retryown');
   ok('W111 这一行列不出链接时按文件名找', page.includes('if((!list||!list.length)&&document.querySelectorAll)list=[...document.querySelectorAll("a[download]")].filter(el=>String(el.getAttribute&&el.getAttribute("download")||"").indexOf(named)>=0)'), 'retryname');
-  ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}}') && page.includes('q0(N,i)') && page.includes('if(String(q.epNames[href]).indexOf(named)<0)continue'), 'epnames');
+  ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}}') && page.includes('q0(N,i||q.saveAs||"")') && page.includes('if(String(q.epNames[href]).indexOf(named)<0)continue'), 'epnames');
+  ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
