@@ -162,5 +162,6 @@
 - v3.0.149：用 `ReadableStream` 逐段 `enqueue`，送出后把 `owned[i]` 置空，再 `Response.blob()`。没有流时才 `new Blob(owned)`。合并仿真 91 项。
 - v3.0.150：`Dx` 在 `Bx()` 之前把状态写成「已记下，若这次卡住，下次会分开保存」。合并仿真 92 项。
 - v3.0.151：批量按钮的 click 在调用 `Dx` 之前写 `bh0` 和这句状态。`Dx` 有 `q.bh0` 就不再另写。合并仿真仍是 92 项。
+- v3.0.152：`pointerdown` 调用 `arm`。`arm` 在没在下载、还没有 `q.bh0`、且不是右键时写标记和状态。click 再调一次 `arm` 后才 `Dx`。合并仿真仍是 92 项。
 
 [← 返回文档首页](./index.md)
