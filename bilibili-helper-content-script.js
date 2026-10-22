@@ -312,6 +312,7 @@ var bxD=async(e,t,P,only)=>{
   bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];if(!q.dir&&!q.dirAsked&&typeof showDirectoryPicker=="function"){q.dirAsked=!0;try{q.dir=await showDirectoryPicker({mode:"readwrite"})}catch(_){q.dir=null}}
   let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Qs=0,Q1v=0,Q1x=0,th=0,st0=Date.now();
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
+  let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
   let F0=only&&only.length?only:t;
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
   let dv=+(localStorage.getItem("bilibili_helper_batch_delay")||3)||3,F1=0;
@@ -319,7 +320,7 @@ var bxD=async(e,t,P,only)=>{
   let s=new Set(q.blobUrls);
   for(let a=0;a<F0.length;a++){
     if(bx0.cancel)break;
-    let bh=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
+    let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
     qRel();try{r.querySelectorAll('a[href^="blob:"]').forEach(el=>{el.removeAttribute("href");el.textContent="已交给浏览器，链接已释放"})}catch(_){}
     q.dirNote="";let h=F0[a],m=bx1(h.title),p=document.createElement("li");
     try{
