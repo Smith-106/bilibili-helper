@@ -263,5 +263,6 @@
 - v3.0.250：数据库删除最多等 1.5 秒。超时写入 `bilibili_helper_nomerge_skip`，读取时不再因为旧名单拆开。合并仿真 189 项。
 - v3.0.251：跳过名单同时写入 localStorage，短集名再写入 cookie `bhnmskip`。读取顺序是 session、local、cookie。合并仿真 190 项。
 - v3.0.252：三处都写不上时 `postMessage` 交给扩展，键名 `bhNmSkip`，启动时放回 `data-bh-nmskip`。合并仿真 191 项。
+- v3.0.253：`q.opfsFor` 记下集名。取回成功就清掉。同一集文件不在时 `sameKept` 强制分开保存。合并仿真 192 项。
 
 [← 返回文档首页](./index.md)
