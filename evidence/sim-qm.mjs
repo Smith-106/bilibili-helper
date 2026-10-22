@@ -922,9 +922,9 @@ ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantPar
 const copyNote = page.indexOf('正在挪开原件，若卡住请点重试，重试会分开保存');
 ok('W69 复制和做成文件时说明进度', copyNote > 0 && copyNote < videoDrop && page.indexOf('原件已放开，正在逐段做成文件，若卡住请点重试，重试会分开保存', copyNote) > copyNote, `copy=${copyNote}`);
 ok('W71 逐段做成文件并放开已写入的一段', page.includes('else jm=new Blob(owned,{type:"video/mp4"})') && blobAt > audioDrop, `blob=${blobAt}`);
-ok('W74 逐段做成文件时显示段数并让出', page.indexOf('正在逐段做成文件 "+(i+1)+"/"+owned.length+"，若卡住请点重试，重试会分开保存', audioDrop) > audioDrop && page.indexOf('if(i&&i%8===0){await new Promise(r=>setTimeout(r,0))', audioDrop) > audioDrop, `yield=${page.indexOf('if(i&&i%8===0)')}`);
-ok('W75 做成文件途中页面满了就停下', page.includes('m.usedJSHeapSize>m.jsHeapSizeLimit*0.7)stop()') && page.includes('if(oom)throw e') && page.includes('live=b=>!!(b&&(b.byteLength>0||b.size>0))') && page.includes('if(oom&&live(N)&&live(t))'), 'heap');
-ok('W76 浏览器不报告内存时按已写字节停下', page.includes('cap=raw==null?8*1024*1024:raw/16;if(sent>cap)stop()') && page.includes('页面已经较满，这一段停下，点重试会分开保存') && page.includes('sent+=p&&(p.byteLength||p.size)||0'), 'sent');
+ok('W74 逐段做成文件时显示段数并让出', page.indexOf('正在逐段做成文件 "+(i+1)+"/"+owned.length+"，若卡住请点重试，重试会分开保存', audioDrop) > audioDrop && page.indexOf('if(i&&i%8===0)await new Promise(r=>setTimeout(r,0))', audioDrop) > audioDrop, `yield=${page.indexOf('if(i&&i%8===0)')}`);
+ok('W75 做成文件途中页面满了就停下', page.includes('m.usedJSHeapSize+n>m.jsHeapSizeLimit*0.7)stop()') && page.includes('if(oom)throw e') && page.includes('live=b=>!!(b&&(b.byteLength>0||b.size>0))') && page.includes('if(oom&&live(N)&&live(t))'), 'heap');
+ok('W76 浏览器不报告内存时按已写字节停下', page.includes('cap=raw==null?8*1024*1024:raw/16;if(sent+n>cap)stop()') && page.includes('页面已经较满，这一段停下，点重试会分开保存') && page.includes('sent+=n;owned[i]=null'), 'sent');
 ok('W70 能挪走时不再复制一份', page.indexOf('p.buffer.transfer') > 0 && page.indexOf('p.buffer.transfer') < videoDrop, `transfer=${page.indexOf('p.buffer.transfer')}`);
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
