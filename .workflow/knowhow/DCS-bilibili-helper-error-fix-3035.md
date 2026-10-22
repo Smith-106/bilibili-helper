@@ -1,5 +1,5 @@
 ---
-title: "「出错了:("三连修v3.0.33-3.0.35: dash video-only降级+空data未登录判定+U空链接INVALID_RESPONSE真根因"
+title: "「出错了」三连修v3.0.33-3.0.35: dash video-only降级+空data未登录判定+U空链接INVALID_RESPONSE真根因"
 category: decision
 createdBy: pi-agent
 sourceRef: "repo:Smith-106/bilibili-helper,tag:v3.0.35"

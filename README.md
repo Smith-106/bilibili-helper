@@ -3,7 +3,7 @@
 浏览器扩展（Manifest V3），帮助你下载 B 站视频，包括「能看不能缓存」的版权受限番剧、电影、影视、电视剧等内容。
 
 - **商店名称**：bilibili哔哩哔哩下载助手
-- **当前版本**：`3.0.298`
+- **当前版本**：`3.0.299`
 - **清单版本**：Manifest V3
 - **运行方式**：纯前端注入（content script + ffmpeg wasm 合并音视频），无后端依赖
 
@@ -85,6 +85,12 @@ node evidence/accept-selfcheck.mjs               # 单命令自验收（跑上�
 ```
 
 `evidence/` 目录保留了真实抓包与全量扫描的轻量证据（view/pagelist/playurl/byte 各 1158/1158，risk=0），以及 v3.0.37 的合集多P取证（`season-multip-state.json` + `live-bx-expand.json`）。UP 主列表完整性语义（`expected`/`partial`/`cached`/`cool`+`bx8` 常驻条）见 `docs/batch-download.md` 与 `docs/KNOWLEDGE.md` S10。详见 `docs/`。
+
+## 仓库卫生
+
+- 安装包只放在 [GitHub Releases](https://github.com/Smith-106/bilibili-helper/releases)。工作区里的 `bilibili-helper-*.zip` 是打包残留，不入库，发版后可以删。
+- `.workflow/` 里只保留知识库条目和知识图谱。向量索引、会话、恢复记录、搜索缓存都是本机缓存，已在 `.gitignore` 里。
+- `ffmpeg-core.wasm` 约 30MB，给手动打开 wasm 合并用。默认下载不进 ffmpeg，所以发布的安装包不带这个文件。
 
 ## 目录结构
 
