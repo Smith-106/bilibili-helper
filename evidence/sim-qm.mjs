@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 
 const page = readFileSync(new URL('../bilibili-helper-content-script.js', import.meta.url), 'utf8');
+const seed = readFileSync(new URL('../bilibili-helper-content-script-seed.js', import.meta.url), 'utf8');
 const qi = page.indexOf('qM=(v,a)=>');
 const qj = page.indexOf(',t0=async', qi);
 const qM = new Function(page.slice(qi, qj) + '\nreturn qM;')();
@@ -434,6 +435,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W131 结果行写不上时先记进失败记录', page.includes('try{bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`);q.retryLine=""}catch(_){}') && page.indexOf('bx0.failLog.push(`${a+1}. ${h.title} — ${shown}`)') < page.indexOf('p.classList.add("b-fail")') && page.includes('if(wrote)q.retryLine=""'), 'retrynote12');
   ok('W132 失败记录和收尾都写不上时留到下一轮', page.includes('if(q.retryLine)note=note?note+"；"+q.retryLine:q.retryLine') && page.includes('i.textContent=q.retryLine') && page.includes('if(wrote)q.retryLine=""') && page.includes('q.retryLine=""};'), 'retrynote13');
   ok('W133 关页时把内存里的说明写进本机记录', page.includes('if(!q.hideRetry){q.hideRetry=1;try{addEventListener("pagehide"') && page.includes('localStorage.setItem("bilibili_helper_retry_note",text)') && page.includes('window.name="bhretry:"+text') && page.includes('setAttribute("data-bh-retry",text)'), 'retrynote14');
+  ok('W134 关页时再交给扩展自己留一份', page.includes('window.postMessage({source:"bilibili-helper-retry",text:text},"*")') && seed.includes('chrome.storage.local.set({bhRetryNote:d.text})') && seed.includes('chrome.storage.local.get("bhRetryNote"') && seed.includes('chrome.storage.local.remove("bhRetryNote")'), 'retrynote15');
   ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;

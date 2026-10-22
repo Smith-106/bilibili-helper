@@ -226,5 +226,6 @@
 - v3.0.213：失败时先把带说明的句子推进 `failLog`，成功记下才清 `q.retryLine`。改行失败时收尾汇总仍有。记录也失败则收尾补到总状态或标签。合并仿真 152 项。
 - v3.0.214：收尾先恢复标签，再依次写总状态、顶部条、按钮、标签。只有写上才清 `q.retryLine`。没写上则下一轮开始接上。合并仿真 153 项。
 - v3.0.215：`pagehide` 时若 `q.retryLine` 还在，再写 localStorage、sessionStorage、cookie、`window.name`、`history.state` 和 `data-bh-retry`。只注册一次。合并仿真 154 项。
+- v3.0.216：关页时再 `postMessage`。种子脚本写入 `chrome.storage.local` 的 `bhRetryNote`，下次打开放回 `data-bh-retry`。清单增加 `storage`。合并仿真 155 项。
 
 [← 返回文档首页](./index.md)

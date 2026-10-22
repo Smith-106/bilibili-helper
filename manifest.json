@@ -20,10 +20,11 @@
    },
    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi2h9zyXMhFrnTghusolDMgPiN3awINuhVOvMtNqL4vmsSlSrfowsUsrmQxaiYqoDjQ4NJKE//NSvSIMOF2UC+8Y5sTWZCG5VwnrJ5+P7P1vFicr3nNZzaaOrC3zQS/PbM9Q92EJFop+cOUkS/omtCa0RlAAeLeR5DKRwWg5jBZ2eE1fgemfwva0Wc1oydxblyHGHwZf1ZnVHyvKW/OWZVytZc2oht271iXE7unieA4t5F0RIdvh+w4IkHq1bYSEe6mjgYWFU9NSviHrGSVoOFHJtHqRrBkO5UVzelvl3xOFgzKtpPCQCtYyJfZuOqrrstWXiHyo8NY0xvWGT+IVyIwIDAQAB",
    "manifest_version": 3,
+   "permissions": [ "storage" ],
    "name": "bilibili哔哩哔哩下载助手",
    "offline_enabled": true,
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.0.215",
+   "version": "3.0.216",
    "web_accessible_resources": [ {
       "matches": [ "http://*.bilibili.com/*", "https://*.bilibili.com/*" ],
       "resources": [ "*.js", "*.css", "*.png", "*.webp", "*.json", "*.html", "*.wasm" ]
