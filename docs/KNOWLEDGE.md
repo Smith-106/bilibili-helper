@@ -247,5 +247,6 @@
 - v3.0.234：临时写入只有 `write` 时，先包成 `WritableStream` 再 `pipeTo`。包不起来仍 `Response.blob()`。合并仿真 173 项。
 - v3.0.235：`getFile` 失败会再试一次，仍失败或原件已空就抛出 `out of memory`，不再用空段攒整份。写到一半的退路会再 `pipeTo` 一个临时文件，这段也失败才 `Response.blob()`。合并仿真 174 项。
 - v3.0.236：第二次临时文件没建成时，剩下超过 4MB 或已用超过一半就抛出 `out of memory`，不再 `Response.blob()`。更小的仍做成文件。合并仿真 175 项。
+- v3.0.237：内存里的逐段结果没有临时文件时，`owned` 超过 4MB 或已用超过一半就抛出 `out of memory`。没有 `ReadableStream` 时仍 `new Blob(owned)`。合并仿真 176 项。
 
 [← 返回文档首页](./index.md)
