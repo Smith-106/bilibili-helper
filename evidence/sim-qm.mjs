@@ -441,6 +441,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W137 浏览器把这一页收起再打开时放开按钮', page.includes('addEventListener("pageshow",ev=>{if(!ev.persisted||!bx0.running)return;bx0.running=!1') && page.includes('这一轮被浏览器收起，按钮已放开，可以再下') && page.includes('el.textContent==="还在下载，结束后才能再试"'), 'retrynote18');
   ok('W138 没有集名的失败行重画后仍放回已有链接', page.includes('let links=[];try{if(p.querySelectorAll)links=[...p.querySelectorAll("a")]}catch(_){}') && page.indexOf('let links=[];try{if(p.querySelectorAll)links=[...p.querySelectorAll("a")]}') < page.indexOf('b-st">✘ ${esc(shown)}</span>') && page.includes('links.forEach(el=>{try{p.appendChild(el)}catch(_){}})'), 'keepfail');
   ok('W139 成功行重画前先取出已有链接', page.includes('else{let links=[];try{if(p.querySelectorAll)links=[...p.querySelectorAll("a")]}catch(_){}p.innerHTML=`<span class="b-idx">${a+1}/${F0.length}</span><span class="b-ep" title="${esc(m)}">${esc(m)}</span><span class="b-st">✔ ${esc(q.mergeNote||"已保存")}') && page.includes('b-st">✔ 已保存</span>`;try{links.forEach(el=>{try{p.appendChild(el)}catch(_){}})'), 'keepok');
+  ok('W140 重试时不是 blob 的链接也先放开', page.includes('if(!href)return;if(href.indexOf("blob:")===0)') && page.indexOf('if(!href)return;if(href.indexOf("blob:")===0)') < page.indexOf('el.textContent="这一集重试前已放开，若没保存成功请再下一次"'), 'noblob');
   ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;
