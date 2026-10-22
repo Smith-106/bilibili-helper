@@ -164,5 +164,6 @@
 - v3.0.151：批量按钮的 click 在调用 `Dx` 之前写 `bh0` 和这句状态。`Dx` 有 `q.bh0` 就不再另写。合并仿真仍是 92 项。
 - v3.0.152：`pointerdown` 调用 `arm`。`arm` 在没在下载、还没有 `q.bh0`、且不是右键时写标记和状态。click 再调一次 `arm` 后才 `Dx`。合并仿真仍是 92 项。
 - v3.0.153：`pointerup` 在按钮外和 `pointercancel` 调用 `drop`，删掉这次 `bhx` 并清空「已记下」。点中时 `held=""` 后再 `Dx`。合并仿真 93 项。
+- v3.0.154：流的 `pull` 显示 `i+1/owned.length`，每 8 段 `setTimeout(0)`。合并仿真 94 项。
 
 [← 返回文档首页](./index.md)
