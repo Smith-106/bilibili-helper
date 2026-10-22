@@ -229,5 +229,6 @@
 - v3.0.216：关页时再 `postMessage`。种子脚本写入 `chrome.storage.local` 的 `bhRetryNote`，下次打开放回 `data-bh-retry`。清单增加 `storage`。合并仿真 155 项。
 - v3.0.217：同一条说明也写入 `chrome.storage.sync`。本地没有时再读同步。清空时两处都删。合并仿真 156 项。
 - v3.0.218：再写入 `chrome.storage.session`。本地和同步都没有时读本次浏览记录。清空时三处都删。合并仿真 157 项。
+- v3.0.219：`pageshow` 且 `persisted` 时，若 `bx0.running` 仍为真，则放开批量按钮、UP 按钮和取消按钮，并改回「还在下载」的重试按钮。合并仿真 158 项。
 
 [← 返回文档首页](./index.md)
