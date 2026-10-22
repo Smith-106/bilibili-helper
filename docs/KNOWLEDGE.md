@@ -255,5 +255,6 @@
 - v3.0.242：一分钟后再扫一次 `a[href^="blob:"]`。约两分钟提醒和失效改字仍只扫 `a[download]`。合并仿真 181 项。
 - v3.0.243：约两分钟提醒、失效改字，以及切回页面，也扫 `a[href^="blob:"]`。合并仿真 182 项。
 - v3.0.244：取回失败时先 `q.rel()` 再 `getFile` 一次。仍失败则把 `{file,name}` 写入 `bilibili_helper_opfs`，同一集下次先取出。合并仿真 183 项。
+- v3.0.245：文件名同时写入 localStorage；sessionStorage 失败时仍写本机。短名字再写入 cookie `bhopfs`。读取顺序是 session、local、cookie。合并仿真 184 项。
 
 [← 返回文档首页](./index.md)
