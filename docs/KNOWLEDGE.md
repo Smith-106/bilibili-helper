@@ -249,5 +249,6 @@
 - v3.0.236：第二次临时文件没建成时，剩下超过 4MB 或已用超过一半就抛出 `out of memory`，不再 `Response.blob()`。更小的仍做成文件。合并仿真 175 项。
 - v3.0.237：内存里的逐段结果没有临时文件时，`owned` 超过 4MB 或已用超过一半就抛出 `out of memory`。没有 `ReadableStream` 时仍 `new Blob(owned)`。合并仿真 176 项。
 - v3.0.238：没有 `ReadableStream` 时，`owned` 超过 4MB 或已用超过一半也抛出 `out of memory`，更小的仍 `new Blob(owned)`。合并仿真 177 项。
+- v3.0.239：单集 `pointerdown` 写 `bhx{id}=*`，点击沿用 `q.oneId`。松手不在链接上或 `pointercancel` 会清掉。合并仿真 178 项。
 
 [← 返回文档首页](./index.md)
