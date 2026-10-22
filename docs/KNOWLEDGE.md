@@ -154,5 +154,6 @@
 - v3.0.141：没有 `jsHeapSizeLimit` 且没设 `mergeHold`/`holdMax` 时，任何结果都不再 `new Blob`。设了上限时仍用 `/32`。合并仿真 85 项。
 - v3.0.142：批量在 `await z()` 之前写 `bh0`。第一集用 `bh0`，后面的集另写。合并仿真仍是 85 项。
 - v3.0.143：`qM.deferBlob` 时先返回小块。调用方复制后把 `videoU`/`audioU` 置空，再 `new Blob`。合并仿真 86 项。
+- v3.0.144：`bh0` 改到 `showDirectoryPicker` 之前写。第一集仍用 `bh0`。合并仿真仍是 86 项。
 
 [← 返回文档首页](./index.md)

@@ -309,10 +309,9 @@ var W0=e=>{let t=e.getElementById("batchBox");if(!t)return;let i=e.getElementByI
 var bxD=async(e,t,P,only)=>{
   if(bx0.running)return;
   let qRel=()=>{let qq=globalThis.q;if(!qq||!qq.epBlobs||!qq.epBlobs.length)return 0;let n=0;for(let V of qq.epBlobs){try{URL.revokeObjectURL(V)}catch(_){}qq.blobUrls&&qq.blobUrls.delete(V);n++}qq.epBlobs.length=0;return n};q.rel=qRel;let bxShown=e=>{let m=String(e&&e.message||e||""),name=String(e&&e.name||"");let wasm=/memory access out of bounds|out of memory|RuntimeError|Aborted\(|allocation failed|Invalid array length|Invalid typed array length/.test(m),lost=/页面里留不住/.test(m),needFolder=/请先选择文件夹/.test(m),deadDir=name==="NotAllowedError"||name==="SecurityError";return{oom:wasm||lost,shown:deadDir?"文件夹权限失效，点重试会重新选择":needFolder?"这一份页面里留不住，点重试会先请你选择文件夹":lost&&!wasm?"这一集页面里留不住，点重试会重新下载后再分开保存":wasm?"合并内存不足，点重试会分开保存，不再进 ffmpeg":m}};
-  bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];if(!q.dir&&!q.dirAsked&&typeof showDirectoryPicker=="function"){q.dirAsked=!0;try{q.dir=await showDirectoryPicker({mode:"readwrite"})}catch(_){q.dir=null}}
+  bx0.running=!0,bx0.cancel=!1,bx0.failLog=[],bx0.failItems=[];let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}if(!q.dir&&!q.dirAsked&&typeof showDirectoryPicker=="function"){q.dirAsked=!0;try{q.dir=await showDirectoryPicker({mode:"readwrite"})}catch(_){q.dir=null}}
   let i=e.getElementById("batch-btn"),d=e.getElementById("batch-cancel"),o=e.getElementById("batch-status"),r=e.getElementById("batch-progress"),u=e.getElementById("batch-skip"),Q0=0,Q1=0,Q2=0,Qs=0,Q1v=0,Q1x=0,th=0,st0=Date.now();
   o.textContent="",o.classList.remove("b-celebrate"),i.disabled=!0,i.classList.add("b-running"),d.style.display="",r.innerHTML="";
-  let bh0=Math.random().toString(36).slice(2);try{document.cookie="bhx"+bh0+"="+encodeURIComponent("*")+";path=/;max-age=2592000"}catch(_){}
   let F0=only&&only.length?only:t;
   let n=await z(),qnO=localStorage.getItem("bilibili_helper_batch_qn");qnO&&(n=+qnO);
   let dv=+(localStorage.getItem("bilibili_helper_batch_delay")||3)||3,F1=0;
