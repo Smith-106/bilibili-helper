@@ -793,6 +793,14 @@ let wireRoom = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '043成', mk()); } catch (e) { wireRoom = e; }
 ok('W54 合成前页面又满了就分开保存', wireRoom === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('合成结果放不下'), `reads=${heapReads} ${q.mergeNote} ${wireRoom && wireRoom.message}`);
 cookieJar.clear();
+globalThis.performance = {};
+q.mergeHold = 8;
+globalThis.q = q;
+const blindMerge = qM(video, audio);
+ok('W55 不报告剩余空间时结果太大也分开', blindMerge == null && qM.why === '合成结果放不下', qM.why || '');
+delete q.mergeHold;
+delete globalThis.q;
+globalThis.performance = prevPerf;
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
