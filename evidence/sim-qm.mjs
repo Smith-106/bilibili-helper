@@ -1164,6 +1164,7 @@ mode = 'small';
   ok('W87 停在音频第一段时这段还没送出', page.includes('if(made<=cut)') && !page.includes('if(oom&&made<cut)'), 'edge');
   ok('W88 已经送出的音频段还能拼回来', page.includes('if(i>=cut)kept.push(p)') && page.includes('for(let k=0;k<kept.length;k++)if(kept[k])rest.push(kept[k])') && page.includes('}).blob();kept=null'), 'kept');
   ok('W89 视频段不再留一份引用', page.includes('if(i>=cut)kept.push(p)') && page.includes('if(i===cut)say("视频段已放开，正在送音频")') && page.indexOf('kept.push(p)') === page.indexOf('if(i>=cut)kept.push(p)') + 'if(i>=cut)'.length, 'novid');
+  ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
 ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件");jm=await fh.getFile()'), 'dir');
 ok('W81 合集进度也写到总状态', page.includes('let say=t=>{if(a)a.innerHTML=t;try{if(typeof bx0!="undefined"&&bx0&&bx0.cancel)return;let st=document.getElementById("batch-status")') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
