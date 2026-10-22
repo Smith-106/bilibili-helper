@@ -841,6 +841,8 @@ try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-ur
 ok('W58 没选文件夹也先写入临时目录', wireOpfs === null && merges === 0 && saved.length === 1 && saved[0].includes('045临.mp4') && opfsChunks.length > 1 && blobNews === 0, `chunks=${opfsChunks.length} blobs=${blobNews} ${saved.join('|')} ${wireOpfs && wireOpfs.message}`);
 globalThis.Blob = BlobNow;
 if (prevStorage) globalThis.navigator.storage = prevStorage; else delete globalThis.navigator.storage;
+const droppedAt = page.indexOf('fh.getFile();videoU=null;audioU=null');
+ok('W59 写完就放开两份原件', droppedAt > 0 && page.indexOf('a0(jm', droppedAt) > droppedAt, `at=${droppedAt}`);
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
