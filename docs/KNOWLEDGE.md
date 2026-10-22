@@ -258,5 +258,6 @@
 - v3.0.245：文件名同时写入 localStorage；sessionStorage 失败时仍写本机。短名字再写入 cookie `bhopfs`。读取顺序是 session、local、cookie。合并仿真 184 项。
 - v3.0.246：再写入 IndexedDB `bilibili_helper_opfs`。读取放在 `bhnmnow` 之后，避免挡住记住。1.5 秒超时。合并仿真 185 项。
 - v3.0.247：留下文件名时立刻 `postMessage`，`pagehide` 再交一次。扩展写入 `bhOpfs`，启动时放回 `data-bh-opfs`。合并仿真 186 项。
+- v3.0.248：`q.opfsKept` 记下后，失败提示改为再取留下的那份，不再说成分开保存。`t0` 开头清掉这个标记。合并仿真 187 项。
 
 [← 返回文档首页](./index.md)
