@@ -937,7 +937,7 @@ const dxCall = page.indexOf('Dx(e)', downAt);
 const bxCall = page.indexOf('let t=Bx()', dxCall);
 const useAt = page.indexOf('let bh0=q.bh0||""');
 const pickAt = page.indexOf('q.dir=await showDirectoryPicker', useAt);
-ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && armAt > 0 && downAt > armAt && dxCall > downAt && bxCall > dxCall && useAt > 0 && pickAt > useAt, `arm=${armAt} down=${downAt} dx=${dxCall}`);
+ok('W65 调用之前就记下', page.split('catch(_){}try{document.cookie="bhnmpend=;path=/;max-age=0"}catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && armAt > 0 && downAt > armAt && dxCall > downAt && bxCall > dxCall && useAt > 0 && pickAt > useAt, `arm=${armAt} down=${downAt} dx=${dxCall}`);
 const notedAt = page.indexOf('已记下，若这次卡住，下次会分开保存', armAt);
 ok('W72 找合集之前就说明下次会分开', notedAt > armAt && notedAt < downAt, `note=${notedAt}`);
 const upAt = page.indexOf('addEventListener("pointerup",drop)', downAt);
@@ -1179,6 +1179,7 @@ q.mergeNote = '';
 cookieJar.clear();
 delete q.noMerge;
 ok('W83 按下的第一句就先记一笔', page.includes('bhnmpend="+encodeURIComponent("*")') && page.includes('bhnmpend=;path=/;max-age=0') && page.includes('(?:^|; )bhnmpend=\\*') && page.indexOf('bhnmpend="+encodeURIComponent("*")') < page.indexOf('bhx"+bh0+"="+encodeURIComponent("*")') && wirePend === null && pendSaved === 2 && !pendLeft && pendNote.includes('上次在页面里放不下'), `${pendNote} ${pendSaved} ${pendLeft} ${wirePend && wirePend.message}`);
+ok('W84 单集一点击就先记一笔', page.includes('contains("disabled"))return;try{document.cookie="bhnmpend="+encodeURIComponent("*")') && page.includes('(()=>{try{document.cookie="bhnmpend=;path=/;max-age=0"}catch(_){}})(),R('), 'singlepend');
 }
 mode = 'big';
 q.mergeNote = '';
