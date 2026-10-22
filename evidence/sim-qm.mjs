@@ -389,10 +389,19 @@ q.jsMergeMax = 10;
 q.mergeNote = '';
 q.mergeWhy = '';
 let relAt = -1;
+const prevPerf14 = globalThis.performance;
+globalThis.performance = { memory: { usedJSHeapSize: 80, jsHeapSizeLimit: 100 } };
 q.rel = () => { relAt = saved.length; };
 let wireRel = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '017_课', mk()); } catch (e) { wireRel = e; }
 ok('W14 同一集第二份开始前释放第一份链接', wireRel === null && merges === 0 && relAt === 1 && saved.length === 2, `relAt=${relAt} saved=${saved.length} ${wireRel && wireRel.message}`);
+globalThis.performance = { memory: { usedJSHeapSize: 1, jsHeapSizeLimit: 1024 * 1024 * 1024 } };
+let relRoom99 = 0;
+q.rel = () => { relRoom99++; };
+let wireRoom99 = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '017b_课', mk()); } catch (e) { wireRoom99 = e; }
+ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && relRoom99 === 0 && page.includes('if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5') && page.includes('if(tight){try{q.rel()}'), `rel=${relRoom99} ${wireRoom99 && wireRoom99.message}`);
+globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
 saved.length = 0;
