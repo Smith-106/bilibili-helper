@@ -269,7 +269,7 @@ function mk() {
   return n;
 }
 const cookieJar = new Map();
-const pageDoc = { createElement: () => mk(), get cookie() { return [...cookieJar.entries()].map(([k, v]) => k + '=' + v).join('; '); }, set cookie(raw) { const text = String(raw), part = text.split(';')[0], i = part.indexOf('='); if (i < 0) return; const k = part.slice(0, i); if ((k === 'bhnmnow' || k.startsWith('bhx')) && !q.keepNow) return; if (text.includes('max-age=0')) cookieJar.delete(k); else cookieJar.set(k, part.slice(i + 1)); } };
+const pageDoc = { createElement: () => mk(), get cookie() { return [...cookieJar.entries()].map(([k, v]) => k + '=' + v).join('; '); }, set cookie(raw) { const text = String(raw), part = text.split(';')[0], i = part.indexOf('='); if (i < 0) return; const k = part.slice(0, i); if ((k === 'bhnmnow' || k.startsWith('bhx')) && !q.keepNow) return; if (k === 'bhnmfull' && !q.keepFull) return; if (text.includes('max-age=0')) cookieJar.delete(k); else cookieJar.set(k, part.slice(i + 1)); } };
 const t0 = new Function('o0', '_0', 'a0', 'F', 'q', 'v', 'esc', 'C', 'document', 'R', `var ${seg}; return t0;`)(o0, _0, a0, () => ({ baseUrl: 'ext' }), q, vlog, (s) => String(s), () => '1B', pageDoc, async () => { throw new Error('R'); });
 let wireErr = null;
 const list1 = mk();
@@ -740,6 +740,21 @@ let wireRead2 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '040冲', mk()); } catch (e) { wireRead2 = e; }
 ok('W50 上一条还没看完也已经写下', wireRead !== null && stuck && wireRead2 === null && merges === 0 && q.mergeNote.includes('上次在页面里放不下'), `stuck=${stuck} reads=${cookieReads} ${q.mergeNote} ${wireRead2 && wireRead2.message}`);
 q.keepNow = false;
+cookieJar.clear();
+q.keepFull = true;
+pageDoc.cookie = 'bhnmfull=1;path=/;max-age=2592000';
+globalThis.performance = { memory: { usedJSHeapSize: 1, jsHeapSizeLimit: 100 } };
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'u8';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireFull = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '041满', mk()); } catch (e) { wireFull = e; }
+ok('W51 名单已经满了就分开保存', wireFull === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('记住的名单已经满了'), `${q.mergeNote} ${saved.length} ${wireFull && wireFull.message}`);
+q.keepFull = false;
 cookieJar.clear();
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
