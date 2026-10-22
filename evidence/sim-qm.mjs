@@ -801,6 +801,11 @@ ok('W55 不报告剩余空间时结果太大也分开', blindMerge == null && qM
 delete q.mergeHold;
 delete globalThis.q;
 globalThis.performance = prevPerf;
+const RealBlob = globalThis.Blob;
+globalThis.Blob = function BoomBlob() { throw new Error('Invalid typed array length'); };
+const boom = qM(video, audio);
+globalThis.Blob = RealBlob;
+ok('W56 做成文件失败也说页面放不下', boom == null && qM.why === '合并时页面放不下', qM.why || '');
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
