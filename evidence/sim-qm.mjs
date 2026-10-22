@@ -928,6 +928,8 @@ const bxCall = page.indexOf('let t=Bx()', dxAt);
 const useAt = page.indexOf('let bh0=q.bh0||""');
 const pickAt = page.indexOf('q.dir=await showDirectoryPicker', useAt);
 ok('W65 调用之前就记下', page.split('catch(_){}return id})()').length === 2 && page.includes(',_,bh)') && batchLoopAt >= 0 && batchMarkAt > batchLoopAt && batchRelAt > batchMarkAt && dxAt > 0 && bxCall > dxAt && useAt > 0 && pickAt > useAt, `dx=${dxAt} bx=${bxCall} use=${useAt} pick=${pickAt}`);
+const notedAt = page.indexOf('已记下，若这次卡住，下次会分开保存');
+ok('W72 找合集之前就说明下次会分开', notedAt > dxAt && notedAt < bxCall, `note=${notedAt}`);
 cookieJar.clear();
 q.keepNow = true;
 cookieJar.set('bhxold', '*');
