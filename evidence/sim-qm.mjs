@@ -436,6 +436,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W132 失败记录和收尾都写不上时留到下一轮', page.includes('if(q.retryLine)note=note?note+"；"+q.retryLine:q.retryLine') && page.includes('i.textContent=q.retryLine') && page.includes('if(wrote)q.retryLine=""') && page.includes('q.retryLine=""};'), 'retrynote13');
   ok('W133 关页时把内存里的说明写进本机记录', page.includes('if(!q.hideRetry){q.hideRetry=1;try{addEventListener("pagehide"') && page.includes('localStorage.setItem("bilibili_helper_retry_note",text)') && page.includes('window.name="bhretry:"+text') && page.includes('setAttribute("data-bh-retry",text)'), 'retrynote14');
   ok('W134 关页时再交给扩展自己留一份', page.includes('window.postMessage({source:"bilibili-helper-retry",text:text},"*")') && seed.includes('chrome.storage.local.set({bhRetryNote:d.text})') && seed.includes('chrome.storage.local.get("bhRetryNote"') && seed.includes('chrome.storage.local.remove("bhRetryNote")'), 'retrynote15');
+  ok('W135 扩展本地记录没有时再写同步记录', seed.includes('chrome.storage.sync.set({bhRetryNote:d.text})') && seed.includes('chrome.storage.sync.get("bhRetryNote"') && seed.includes('chrome.storage.sync.remove("bhRetryNote")'), 'retrynote16');
   ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;
