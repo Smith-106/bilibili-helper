@@ -425,6 +425,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name,size)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}if(size>0){(q.epSizes||(q.epSizes={}))[e]=size}}') && page.includes('q0(N,i||q.saveAs||"",b.size)') && page.includes('if(nm.indexOf(named)<0&&!(m&&(nm===String(m)||nm.slice(-String(m).length-1)==="_"+m))&&!((stem,raw)=>stem.length>=4&&(String(m).indexOf(stem)===0||String(m).slice(-stem.length)===stem)'), 'epnames');
   ok('W192 集名被截断时重试也放开', page.includes('||(!!m&&((stem,raw)=>stem.length>=4&&(String(m).indexOf(stem)===0||String(m).slice(-stem.length)===stem)'), 'partname');
   ok('W193 集名后半段重试也放开', page.includes('String(m).slice(-stem.length)===stem)||stem.length>=2&&String(raw||"").indexOf(String(a+1).padStart(3,"0")+"_")>=0'), 'partsuf');
+  ok('W194 集名中间一段重试也放开', page.includes('||stem.length>=6&&String(m).indexOf(stem)>=0||stem.length>=4&&String(raw||"").indexOf(String(a+1).padStart(3,"0")+"_")>=0&&String(m).indexOf(stem)>=0'), 'partmid');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
   ok('W114 单集也记下名字', page.includes('q.saveAs=K||"单集"') && page.includes('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})'), 'onesave');
   ok('W115 没有名字也点不了的旧链接会放开', page.includes('没有名字也点不了的旧链接已放开') && page.includes('document.querySelectorAll("a[href]")'), 'orphan');
