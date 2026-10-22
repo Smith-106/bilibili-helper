@@ -265,5 +265,6 @@
 - v3.0.252：三处都写不上时 `postMessage` 交给扩展，键名 `bhNmSkip`，启动时放回 `data-bh-nmskip`。合并仿真 191 项。
 - v3.0.253：`q.opfsFor` 记下集名。取回成功就清掉。同一集文件不在时 `sameKept` 强制分开保存。合并仿真 192 项。
 - v3.0.254：集名写入 `bilibili_helper_opfs_for` 和 cookie `bhopfsfor`。重新打开先读回来。合并仿真 193 项。
+- v3.0.255：三处都写不上时把集名交给扩展，键名 `bhOpfsFor`，启动时放回 `data-bh-opfs-for`。合并仿真 194 项。
 
 [← 返回文档首页](./index.md)
