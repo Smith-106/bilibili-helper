@@ -1165,7 +1165,7 @@ mode = 'small';
   ok('W88 已经送出的音频段还能拼回来', page.includes('if(i>=cut)kept.push(p)') && page.includes('for(let k=0;k<kept.length;k++)if(kept[k])rest.push(kept[k])') && page.includes('}).blob();kept=null'), 'kept');
   ok('W89 视频段不再留一份引用', page.includes('if(i>=cut)kept.push(p)') && page.includes('if(i===cut)say("视频段已放开，正在送音频")') && page.indexOf('kept.push(p)') === page.indexOf('if(i>=cut)kept.push(p)') + 'if(i>=cut)'.length, 'novid');
   ok('W90 单独保存前先说明', page.includes('say("这一份没做成，正在把音频单独保存")') && page.includes('say("这一份没做成，正在把"+which+"单独保存")'), 'saysave');
-  ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('q.mergeSaves=null,bx0.failLog.push') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}q.mergeSaves=null'), 'relink');
+  ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('q.mergeSaves=null,bx0.failLog.push') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
   ok('W93 链接失效前会多留一会儿并说明', page.includes('q.blobUrls.delete(N)},6e5)') && page.includes('el.textContent="（链接已失效，若没保存成功请再下一次）"') && !page.includes('q.blobUrls.delete(N)},6e4)'), 'ttl');
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
@@ -1173,6 +1173,7 @@ ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文
 ok('W81 合集进度也写到总状态', page.includes('let say=t=>{try{if(a){let ep=a.querySelector&&a.querySelector(".b-ep")') && page.includes('else a.innerHTML=t') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
   ok('W94 合集进度不再盖掉这一集的名字', page.includes('a.querySelector(".b-st")') && page.includes('line.textContent=" "+t') && page.includes('a.querySelector(".b-ep")') && !page.includes('line.className="b-say"'), 'keepname');
   ok('W95 失败时改掉原来的状态不再另起一行', page.includes('let st=p.querySelector(".b-st");if(!st){st=document.createElement("span");st.className="b-st";p.appendChild(st)}st.textContent="✘ "+shown'), 'onestatus');
+  ok('W96 收尾时不再整行重画', page.includes('st.textContent="✔ "+(q.mergeNote||"已保存")') && page.includes('if(!p.querySelector("a[download]"))(q.mergeSaves') && page.includes('st.textContent="✘ "+shown;if(!p.querySelector("a[download]"))'), 'inplace');
 ok('W82 取回文件前先放开音频', page.includes('原件已放开，正在取回文件') && page.indexOf('jm=await fh.getFile()') > page.indexOf('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件")'), 'getfile');
 cookieJar.clear();
 delete q.noMerge;
