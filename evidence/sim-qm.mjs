@@ -254,6 +254,9 @@ ok('F5 长度到文件尾的数据块合并后仍能分开音视频', !!em && eo
   const encA = basic(1, new Uint8Array([2]), 80);
   const enc = qM(encV, encA);
   ok('F7 加密时说明原因', enc == null && qM.why === '视频已加密', qM.why || '');
+  const hidden = cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', box('sinf', new Uint8Array(4))));
+  const hid = qM(hidden, basic(1, new Uint8Array([2]), 80));
+  ok('F8 加密只在媒体数据里也说明原因', hid == null && qM.why === '视频已加密', qM.why || '');
 }
 }
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
