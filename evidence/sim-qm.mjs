@@ -415,6 +415,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W111 这一行列不出链接时按文件名找', page.includes('if((!list||!list.length)&&document.querySelectorAll)list=[...document.querySelectorAll("a[download]")].filter(el=>String(el.getAttribute&&el.getAttribute("download")||"").indexOf(named)>=0)'), 'retryname');
   ok('W112 记不住链接时仍按记下的文件名放开', page.includes('q0=(e,name)=>{q.blobUrls.add(e);(q.epBlobs||(q.epBlobs=[])).push(e);if(name){(q.epNames||(q.epNames={}))[e]=String(name)}}') && page.includes('q0(N,i||q.saveAs||"")') && page.includes('if(String(q.epNames[href]).indexOf(named)<0)continue'), 'epnames');
   ok('W113 没带文件名时用这一集的名字', page.includes('q.saveAs=`${String(a+1).padStart(3,"0")}_${m}`;try{await t0(!0,p,S,q.saveAs,_,bh)}finally{q.noWasm=!1;q.saveAs=""}'), 'saveas');
+  ok('W114 单集也记下名字', page.includes('q.saveAs=K||"单集"') && page.includes('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})'), 'onesave');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
@@ -1191,7 +1192,7 @@ mode = 'small';
   ok('W91 失败行盖掉后仍能放回下载链接', page.includes('q.mergeSaves=[...a.querySelectorAll("a[download]")]') && page.includes('q.mergeSaves=null,bx0.failLog.push') && page.includes('textContent="保存 "+s.name,el.style.marginLeft="8px",p.appendChild(el)})}catch(_){}}}q.mergeSaves=null'), 'relink');
   ok('W92 合成成功后这一行重画仍留着下载', page.includes('await a0(jm,o+".mp4",a);try{q.mergeSaves=') && page.includes('await a0(c,o+".mp4",a);try{q.mergeSaves='), 'oklink');
   ok('W93 链接失效前会多留一会儿并说明', page.includes('q.blobUrls.delete(N)},6e5)') && page.includes('el.textContent="（链接已失效，若没保存成功请再下一次）"') && !page.includes('q.blobUrls.delete(N)},6e4)'), 'ttl');
-ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
+ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(()=>{q.saveAs="";m()},err=>{q.saveAs="";fail(err)})').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
 ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件");jm=await fh.getFile()'), 'dir');
 ok('W81 合集进度也写到总状态', page.includes('let say=t=>{try{if(a){let ep=a.querySelector&&a.querySelector(".b-ep")') && page.includes('else a.innerHTML=t') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
   ok('W94 合集进度不再盖掉这一集的名字', page.includes('a.querySelector(".b-st")') && page.includes('line.textContent=" "+t') && page.includes('a.querySelector(".b-ep")') && !page.includes('line.className="b-say"'), 'keepname');
