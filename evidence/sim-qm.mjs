@@ -423,7 +423,8 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W119 总状态也没有时写进日志', page.includes('else if(document.getElementById(B))v(h.noWasm?"这次分开保存，不再合成":"正在重试")'), 'rowlog');
   ok('W120 日志也没有时改标签，结束再改回', page.includes('if(!q.wasTitle)q.wasTitle=document.title;document.title=h.noWasm?"这次分开保存，不再合成":"正在重试"') && page.includes('try{if(q.wasTitle){document.title=q.wasTitle;q.wasTitle=""}}catch(_){}'), 'wastitle');
   ok('W121 标签也改不了时在页面上补一句', page.includes('n.id="bh-retry-note"') && page.includes('background:#f45a8d') && page.includes('try{let n=document.getElementById("bh-retry-note");n&&n.remove()}catch(_){}'), 'retrynote2');
-  ok('W122 页面上也加不了时先记下，下次开始再写', page.includes('localStorage.setItem("bilibili_helper_retry_note",h.noWasm?"这次分开保存，不再合成":"正在重试")') && page.includes('localStorage.getItem("bilibili_helper_retry_note")'), 'retrynote3');
+  ok('W122 页面上也加不了时先记下，下次开始再写', page.includes('localStorage.setItem("bilibili_helper_retry_note",h.noWasm?"这次分开保存，不再合成":"正在重试")') && page.includes('if(note&&o){o.textContent=(o.textContent||"")+((o.textContent||"").trim()?"；":" ")+note;localStorage.removeItem("bilibili_helper_retry_note")}'), 'retrynote3');
+  ok('W123 总状态已有字时也补上上次的说明', page.includes('((o.textContent||"").trim()?"；":" ")+note') && !page.includes('if(note){localStorage.removeItem("bilibili_helper_retry_note");if(o&&!o.textContent)'), 'retrynote4');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
