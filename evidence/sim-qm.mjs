@@ -780,6 +780,19 @@ let wireFour = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 4 }, { url: 'video-url', size: 4 }], '042四', mk()); } catch (e) { wireFour = e; }
 ok('W53 再留一份合成开销也分开保存', wireFour === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('不再把两份放在一起'), `${q.mergeNote} ${saved.length} ${wireFour && wireFour.message}`);
 cookieJar.clear();
+let heapReads = 0;
+globalThis.performance = { memory: { jsHeapSizeLimit: 100, get usedJSHeapSize() { heapReads++; return heapReads <= 3 ? 1 : 95; } } };
+for (const key of Object.keys(quotaSess)) delete quotaSess[key];
+delete q.noMerge;
+mode = 'small';
+saved.length = 0;
+merges = 0;
+q.mergeNote = '';
+q.mergeWhy = '';
+let wireRoom = null;
+try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '043成', mk()); } catch (e) { wireRoom = e; }
+ok('W54 合成前页面又满了就分开保存', wireRoom === null && merges === 0 && saved.length === 2 && q.mergeNote.includes('合成结果放不下'), `reads=${heapReads} ${q.mergeNote} ${wireRoom && wireRoom.message}`);
+cookieJar.clear();
 delete globalThis.indexedDB;
 delete globalThis.localStorage;
 delete globalThis.sessionStorage;
