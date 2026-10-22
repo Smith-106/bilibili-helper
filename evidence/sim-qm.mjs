@@ -1174,6 +1174,7 @@ ok('W81 合集进度也写到总状态', page.includes('let say=t=>{try{if(a){le
   ok('W94 合集进度不再盖掉这一集的名字', page.includes('a.querySelector(".b-st")') && page.includes('line.textContent=" "+t') && page.includes('a.querySelector(".b-ep")') && !page.includes('line.className="b-say"'), 'keepname');
   ok('W95 失败时改掉原来的状态不再另起一行', page.includes('let st=p.querySelector(".b-st");if(!st){st=document.createElement("span");st.className="b-st";p.appendChild(st)}st.textContent="✘ "+shown'), 'onestatus');
   ok('W96 收尾时不再整行重画', page.includes('st.textContent="✔ "+(q.mergeNote||"已保存")') && page.includes('if(!p.querySelector("a[download]"))(q.mergeSaves') && page.includes('st.textContent="✘ "+shown;if(!p.querySelector("a[download]"))'), 'inplace');
+  ok('W97 下一集开始前放开的链接会说明', page.includes('el.textContent="链接已放开，若没保存成功请再下一次"') && page.includes('q.blobUrls.delete(V)},6e5)') && !page.includes('q.blobUrls.delete(V)},6e4)') && !page.includes('已交给浏览器，链接已释放'), 'relnote');
 ok('W82 取回文件前先放开音频', page.includes('原件已放开，正在取回文件') && page.indexOf('jm=await fh.getFile()') > page.indexOf('audioU=null;await new Promise(r=>setTimeout(r,0));say("原件已放开，正在取回文件")'), 'getfile');
 cookieJar.clear();
 delete q.noMerge;
