@@ -402,7 +402,7 @@ let wireRoom99 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '017b_课', mk()); } catch (e) { wireRoom99 = e; }
 ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && relRoom99 === 0 && page.includes('if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5') && page.includes('if(tight){try{let st=document.getElementById("batch-status")'), `rel=${relRoom99} ${wireRoom99 && wireRoom99.message}`);
   ok('W100 放开上一集时说明原因', page.includes('页面已经过半，先放开上一集的链接') && page.includes('浏览器没报告剩余空间，先放开上一集的链接'), 'whyrel');
-  ok('W101 重试前先写明这次分开保存', page.includes('if(h.noWasm||only){try{let st=p.querySelector&&p.querySelector(".b-st");if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}if(st)st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试";else if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"}catch(_){try{if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"}catch(__){}}}q.noWasm=!!h.noWasm'), 'retrynote');
+  ok('W101 重试前先写明这次分开保存', page.includes('if(h.noWasm||only){try{let st=p.querySelector&&p.querySelector(".b-st");if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}if(st)st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试";else if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试";else v(h.noWasm?"这次分开保存，不再合成":"正在重试")}catch(_){try{if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试";else v(h.noWasm?"这次分开保存，不再合成":"正在重试")}catch(__){}}}q.noWasm=!!h.noWasm'), 'retrynote');
   ok('W102 普通失败的重试先写成正在重试', page.includes('st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"'), 'retryplain');
   ok('W103 重试没有状态时补上一句', page.includes('if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}'), 'retrymake');
   ok('W104 重试按钮写明哪些分开保存', page.includes('分开保存失败${bx0.failItems.length}集') && page.includes('重试失败${bx0.failItems.length}集，其中${bx0.failItems.filter(h=>h.noWasm).length}集分开保存') && page.includes(':`重试失败${bx0.failItems.length}集`'), 'retrybtn');
@@ -419,7 +419,8 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W115 没有名字也点不了的旧链接会放开', page.includes('没有名字也点不了的旧链接已放开') && page.includes('document.querySelectorAll("a[href]")'), 'orphan');
   ok('W116 页面较满时放开还能点但没名字的链接', page.includes('if(els.length&&!full&&!blindFull)continue') && page.includes('页面较满，没记下名字的链接已放开') && page.includes('full=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5'), 'fullname');
   ok('W117 不报告剩余空间时无名大链接会放开', page.includes('let blindFull=blind&&blindSum>(q.holdMax||128*1024*1024)') && page.includes('浏览器没报告剩余空间，没记下名字的大链接已放开'), 'blindbig');
-  ok('W118 这一行写不上时改写到总状态', page.includes('else if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"') && page.includes('catch(_){try{if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"}catch(__){}}'), 'rowmiss');
+  ok('W118 这一行写不上时改写到总状态', page.includes('else if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"') && page.includes('catch(_){try{if(o)o.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试";else v(h.noWasm?"这次分开保存，不再合成":"正在重试")}catch(__){}}'), 'rowmiss');
+  ok('W119 总状态也没有时写进日志', page.includes('else v(h.noWasm?"这次分开保存，不再合成":"正在重试")'), 'rowlog');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
