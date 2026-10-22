@@ -402,8 +402,9 @@ let wireRoom99 = null;
 try { await t0(true, { classList: { add() {}, remove() {} } }, [{ url: 'audio-url', size: 8 }, { url: 'video-url', size: 8 }], '017b_课', mk()); } catch (e) { wireRoom99 = e; }
 ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && relRoom99 === 0 && page.includes('if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5') && page.includes('if(tight){try{let st=document.getElementById("batch-status")'), `rel=${relRoom99} ${wireRoom99 && wireRoom99.message}`);
   ok('W100 放开上一集时说明原因', page.includes('页面已经过半，先放开上一集的链接') && page.includes('浏览器没报告剩余空间，先放开上一集的链接'), 'whyrel');
-  ok('W101 重试前先写明这次分开保存', page.includes('if(h.noWasm){try{let st=p.querySelector&&p.querySelector(".b-st");if(st)st.textContent=" 这次分开保存，不再合成"}catch(_){}}else if(only){try{let st=p.querySelector&&p.querySelector(".b-st");if(st)st.textContent=" 正在重试"}catch(_){}}q.noWasm=!!h.noWasm'), 'retrynote');
-  ok('W102 普通失败的重试先写成正在重试', page.includes('else if(only){try{let st=p.querySelector&&p.querySelector(".b-st");if(st)st.textContent=" 正在重试"}'), 'retryplain');
+  ok('W101 重试前先写明这次分开保存', page.includes('if(h.noWasm||only){try{let st=p.querySelector&&p.querySelector(".b-st");if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}if(st)st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"}catch(_){}}q.noWasm=!!h.noWasm'), 'retrynote');
+  ok('W102 普通失败的重试先写成正在重试', page.includes('st.textContent=h.noWasm?" 这次分开保存，不再合成":" 正在重试"'), 'retryplain');
+  ok('W103 重试没有状态时补上一句', page.includes('if(!st&&p.appendChild){st=document.createElement("span");st.className="b-st";p.appendChild(st)}'), 'retrymake');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
