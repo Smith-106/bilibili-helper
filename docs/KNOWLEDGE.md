@@ -222,5 +222,6 @@
 - v3.0.209：浏览记录也失败时，写入 IndexedDB `bilibili_helper_retry` 的 `retry`。下次最多等 1.5 秒。显示后删除。合并仿真 148 项。
 - v3.0.210：没有 IndexedDB 时写 `data-bh-retry`。页面写不了就 `postMessage`，由种子脚本代写。显示后清掉。合并仿真 149 项。
 - v3.0.211：页面根和 `postMessage` 都失败时才 `alert`。前面任一处成功都不会弹。合并仿真 150 项。
+- v3.0.212：`alert` 也失败时把说明放进 `q.retryLine`，这一集成功或失败的结果行用「；」接上，然后清空。合并仿真 151 项。
 
 [← 返回文档首页](./index.md)
