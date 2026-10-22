@@ -258,6 +258,15 @@ ok('F5 长度到文件尾的数据块合并后仍能分开音视频', !!em && eo
   const hidden = cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', box('sinf', new Uint8Array(4))));
   const hid = qM(hidden, basic(1, new Uint8Array([2]), 80));
   ok('F8 加密只在媒体数据里也说明原因', hid == null && qM.why === '视频已加密', qM.why || '');
+  const deepPay = new Uint8Array(6000);
+  deepPay.set(box('sinf', new Uint8Array(4)), 5000);
+  const deepHit = qM(cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', deepPay)), basic(1, new Uint8Array([2]), 80));
+  ok('F9 媒体数据 4KB 之后的加密也说明原因', deepHit == null && qM.why === '视频已加密', qM.why || '');
+  const farPay = new Uint8Array(24000);
+  farPay.set(box('sinf', new Uint8Array(4)), 20000);
+  qM.why = '';
+  const farHit = qM(cat(ftyp(), box('moov', cat(mvhd(), trak(1, 80))), box('mdat', farPay)), basic(1, new Uint8Array([2]), 80));
+  ok('F10 16KB 之后的加密标记先不当成加密', farHit != null || qM.why !== '视频已加密', qM.why || 'merged');
 }
 }
 ok('N1 乱数据返回空', qM(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), new Uint8Array(16)) === null);
@@ -906,7 +915,7 @@ const videoDrop = page.indexOf('videoU=null;await new Promise(r=>setTimeout(r,0)
 const audioDrop = page.indexOf('audioU=null;if(a)a.innerHTML="原件已放开，正在做成文件"', videoDrop);
 const blobAt = page.indexOf('try{jm=new Blob(owned', audioDrop);
 ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantParts') && videoDrop > 0 && audioDrop > videoDrop && blobAt > audioDrop && qM(video, audio) instanceof Blob, `v=${videoDrop} a=${audioDrop} b=${blobAt} ${qM.why || ''}`);
-const copyNote = page.indexOf('正在复制，若卡住请点重试，重试会分开保存');
+const copyNote = page.indexOf('正在挪开原件，若卡住请点重试，重试会分开保存');
 ok('W69 复制和做成文件时说明进度', copyNote > 0 && copyNote < videoDrop && page.indexOf('原件已放开，正在做成文件', copyNote) > copyNote, `copy=${copyNote}`);
 ok('W70 能挪走时不再复制一份', page.indexOf('p.buffer.transfer') > 0 && page.indexOf('p.buffer.transfer') < videoDrop, `transfer=${page.indexOf('p.buffer.transfer')}`);
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
