@@ -410,6 +410,7 @@ ok('W99 页面还空着时先留着上一集的链接', wireRoom99 === null && r
   ok('W106 还在下载时再点会说明', page.includes('if(st)st.textContent=" 还在下载，这一轮结束后才能再试"') && page.includes('if(bx0.running){try{let st=document.getElementById("batch-status")'), 'busy');
   ok('W107 没有总状态时改按钮上的字', page.includes('a.btn-ghost') && page.includes('b.textContent="还在下载，结束后才能再试"'), 'busybtn');
   ok('W108 这一轮结束时改回按钮上的字', page.includes('if(b.textContent!=="还在下载，结束后才能再试")b.dataset.was=b.textContent') && page.includes('el.textContent=el.dataset.was;delete el.dataset.was'), 'busyback');
+  ok('W109 重试前页面较满先放开上一轮', page.includes('if(only&&only.length){let tight=!0;try{let m=performance&&performance.memory;if(m&&m.jsHeapSizeLimit)tight=m.usedJSHeapSize>m.jsHeapSizeLimit*0.5}catch(_){}if(tight){try{q.rel()}catch(_){}if(o)o.textContent=" 页面较满，重试前先放开上一轮的链接"}}'), 'retryrel');
 globalThis.performance = prevPerf14;
 q.rel = null;
 q.jsMergeMax = 1200 * 1024 * 1024;
