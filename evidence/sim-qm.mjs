@@ -916,7 +916,7 @@ ok('W67 不报告剩余空间时也不再整份合成', tinyBlind == null && qM.
 delete globalThis.q;
 globalThis.performance = prevPerf;
 const videoDrop = page.indexOf('videoU=null;await new Promise(r=>setTimeout(r,0))');
-const audioDrop = page.indexOf('audioU=null;if(a)a.innerHTML="原件已放开，正在逐段做成文件', videoDrop);
+const audioDrop = page.indexOf('audioU=null;say("原件已放开，正在逐段做成文件', videoDrop);
 const blobAt = page.indexOf('owned[i]=null;i++;c.enqueue(p)', audioDrop);
 ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantParts') && videoDrop > 0 && audioDrop > videoDrop && blobAt > audioDrop && qM(video, audio) instanceof Blob, `v=${videoDrop} a=${audioDrop} b=${blobAt} ${qM.why || ''}`);
 const copyNote = page.indexOf('正在挪开原件，若卡住请点重试，重试会分开保存');
@@ -1160,6 +1160,7 @@ mode = 'small';
   ok('W78 页面放不下的失败重试会直接分开', full.oom === true && full.shown.includes('不再进 ffmpeg') && !full.shown.includes('合并时页面放不下'), full.shown);
 ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
 ok('W80 写入文件夹时写完视频就放开', page.includes('正在写入文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('正在写入浏览器文件夹 "+(i+1)+"/"+jm.parts.length') && page.includes('jm.parts[i]=null;if(i+1===cut){videoU=null') && page.includes('fh.getFile();audioU=null'), 'dir');
+ok('W81 合集进度也写到总状态', page.includes('let say=t=>{if(a)a.innerHTML=t;try{if(typeof bx0!="undefined"&&bx0&&bx0.cancel)return;let st=document.getElementById("batch-status")') && page.includes('st.textContent=" "+t') && page.includes('bx0.lastStatus=st.textContent'), 'say');
 }
 mode = 'big';
 q.mergeNote = '';
