@@ -908,6 +908,7 @@ const blobAt = page.indexOf('try{jm=new Blob(owned', audioDrop);
 ok('W68 先放开原件再做成文件', page.includes('qM.deferBlob=!qM.wantParts') && videoDrop > 0 && audioDrop > videoDrop && blobAt > audioDrop && qM(video, audio) instanceof Blob, `v=${videoDrop} a=${audioDrop} b=${blobAt} ${qM.why || ''}`);
 const copyNote = page.indexOf('正在复制，若卡住请点重试，重试会分开保存');
 ok('W69 复制和做成文件时说明进度', copyNote > 0 && copyNote < videoDrop && page.indexOf('原件已放开，正在做成文件', copyNote) > copyNote, `copy=${copyNote}`);
+ok('W70 能挪走时不再复制一份', page.indexOf('p.buffer.transfer') > 0 && page.indexOf('p.buffer.transfer') < videoDrop, `transfer=${page.indexOf('p.buffer.transfer')}`);
 ok('W64 还没准备数据库就先记下', page.includes('t0=async(e=!0,i,d,o,a,idIn)=>{let id=idIn||Math.random().toString(36).slice(2);try{document.cookie="bhx"+id+"="+encodeURIComponent("*")'), 'missing early marker');
 const batchLoopAt = page.indexOf('for(let a=0;a<F0.length;a++){');
 const batchMarkAt = page.indexOf('let bh=a?Math.random().toString(36).slice(2):bh0;try{document.cookie="bhx"+bh+"="+encodeURIComponent("*")', batchLoopAt);

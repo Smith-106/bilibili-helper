@@ -156,5 +156,6 @@
 - v3.0.143：`qM.deferBlob` 时先返回小块。调用方复制后把 `videoU`/`audioU` 置空，再 `new Blob`。合并仿真 86 项。
 - v3.0.144：`bh0` 改到 `showDirectoryPicker` 之前写。第一集仍用 `bh0`。合并仿真仍是 86 项。
 - v3.0.145：`hold` 结果带 `vCut`。先复制视频并放开，再复制音频并放开，然后 `new Blob`。合并仿真 87 项。
+- v3.0.146：小块有 `buffer.transfer` 时先挪走，失败才 `slice`。先挪视频再挪音频。合并仿真 88 项。
 
 [← 返回文档首页](./index.md)
