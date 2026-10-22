@@ -1158,6 +1158,7 @@ mode = 'small';
   ok('W26 分配失败也说成分开保存，不再显示英文', alloc.oom === true && alloc.shown.includes('不再进 ffmpeg') && !alloc.shown.includes('allocation'), alloc.shown);
   const full = bxShown(new Error('合并时页面放不下，点重试会分开保存'));
   ok('W78 页面放不下的失败重试会直接分开', full.oom === true && full.shown.includes('不再进 ffmpeg') && !full.shown.includes('合并时页面放不下'), full.shown);
+ok('W79 单集失败会重新打开按钮并说明再点一次分开', page.includes('let _=null,K=g.getAttribute("title"),fail=err=>{m()') && page.split('.then(m,fail)').length === 3 && page.includes('合并内存不足，再点一次会分开保存，不再进 ffmpeg'), 'single');
 }
 mode = 'big';
 q.mergeNote = '';
